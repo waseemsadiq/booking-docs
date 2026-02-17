@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WFCS Booking Docs</title>
+  <link rel="stylesheet" href="assets/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+  <script>
+    // Apply saved theme before first paint to avoid flash
+    (function () {
+      try {
+        var t = localStorage.getItem('wfcs-docs-theme') ||
+          (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+
+<header class="site-header">
+  <button id="hamburger" class="hamburger" aria-label="Open menu">
+    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <line x1="3" y1="6" x2="21" y2="6"/>
+      <line x1="3" y1="12" x2="21" y2="12"/>
+      <line x1="3" y1="18" x2="21" y2="18"/>
+    </svg>
+  </button>
+  <a class="brand" href="#admin-guide">
+    <div class="brand-logo" aria-hidden="true">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+      </svg>
+    </div>
+    <div>
+      <div class="brand-name">WFCS Booking</div>
+      <div id="brand-sub" class="brand-sub">Admin Guide</div>
+    </div>
+  </a>
+  <div class="header-spacer"></div>
+  <div class="header-search">
+    <input type="text" class="search-input" id="search-input-header" placeholder="Search..." />
+    <svg class="search-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    </svg>
+    <div class="search-kbd">⌘K</div>
+  </div>
+  <a id="view-toggle" class="header-btn" href="#">
+    <svg id="view-icon" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+    <span id="view-label">Developer docs</span>
+  </a>
+  <button id="theme-toggle" class="header-btn" title="Switch theme">
+    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="5"/>
+      <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+      <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+    </svg>
+    <span class="theme-label">Dark</span>
+  </button>
+</header>
+
+<div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+<div class="search-overlay" id="search-overlay">
+  <div class="search-modal">
+    <div class="search-modal-input-row">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input type="text" class="search-modal-input" id="search-modal-input" placeholder="Search documentation..." />
+    </div>
+    <div class="search-results" id="search-results"></div>
+  </div>
+</div>
+
+<aside id="sidebar" class="sidebar">
+  <nav class="sidebar-nav" id="sidebar-nav"></nav>
+</aside>
+
+<div class="main-area">
+  <div class="content-wrapper">
+    <article class="prose" id="content">
+      <p>Loading&hellip;</p>
+    </article>
+  </div>
+  <aside class="toc-rail" id="toc-rail">
+    <div class="toc-title" id="toc-title">On this page</div>
+    <ul class="toc-list" id="toc-list"></ul>
+  </aside>
+</div>
+
+<style>
+/* Admin guide sidebar menu styling */
+.sidebar-menu-item {
+  font-weight: 600 !important;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sidebar-menu-item::after {
+  content: '+';
+  display: inline-block;
+  margin-left: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  width: 16px;
+  text-align: center;
+  flex-shrink: 0;
+  transition: transform 150ms ease;
+}
+
+.sidebar-menu-item.expanded::after {
+  content: '−';
+}
+
+.sidebar-sub {
+  font-size: 12.5px !important;
+  padding-left: 32px !important;
+  opacity: 0.9;
+}
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
+<script>
+'use strict';
+
+// ── Page map ──────────────────────────────────────────────
+var PAGES = {
+  'admin-guide':     { src: '../docs/admin-guide.md',           title: 'Admin Guide' },
+  'getting-started': { src: '../docs/wiki/Getting-Started.md',  title: 'Getting Started' },
+  'architecture':    { src: '../docs/wiki/Architecture.md',     title: 'Architecture' },
+  'galvani-rules':   { src: '../docs/wiki/Galvani-Rules.md',    title: 'Galvani Rules' },
+  'database':        { src: '../docs/wiki/Database.md',         title: 'Database' },
+  'developer-guide': { src: '../docs/dev-guide.md',             title: 'Developer Guide' },
+  'api-reference':   { src: '../docs/api-reference.md',         title: 'REST API Reference' },
+  'mcp-server':      { src: '../docs/wiki/MCP-Servers.md',      title: 'MCP Server' },
+  'deployment':      { src: '../docs/wiki/Deployment.md',       title: 'Deployment' },
+  'contributing':    { src: '../docs/wiki/Contributing.md',     title: 'Contributing' },
+};
+
+var GROUPS = [
+  { title: 'Operations', items: ['admin-guide'] },
+  { title: 'Core',       items: ['getting-started', 'architecture', 'galvani-rules', 'database'] },
+  { title: 'Reference',  items: ['developer-guide', 'api-reference', 'mcp-server'] },
+  { title: 'Project',    items: ['deployment', 'contributing'] },
+];
+
+// ── marked.js renderer ────────────────────────────────────
+var renderer = new marked.Renderer();
+var codeId = 0;
+
+renderer.heading = function (text, level) {
+  if (level > 3) return '<h' + level + '>' + text + '</h' + level + '>\n';
+  var id = text.replace(/<[^>]*>/g, '').toLowerCase()
+               .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  return '<h' + level + ' id="' + id + '">' + text + '</h' + level + '>\n';
+};
+
+renderer.code = function (code, lang) {
+  var id    = 'cb' + (++codeId);
+  var cls   = lang ? ' class="language-' + lang + '"' : '';
+  var badge = lang ? '<span class="code-lang">' + lang + '</span>' : '';
+  return '<div class="code-block">' +
+    '<div class="code-block-header">' + badge +
+    '<button class="copy-btn" data-target="' + id + '"><span class="copy-label">Copy</span></button>' +
+    '</div><pre><code id="' + id + '"' + cls + '>' + code + '</code></pre></div>\n';
+};
+
+marked.setOptions({ renderer: renderer, gfm: true, breaks: false });
+
+// ── Sidebar ───────────────────────────────────────────────
+var sidebarObserver = null;
+
+function buildSidebar(activeId) {
+  var nav = document.getElementById('sidebar-nav');
+  var content = document.getElementById('content');
+  nav.textContent = '';
+
+  // For admin-guide: show page headings with collapsible sub-items
+  if (activeId === 'admin-guide') {
+    var h2s = Array.from(content.querySelectorAll('h2'));
+    var allHeadings = [];
+
+    h2s.forEach(function (h2, idx) {
+      allHeadings.push(h2);
+
+      // Create main menu item
+      var a = document.createElement('a');
+      a.href = '#' + h2.id;
+      a.className = 'sidebar-link sidebar-menu-item';
+      a.setAttribute('data-menu-index', idx);
+      // Remove leading numbers from h2 headings
+      var text = h2.textContent.replace(/^\d+\.\s+/, '');
+      a.textContent = text;
+
+      // Click to expand/collapse sub-items
+      a.addEventListener('click', function (e) {
+        e.preventDefault();
+        var subItems = nav.querySelectorAll('[data-parent-index="' + idx + '"]');
+        var isHidden = subItems[0] && subItems[0].style.display === 'none';
+        subItems.forEach(function (item) {
+          item.style.display = isHidden ? '' : 'none';
+        });
+        // Toggle expanded class to change icon
+        if (isHidden) {
+          a.classList.add('expanded');
+        } else {
+          a.classList.remove('expanded');
+        }
+        h2.scrollIntoView({ behavior: 'smooth' });
+      });
+
+      nav.appendChild(a);
+
+      // Find and add h3 sub-items
+      var current = h2.nextElementSibling;
+      while (current && current.tagName !== 'H2') {
+        if (current.tagName === 'H3') {
+          allHeadings.push(current);
+          var subLink = document.createElement('a');
+          subLink.href = '#' + current.id;
+          subLink.className = 'sidebar-link sidebar-sub';
+          subLink.setAttribute('data-parent-index', idx);
+          subLink.style.display = 'none'; // Hidden by default
+          subLink.textContent = current.textContent;
+          subLink.addEventListener('click', function (e) {
+            e.preventDefault();
+            current.scrollIntoView({ behavior: 'smooth' });
+          });
+          nav.appendChild(subLink);
+        }
+        current = current.nextElementSibling;
+      }
+    });
+
+    setupSidebarScrollSpy(allHeadings, nav);
+  } else {
+    // For other pages: show navigation groups
+    GROUPS.forEach(function (group, i) {
+      if (i > 0) {
+        var divider = document.createElement('div');
+        divider.className = 'sidebar-divider';
+        nav.appendChild(divider);
+      }
+      var groupTitle = document.createElement('span');
+      groupTitle.className = 'sidebar-group-title';
+      groupTitle.textContent = group.title;
+      nav.appendChild(groupTitle);
+
+      group.items.forEach(function (id) {
+        var page = PAGES[id];
+        if (!page) return;
+        var a = document.createElement('a');
+        a.href = '#' + id;
+        a.className = 'sidebar-link' + (id === activeId ? ' active' : '');
+        a.textContent = page.title;
+        nav.appendChild(a);
+      });
+    });
+  }
+}
+
+function setupSidebarScrollSpy(headings, nav) {
+  if (sidebarObserver) sidebarObserver.disconnect();
+  var links = nav.querySelectorAll('.sidebar-link');
+  var currentActiveId = null;
+
+  sidebarObserver = new IntersectionObserver(function (entries) {
+    // Find which heading is highest in the viewport
+    var topMost = null;
+    var topMostDistance = Infinity;
+
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        var distance = Math.abs(entry.boundingClientRect.top);
+        if (distance < topMostDistance) {
+          topMostDistance = distance;
+          topMost = entry.target;
+        }
+      }
+    });
+
+    // Update active only if we found a heading in viewport
+    if (topMost) {
+      currentActiveId = topMost.id;
+
+      // Clear all active states first
+      links.forEach(function (link) {
+        link.classList.remove('active');
+      });
+
+      // Highlight the current heading
+      var currentLink = Array.from(links).find(function (link) {
+        return link.getAttribute('href') === '#' + currentActiveId;
+      });
+      if (currentLink) {
+        currentLink.classList.add('active');
+      }
+
+      // If current heading is an h3, also highlight its parent h2
+      if (topMost.tagName === 'H3') {
+        var h3Index = headings.indexOf(topMost);
+        // Find the previous h2
+        for (var i = h3Index - 1; i >= 0; i--) {
+          if (headings[i].tagName === 'H2') {
+            var parentLink = Array.from(links).find(function (link) {
+              return link.getAttribute('href') === '#' + headings[i].id;
+            });
+            if (parentLink) {
+              parentLink.classList.add('active');
+            }
+            break;
+          }
+        }
+      }
+    }
+  }, { rootMargin: '-66px 0px -70% 0px', threshold: 0 });
+
+  headings.forEach(function (h) { sidebarObserver.observe(h); });
+}
+
+// ── Page loading ──────────────────────────────────────────
+var currentPage = null;
+var searchIndex = [];
+var fullSearchIndex = []; // Pre-built index from assets/search-index.json
+
+function buildTOC(content, pageId) {
+  var tocList = document.getElementById('toc-list');
+  var tocRail = document.getElementById('toc-rail');
+  if (!tocList || !tocRail) return;
+
+  // Hide TOC rail on admin guide page (left sidebar shows TOC instead)
+  if (pageId === 'admin-guide') {
+    tocRail.style.display = 'none';
+    return;
+  }
+
+  tocList.textContent = '';
+
+  var headings = Array.from(content.querySelectorAll('h2, h3'));
+  if (headings.length < 2) {
+    tocRail.style.display = 'none';
+    return;
+  }
+
+  document.getElementById('toc-rail').style.display = '';
+  headings.forEach(function (h) {
+    var li = document.createElement('li');
+    li.className = 'toc-item' + (h.tagName === 'H3' ? ' toc-h3' : '');
+    var a = document.createElement('a');
+    a.href = '#' + h.id;
+    a.textContent = h.textContent;
+    a.addEventListener('click', function (e) {
+      e.preventDefault();
+      h.scrollIntoView({ behavior: 'smooth' });
+    });
+    li.appendChild(a);
+    tocList.appendChild(li);
+  });
+
+  setupTOCScrollSpy(headings, tocList);
+}
+
+function setupTOCScrollSpy(headings, tocList) {
+  if (window._tocSpy) window._tocSpy.disconnect();
+  var items = tocList.querySelectorAll('.toc-item');
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        items.forEach(function (item) {
+          var a = item.querySelector('a');
+          item.classList.toggle('active', a && a.getAttribute('href') === '#' + entry.target.id);
+        });
+      }
+    });
+  }, { rootMargin: '-66px 0px -70% 0px', threshold: 0 });
+  headings.forEach(function (h) { observer.observe(h); });
+  window._tocSpy = observer;
+}
+
+// Load pre-built search index from JSON
+function loadSearchIndex() {
+  console.log('loadSearchIndex() called, current location:', window.location.href);
+  fetch('./assets/search-index.json')
+    .then(function (response) {
+      console.log('fetch response status:', response.status);
+      if (!response.ok) throw new Error('HTTP ' + response.status);
+      return response.json();
+    })
+    .then(function (data) {
+      fullSearchIndex = data;
+      console.log('✓ Search index loaded:', data.length, 'entries');
+    })
+    .catch(function (err) {
+      console.error('✗ Failed to load search index:', err);
+    });
+}
+
+function getSnippetAfter(h) {
+  var n = h.nextElementSibling;
+  while (n) {
+    if (/^H[1-6]$/.test(n.tagName)) break;
+    if (n.tagName === 'P') return n.textContent.slice(0, 120);
+    n = n.nextElementSibling;
+  }
+  return '';
+}
+
+function updateViewToggleIcon(pageId) {
+  var iconSvg = document.getElementById('view-icon');
+  if (!iconSvg) return;
+  var chevronSvg = document.createElement('polyline');
+  var docPath1 = document.createElement('path');
+  var docPath2 = document.createElement('path');
+
+  iconSvg.textContent = '';
+
+  if (pageId === 'admin-guide') {
+    chevronSvg.setAttribute('points', '16 18 22 12 16 6');
+    iconSvg.appendChild(chevronSvg);
+    var chevronSvg2 = document.createElement('polyline');
+    chevronSvg2.setAttribute('points', '8 6 2 12 8 18');
+    iconSvg.appendChild(chevronSvg2);
+  } else {
+    docPath1.setAttribute('d', 'M4 19.5A2.5 2.5 0 0 1 6.5 17H20');
+    docPath2.setAttribute('d', 'M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z');
+    iconSvg.appendChild(docPath1);
+    iconSvg.appendChild(docPath2);
+  }
+}
+
+function navigateTo(pageId, pushState) {
+  if (pushState === undefined) pushState = true;
+  if (!PAGES[pageId]) pageId = 'admin-guide';
+  if (currentPage === pageId) return;
+  currentPage = pageId;
+  codeId = 0;
+
+  var page    = PAGES[pageId];
+  var content = document.getElementById('content');
+  var brandSub = document.getElementById('brand-sub');
+  var viewToggle = document.getElementById('view-toggle');
+  var viewLabel = document.getElementById('view-label');
+
+  document.title = page.title + ' \u2014 WFCS Booking Docs';
+
+  // Update brand subtitle and view toggle
+  if (pageId === 'admin-guide') {
+    brandSub.textContent = 'Admin Guide';
+    viewToggle.href = '#getting-started';
+    viewLabel.textContent = 'Developer docs';
+  } else {
+    brandSub.textContent = 'Developer Docs';
+    viewToggle.href = '#admin-guide';
+    viewLabel.textContent = 'Admin guide';
+  }
+
+  updateViewToggleIcon(pageId);
+
+  content.textContent = '';
+  var loading = document.createElement('p');
+  loading.textContent = 'Loading\u2026';
+  content.appendChild(loading);
+
+  fetch(page.src)
+    .then(function (res) {
+      if (!res.ok) throw new Error(res.status);
+      return res.text();
+    })
+    .then(function (md) {
+      var rawHtml = marked.parse(md);
+      var safeHtml = DOMPurify.sanitize(rawHtml, {
+        ADD_ATTR: ['id', 'data-target', 'data-hl'],
+        ADD_TAGS: ['pre', 'code'],
+        FORCE_BODY: false,
+      });
+      content.innerHTML = safeHtml;
+
+      // Remove "Table of Contents" section from admin guide
+      if (pageId === 'admin-guide') {
+        var toc = content.querySelector('h2');
+        if (toc && toc.textContent === 'Table of Contents') {
+          // Remove the TOC h2 and all elements until the next h2
+          var node = toc;
+          var tocEnd = toc.nextElementSibling;
+          while (tocEnd && tocEnd.tagName !== 'H2') {
+            var nextNode = tocEnd.nextElementSibling;
+            tocEnd.remove();
+            tocEnd = nextNode;
+          }
+          toc.remove();
+        }
+      }
+
+      if (window.hljs) {
+        content.querySelectorAll('pre code:not([data-hl])').forEach(function (el) {
+          window.hljs.highlightElement(el);
+          el.setAttribute('data-hl', '1');
+        });
+      }
+      window.scrollTo(0, 0);
+      buildSidebar(pageId);
+      buildTOC(content, pageId);
+    })
+    .catch(function () {
+      content.textContent = 'Could not load page. Docs must be served from a web server, not opened as a local file.';
+    });
+
+  if (pushState) history.pushState({ page: pageId }, '', '#' + pageId);
+  closeSidebar();
+}
+
+// ── Routing ───────────────────────────────────────────────
+function getPageFromHash() {
+  var hash = location.hash.slice(1);
+  return PAGES[hash] ? hash : 'admin-guide';
+}
+
+// ── Theme ─────────────────────────────────────────────────
+var THEME_KEY = 'wfcs-docs-theme';
+
+function toggleTheme() {
+  var current = document.documentElement.getAttribute('data-theme') || 'light';
+  var next    = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  try { localStorage.setItem(THEME_KEY, next); } catch (e) {}
+  var lbl = document.querySelector('#theme-toggle .theme-label');
+  if (lbl) lbl.textContent = next === 'dark' ? 'Light' : 'Dark';
+}
+
+// ── Mobile sidebar ────────────────────────────────────────
+function openSidebar() {
+  document.getElementById('sidebar').classList.add('open');
+  document.getElementById('sidebar-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ── Search ────────────────────────────────────────────────
+function openSearch() {
+  document.getElementById('search-overlay').classList.add('open');
+  setTimeout(function () { document.getElementById('search-modal-input').focus(); }, 50);
+  document.body.style.overflow = 'hidden';
+}
+
+function closeSearch() {
+  document.getElementById('search-overlay').classList.remove('open');
+  document.getElementById('search-modal-input').value = '';
+  var r = document.getElementById('search-results');
+  if (r) r.textContent = '';
+  document.body.style.overflow = '';
+}
+
+function performSearch(query) {
+  var resultsEl = document.getElementById('search-results');
+  if (!query.trim()) { resultsEl.textContent = ''; return; }
+  if (!fullSearchIndex.length) {
+    var empty = document.createElement('div');
+    empty.className = 'search-empty';
+    empty.textContent = 'Search index loading...';
+    resultsEl.textContent = '';
+    resultsEl.appendChild(empty);
+    return;
+  }
+
+  var q = query.toLowerCase();
+  var matches = fullSearchIndex.filter(function (item) {
+    return item.title.toLowerCase().indexOf(q) !== -1 ||
+           item.snippet.toLowerCase().indexOf(q) !== -1 ||
+           item.content.toLowerCase().indexOf(q) !== -1 ||
+           item.pageTitle.toLowerCase().indexOf(q) !== -1;
+  }).slice(0, 12);
+
+  resultsEl.textContent = '';
+
+  if (!matches.length) {
+    var empty = document.createElement('div');
+    empty.className = 'search-empty';
+    empty.textContent = 'No results for "' + query + '"';
+    resultsEl.appendChild(empty);
+    return;
+  }
+
+  matches.forEach(function (match) {
+    var item = document.createElement('div');
+    item.className = 'search-result-item';
+    item.setAttribute('role', 'button');
+    item.setAttribute('tabindex', '0');
+
+    var secLabel = document.createElement('div');
+    secLabel.className = 'search-result-section';
+    secLabel.textContent = match.pageTitle;
+
+    var titleEl = document.createElement('div');
+    titleEl.className = 'search-result-title';
+    titleEl.textContent = match.title;
+
+    item.appendChild(secLabel);
+    item.appendChild(titleEl);
+
+    if (match.snippet) {
+      var snip = document.createElement('div');
+      snip.className = 'search-result-snippet';
+      snip.textContent = match.snippet;
+      item.appendChild(snip);
+    }
+
+    function handleActivate() {
+      navigateTo(match.pageId);
+      closeSearch();
+      if (match.anchor) {
+        setTimeout(function () {
+          var hEl = document.getElementById(match.anchor);
+          if (hEl) hEl.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    }
+
+    item.addEventListener('click', handleActivate);
+    item.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleActivate(); }
+    });
+    resultsEl.appendChild(item);
+  });
+}
+
+// ── Copy buttons ──────────────────────────────────────────
+document.addEventListener('click', function (e) {
+  var btn = e.target.closest('.copy-btn');
+  if (!btn) return;
+  var el = document.getElementById(btn.dataset.target);
+  if (!el) return;
+  navigator.clipboard.writeText(el.textContent).then(function () {
+    var lbl = btn.querySelector('.copy-label');
+    if (!lbl) return;
+    btn.classList.add('copied');
+    lbl.textContent = 'Copied!';
+    setTimeout(function () {
+      btn.classList.remove('copied');
+      lbl.textContent = 'Copy';
+    }, 2000);
+  });
+});
+
+// ── Init ──────────────────────────────────────────────────
+document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+document.getElementById('hamburger').addEventListener('click', openSidebar);
+document.getElementById('sidebar-overlay').addEventListener('click', closeSidebar);
+document.getElementById('view-toggle').addEventListener('click', function (e) {
+  e.preventDefault();
+  window.location.hash = this.getAttribute('href').slice(1);
+});
+
+var searchHeaderInput = document.getElementById('search-input-header');
+if (searchHeaderInput) {
+  searchHeaderInput.addEventListener('focus', openSearch);
+}
+
+var searchOverlay = document.getElementById('search-overlay');
+if (searchOverlay) {
+  searchOverlay.addEventListener('click', function (e) {
+    if (e.target === searchOverlay) closeSearch();
+  });
+}
+
+var modalInput = document.getElementById('search-modal-input');
+if (modalInput) {
+  modalInput.addEventListener('input', function (e) { performSearch(e.target.value); });
+}
+
+document.addEventListener('keydown', function (e) {
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+    e.preventDefault();
+    var isOpen = document.getElementById('search-overlay').classList.contains('open');
+    if (isOpen) closeSearch(); else openSearch();
+  }
+  if (e.key === 'Escape') { closeSearch(); closeSidebar(); }
+});
+
+window.addEventListener('popstate', function (e) {
+  navigateTo(e.state && e.state.page ? e.state.page : getPageFromHash(), false);
+});
+
+(function () {
+  var theme = document.documentElement.getAttribute('data-theme') || 'light';
+  var lbl = document.querySelector('#theme-toggle .theme-label');
+  if (lbl) lbl.textContent = theme === 'dark' ? 'Light' : 'Dark';
+})();
+
+// Load search index
+loadSearchIndex();
+
+navigateTo(getPageFromHash(), false);
+</script>
+
+</body>
+</html>

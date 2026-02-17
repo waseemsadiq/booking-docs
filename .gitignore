@@ -1,0 +1,34 @@
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+.AppleDouble
+.LSOverride
+
+# Node (if we add build tools later)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+
+# Environment
+.env
+.env.local
+
+# Main app files (shouldn't be here, but just in case)
+app/
+config/
+database/
+vendor/
+composer.json
+composer.lock
+package.json
+.git (should already be excluded)
+
+# Static HTML reference files (local development only)
+docs-site/
