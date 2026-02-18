@@ -208,12 +208,14 @@ booking/                          # Git root (local Galvani workspace — not pu
 │   │   │
 │   │   ├── Repositories/         # All SQL lives here — SELECT/INSERT/UPDATE/DELETE
 │   │   │   ├── ActivityRepository.php
+│   │   │   ├── AppSettingsRepository.php
 │   │   │   ├── AttendanceRepository.php
 │   │   │   ├── AuditLogRepository.php
 │   │   │   ├── BookingRepository.php
 │   │   │   ├── GdprConsentRepository.php
 │   │   │   ├── GiftAidRepository.php
 │   │   │   ├── NotificationRepository.php
+│   │   │   ├── NotificationSubscriptionRepository.php
 │   │   │   ├── ParticipantRepository.php
 │   │   │   ├── PaymentRepository.php
 │   │   │   ├── RoomHireRepository.php
@@ -558,6 +560,17 @@ class BookingService
     }
 }
 ```
+
+**Notable repositories:**
+
+| Repository | Table(s) | Notes |
+|---|---|---|
+| `AppSettingsRepository` | `app_settings` | Key-value store for admin-configurable settings. Use `get($key)`, `set($key, $value)`, `getMultiple($keys[])`. All Stripe keys, mail driver, SMTP credentials, and Bird credentials go through this class. |
+| `NotificationSubscriptionRepository` | `user_notification_subscriptions` | CRUD for per-user event notification preferences. Manages activity/session-specific subscriptions for admins and instructors. |
+| `BookingRepository` | `bookings` | Core booking CRUD, filters, block-booking queries. |
+| `PaymentRepository` | `payments`, `account_credit_transactions` | Payment records and credit ledger writes. |
+| `SessionRepository` | `sessions` | Session generation, availability queries. |
+| `UserRepository` | `users`, `participants` | User and participant CRUD, role lookups. |
 
 ### Views — the display layer
 
@@ -941,6 +954,14 @@ $newId = $db->lastInsertId();
 | `app_settings` | Key-value store for admin-configurable settings. Stripe keys, email driver config (Resend API key, SMTP credentials), Bird credentials — sensitive values encrypted with AES-256-GCM |
 | `cache` | Generic key-value cache table |
 
+**Groups:**
+
+| Table | Purpose |
+|---|---|
+| `groups` | Activity-scoped participant rosters. Has `min_age`/`max_age` for auto-assignment |
+| `group_participants` | Many-to-many: participant ↔ group membership |
+| `session_groups` | Many-to-many: session ↔ group (restricts booking to group members only) |
+
 **Gift Aid:**
 
 | Table | Purpose |
@@ -982,6 +1003,8 @@ BookingService::createBooking()
   4. Check age eligibility (min_age / max_age on activity)
   5. Verify session exists for this activity
   6. Check no duplicate booking (same participant + session)
+  6a. Group restriction: if session has groups, participant must be a member — OR be
+      a first-timer (age-eligible, no group for this activity yet; group assigned post-payment)
   7. Check capacity: if full and allow_waiting_list=true -> put on waitlist
   8. INSERT INTO bookings (booking_status='pending', is_waiting_list=0/1)
   9. Return { booking_ids, total_price, is_waiting_list }
@@ -1023,6 +1046,36 @@ BookingService -> createRoomHireBooking():
   3. Create a session on-the-fly for this specific slot
   4. INSERT booking linked to new session
   5. INSERT space_reservation for the time slot (prevents double-booking)
+```
+
+### Group enrollment
+
+Children are assigned to activity groups **after** their first paid session — not on registration. Adding a child to an account has no group side-effects.
+
+```
+PaymentService::processPayment() / processBatchPayment()
+  After booking confirmed as paid:
+  1. Check booking['relationship'] !== 'self'
+  2. GroupService::assignToActivityGroupByAge(participantId, activityId)
+       - Fetch participant DOB from DB
+       - Calculate age
+       - GroupRepository::findByActivityAndAge(activityId, age) — scoped to this activity only
+       - For each matching group: addMember() → enrollInFutureSessions()
+           enrollInFutureSessions() creates pending bookings for ALL future group sessions
+
+  Wrapped in try/catch: booking is already committed under autocommit, so a group
+  assignment failure must not break the payment response (logged, not thrown).
+  processBatchPayment() deduplicates by participant+activity key across the batch.
+```
+
+**Group restriction bypass (BookingService::createBooking):**
+
+```
+if session has groups AND participant not in session group:
+  - Already has a group for this activity → DENY (wrong group)
+  - Not age-eligible → DENY
+  - Age-eligible + no group for this activity yet → ALLOW (first-timer bypass)
+    Group assignment happens after payment, not at booking time.
 ```
 
 ### Credit priority logic

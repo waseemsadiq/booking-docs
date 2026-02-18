@@ -142,7 +142,7 @@ These tools are defined in `mcp/packages/server/src/tools/`.
 | `admin_withdrawals` | `list`, `process`, `reject` | List pending and historical instructor withdrawal requests. Process (triggers Stripe refund) or reject a request (requires `confirmed: true`). |
 | `admin_settings` | `get`, `update` | View and update payment settings (Stripe keys). Super admin only. |
 | `admin_notify` | `preview`, `send`, `history` | Send ad-hoc email broadcasts to targeted customer groups. Two-step flow: preview shows recipient names + token, send consumes the token and emails all recipients. Supports `all_customers`, `activity`, `session`, and `user` audience types. History lists recent broadcasts. Always preview before sending. |
-| `admin_groups` | `list`, `get`, `create`, `update`, `delete`, `add_member`, `remove_member`, `search_participants`, `send_message`, `preview_age_assignment`, `apply_age_assignment`, `get_session_groups`, `set_session_groups` | Manage customer groups (activity-scoped participant rosters). Create groups, manage membership, bulk-assign members by age range, send messages to all group members, and control which groups are assigned to sessions. Sessions with groups assigned are restricted to members only. |
+| `admin_groups` | `list`, `get`, `create`, `update`, `delete`, `add_member`, `remove_member`, `search_participants`, `send_message`, `preview_age_assignment`, `apply_age_assignment`, `get_session_groups`, `set_session_groups` | Manage customer groups (activity-scoped participant rosters). Create groups, manage membership, bulk-assign members by age range, send messages to all group members, and control which groups are assigned to sessions. Sessions with groups assigned are restricted to members only. Children are assigned to a group automatically after their first paid session for the activity — not on registration. |
 
 ### Destructive action confirmation
 
@@ -454,4 +454,4 @@ curl -X POST http://localhost:8787/admin \
 
 ---
 
-*Last updated: 2026-02-17. Branch: feature/9-customer-groups.*
+*Last updated: 2026-02-18. Group enrollment now triggered by payment, not registration.*

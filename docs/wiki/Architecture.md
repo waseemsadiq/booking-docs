@@ -113,6 +113,21 @@ Served with: `./galvani` (from git root). App URL: `http://localhost:8080/bookin
                                  └─────────────────────┘
 ```
 
+### Repository index
+
+All SQL is exclusive to Repository classes in `app/Repositories/`. Services and Controllers never call `Database::getInstance()` directly.
+
+Key repositories to know:
+
+| Repository | Owns |
+|---|---|
+| `AppSettingsRepository` | `app_settings` key-value store. Use `get($key)` / `set($key, $value)` / `getMultiple($keys[])` for Stripe keys, mail driver, SMTP/Bird credentials, and other admin-configurable settings. |
+| `NotificationSubscriptionRepository` | `user_notification_subscriptions`. CRUD for per-user event notification preferences (activity/session-specific subscriptions for admins and instructors). |
+| `BookingRepository` | `bookings` — core booking CRUD and availability queries. |
+| `PaymentRepository` | `payments` and `account_credit_transactions`. |
+| `SessionRepository` | `sessions` — generation and availability. |
+| `UserRepository` | `users` and `participants`. |
+
 ---
 
 ## How a request flows
@@ -139,7 +154,7 @@ Served with: `./galvani` (from git root). App URL: `http://localhost:8080/bookin
 
 3. **`Router`** matches `GET /api/admin/bookings` → calls `AdminController::listBookings()`.
 
-4. **`AdminController`** calls `BookingRepository`, returns `json_encode($data)`.
+4. **`AdminController`** calls `BookingService`, which calls `BookingRepository`, and returns `json_encode($data)`.
 
 ---
 

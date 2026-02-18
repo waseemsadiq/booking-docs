@@ -35,6 +35,27 @@ Customer URLs use slugs; instructor session URLs use `{slug}/{date}`
 
 ---
 
+## CSRF Token & Fetch Responses
+
+For JSON API requests with `fetch()`:
+```javascript
+const response = await fetch(csrfUrl(basePath + '/api/endpoint'), {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ _csrf_token: getCsrfToken(), ...payload })
+});
+const data = await response.json();
+if (!response.ok) throw new Error(data.message || 'Request failed');
+```
+
+**Critical:** Call `.json()` BEFORE checking `response.ok` — this allows error responses with JSON messages to be properly extracted. If you check `.ok` first and it fails on an error page (HTML), `.json()` will throw a parse error.
+
+- CSRF token sent as query param via `csrfUrl()` or in request body
+- Always parse JSON before checking HTTP status
+- Reference: `activity-detail.php` and `bookings.php` payment flows
+
+---
+
 ## Popover Pattern
 
 Reference implementation: `activity-detail.php`

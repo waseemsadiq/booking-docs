@@ -9,6 +9,40 @@ Seed data: `database/seeds.sql`
 
 ---
 
+## SQL Access Patterns
+
+All database queries must go through Repository classes in `app/Repositories/`. Never call `Database::getInstance()` directly in Services, Controllers, Route files, or Views.
+
+**Pattern:**
+1. Find the appropriate Repository for the table (e.g. users → `UserRepository`, bookings → `BookingRepository`)
+2. Add a method to the Repository if one does not exist
+3. Call the Repository method from your Service or Controller
+
+**AppSettings access:** Use `AppSettingsRepository::get($key)` / `::set($key, $value)` instead of querying `app_settings` directly. Use `getMultiple($keys[])` to fetch several settings in one query.
+
+**NotificationSubscriptions access:** Use `NotificationSubscriptionRepository` for all reads and writes to `user_notification_subscriptions`. Do not query this table from Services or Controllers.
+
+**Quick reference:**
+
+| Table | Repository |
+|---|---|
+| `app_settings` | `AppSettingsRepository` |
+| `user_notification_subscriptions` | `NotificationSubscriptionRepository` |
+| `bookings` | `BookingRepository` |
+| `payments`, `account_credit_transactions` | `PaymentRepository` |
+| `sessions` | `SessionRepository` |
+| `users`, `participants` | `UserRepository` |
+| `activities` | `ActivityRepository` |
+| `venues` | `VenueRepository` |
+| `bookable_spaces` | `SpaceRepository` |
+| `attendance_logs` | `AttendanceRepository` |
+| `gift_aid_declarations`, `gift_aid_claims` | `GiftAidRepository` |
+| `audit_logs` | `AuditLogRepository` |
+| `notification_logs`, `notification_broadcasts` | `NotificationRepository` |
+| `withdrawal_requests` | `WithdrawalRepository` |
+
+---
+
 ## Reset the database
 
 ```bash
