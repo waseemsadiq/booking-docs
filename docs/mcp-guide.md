@@ -106,6 +106,8 @@ The `workers/` package is not an npm package — it is a Cloudflare Worker that 
 
 These tools are defined in `mcp/packages/server/src/tools/` and are registered for every role.
 
+> **Account creation is web-only.** Register at `/register` and verify your email before using the MCP server. The server logs in with your credentials at startup — if your email is unverified, login will be rejected with a 403.
+
 | Tool | Actions | Description |
 |---|---|---|
 | `verify_connection` | — | Checks the API connection and returns the authenticated user's name, email, and role. Useful as a first step to confirm credentials are working. |

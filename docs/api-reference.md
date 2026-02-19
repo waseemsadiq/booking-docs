@@ -55,7 +55,7 @@ All auth endpoints verify the CSRF token via `Controller::verifyCsrf()`.
 
 ### `POST /api/auth/register`
 
-Register a new customer account. On success, auto-logs in and sets the `auth_token` cookie.
+Register a new customer account. On success, creates the account and sends a verification email. **No session is created — the user must verify their email before they can log in.**
 
 **Auth required:** None (public)
 **CSRF required:** Yes
@@ -82,10 +82,13 @@ Register a new customer account. On success, auto-logs in and sets the `auth_tok
   "email": "user@example.com",
   "first_name": "Jane",
   "last_name": "Smith",
-  "token": "<jwt>",
-  "user": { "id": 42, "role": "customer", ... }
+  "role": "customer",
+  "message": "Registration successful. Please check your email to verify your account.",
+  "needs_verification": true
 }
 ```
+
+No `auth_token` cookie is set. The user must click the link in the verification email before they can log in.
 
 **Errors**
 
@@ -129,6 +132,7 @@ Sets `auth_token` HTTP-only cookie.
 |---|---|
 | `400` | `Email and password are required` |
 | `401` | Invalid credentials (from AuthService) |
+| `403` | `Please verify your email before logging in.` — account exists but email not yet verified |
 
 ---
 

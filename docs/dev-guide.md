@@ -915,7 +915,7 @@ $newId = $db->lastInsertId();
 
 | Table | Purpose |
 |---|---|
-| `users` | User accounts. Roles: customer, instructor, admin, super_admin |
+| `users` | User accounts. Roles: customer, instructor, admin, super_admin. `email_verified` (0/1) controls login access. `email_verification_token` and `email_verification_expires_at` hold the 64-char hex token and 24-hour expiry used during registration; both are NULLed once verified. |
 | `participants` | Bookable people (self + children). Linked to user |
 | `gdpr_consents` | UK GDPR consent records per user per consent type |
 | `audit_logs` | Login attempts, password resets, payment events |
@@ -985,6 +985,71 @@ This drops all tables, but first saves `app_settings` (Stripe keys etc.), then d
 ---
 
 ## 8. Key Business Flows
+
+### Registration and email verification
+
+Login is fully blocked until a user verifies their email. No session is created at registration time.
+
+```
+Client: POST /api/auth/register { email, password, first_name, last_name, ... }
+
+AuthService::register()
+  1. Validate uniqueness — UserRepository::findByEmail()
+  2. Hash password — password_hash(PASSWORD_DEFAULT)
+  3. Generate token — bin2hex(random_bytes(32)) → 64-char hex
+  4. Set expiry — NOW() + 24 hours
+  5. UserRepository::createUser() — stores user with email_verified=0, token, expiry
+  6. NotificationService::sendVerificationEmail() — sends link to /verify-email?token=<TOKEN>
+  7. Return { id, email, first_name, last_name, role, needs_verification: true }
+  — No auth cookie is set
+
+AuthController: responds 201, no token/cookie
+
+Client is redirected (web) or informed (API) to check inbox
+```
+
+**Verification:**
+
+```
+GET /verify-email?token=<TOKEN>  (HTML form route in index.php)
+
+AuthService::verifyEmail($token)
+  1. UserRepository::findByVerificationToken() — WHERE token = ? AND expires_at > NOW()
+  2. If not found → throw "Invalid or expired verification token"
+  3. UserRepository::markEmailVerified() — SET email_verified=1, token=NULL, expires_at=NULL
+  4. If UPDATE fails → log + throw "Verification could not be saved"
+  5. logAudit('email_verified', userId)
+  6. Return merged user row
+
+index.php: sets $verifySuccess = true — view shows success + login link
+```
+
+**Resend:**
+
+```
+POST /resend-verification { email }  (HTML form route in index.php, no auth required)
+
+AuthService::resendVerification($email)
+  1. UserRepository::findByEmail() — if not found or already verified → silent return
+  2. Generate new token + 24h expiry
+  3. UserRepository::update() — persist new token; if UPDATE fails → log + return (don't send)
+  4. NotificationService::sendVerificationEmail() — resend link
+
+Always shows generic "check your inbox" message (prevents user enumeration)
+```
+
+**Login guard:**
+
+```
+AuthService::login()
+  — password_verify() passes
+  — if email_verified == 0 → throw Exception('...', code: 1001)
+
+index.php catches code 1001 → redirect to /verify-email?resend=1
+AuthController catches code 1001 → 403 JSON error
+```
+
+---
 
 ### Booking creation
 
