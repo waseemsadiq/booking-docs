@@ -435,7 +435,7 @@ This works for both Galvani (served from `/booking/`) and LAMP (`/booking/` or b
 3. Subsequent requests: `getAuthUser()` (views) or `requireAuth()` / `requireVerifiedRole()` (API) reads cookie
 4. JWT payload: `{user_id, email, role, iat, exp}`
 5. Password invalidation: if `users.password_changed_at > JWT.iat`, token is rejected immediately
-6. Token expiry: 24 hours (configurable in `config/app.php`)
+6. Token expiry: 120 minutes; rolling refresh — each page navigation resets the clock; JS idle timer logs out after 120 minutes of inactivity
 7. Logout: `GET /logout` calls `clearAuthCookie()` then redirects to `/`
 
 ---
@@ -1398,7 +1398,7 @@ API routes call `$this->verifyCsrf()` inside `requireAuth()` automatically. HTML
 - Algorithm: HS256 (HMAC-SHA256)
 - Secret: `JWT_SECRET` environment variable
 - Payload: `{ user_id, email, role, iat, exp }`
-- Expiry: 24 hours by default (configurable)
+- Expiry: 120 minutes; rolling refresh on each page navigation creates a 120-minute inactivity window
 - Stored in `auth_token` cookie: HttpOnly, SameSite=Strict, Secure when HTTPS
 
 **Password invalidation:** if `users.password_changed_at > JWT.iat`, the token is rejected even if not expired. This immediately invalidates all existing sessions when a user changes their password.

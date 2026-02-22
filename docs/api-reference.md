@@ -119,7 +119,7 @@ Authenticate and receive a session cookie.
 ```json
 {
   "token": "<jwt>",
-  "expires_in": 86400,
+  "expires_in": 7200,
   "user": { "id": 5, "role": "customer", "first_name": "Jane", ... }
 }
 ```
