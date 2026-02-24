@@ -90,8 +90,8 @@ mcp/
 
 ## 3. Packages overview
 
-| Package | npm name | Description |
-|---|---|---|
+| Package  | npm name                      | Description                                                                                                                  |
+| -------- | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
 | `server` | `@wellfoundation/booking-mcp` | Single role-aware server. Logs in at startup, detects role from JWT response, registers only the tools that role can access. |
 
 No need to choose a package — role is detected automatically from the login credentials you supply.
@@ -108,43 +108,43 @@ These tools are defined in `mcp/packages/server/src/tools/` and are registered f
 
 > **Account creation is web-only.** Register at `/register` and verify your email before using the MCP server. The server logs in with your credentials at startup — if your email is unverified, login will be rejected with a 403.
 
-| Tool | Actions | Description |
-|---|---|---|
-| `verify_connection` | — | Checks the API connection and returns the authenticated user's name, email, and role. Useful as a first step to confirm credentials are working. |
-| `search_activities` | `list`, `get_details`, `check_availability` | Browse all published activities, retrieve full details for a specific activity by slug, or check session availability for a date range. |
-| `my_bookings` | `list`, `get_details`, `create`, `cancel`, `pay` | List all bookings for the authenticated user. Create a new booking for a session. Cancel a booking (requires `confirmed: true`). Pay for a booking that was promoted from the waitlist (applies account credit first, then reports if Stripe payment is needed). |
-| `my_participants` | `list`, `add`, `update`, `delete` | Manage the authenticated user's bookable participants — themselves and any children or dependants. |
-| `my_credit` | `balance`, `transactions`, `top_up`, `withdraw` | View current account credit balance and transaction history. Top up credit or request a withdrawal (requires `confirmed: true`). |
-| `my_gift_aid` | `status`, `declare`, `update`, `history` | Check Gift Aid declaration status. Submit or update a Gift Aid declaration (requires UK address). View claim history. |
-| `my_profile` | `get`, `update` | View and update the authenticated user's profile details (name, email, phone, date of birth). |
+| Tool                | Actions                                          | Description                                                                                                                                                                                                                                                      |
+| ------------------- | ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `verify_connection` | —                                                | Checks the API connection and returns the authenticated user's name, email, and role. Useful as a first step to confirm credentials are working.                                                                                                                 |
+| `search_activities` | `list`, `get_details`, `check_availability`      | Browse all published activities, retrieve full details for a specific activity by slug, or check session availability for a date range.                                                                                                                          |
+| `my_bookings`       | `list`, `get_details`, `create`, `cancel`, `pay` | List all bookings for the authenticated user. Create a new booking for a session. Cancel a booking (requires `confirmed: true`). Pay for a booking that was promoted from the waitlist (applies account credit first, then reports if Stripe payment is needed). |
+| `my_participants`   | `list`, `add`, `update`, `delete`                | Manage the authenticated user's bookable participants — themselves and any children or dependants.                                                                                                                                                               |
+| `my_credit`         | `balance`, `transactions`, `top_up`, `withdraw`  | View current account credit balance and transaction history. Top up credit or request a withdrawal (requires `confirmed: true`).                                                                                                                                 |
+| `my_gift_aid`       | `status`, `declare`, `update`, `history`         | Check Gift Aid declaration status. Submit or update a Gift Aid declaration (requires UK address). View claim history.                                                                                                                                            |
+| `my_profile`        | `get`, `update`                                  | View and update the authenticated user's profile details (name, email, phone, date of birth).                                                                                                                                                                    |
 
 ### Instructor tools (instructor, admin, super_admin)
 
 These tools are defined in `mcp/packages/server/src/tools/instructor.ts`.
 
-| Tool | Actions | Description |
-|---|---|---|
+| Tool                  | Actions                           | Description                                                                                                                                   |
+| --------------------- | --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
 | `instructor_sessions` | `upcoming`, `past`, `get_details` | List upcoming or past sessions assigned to the authenticated instructor. Retrieve full details for a session, including the participant list. |
-| `mark_attendance` | — | Mark a booking as attended or absent for a specific session. Accepts `booking_id` and `status` (attended / absent). |
-| `instructor_stats` | — | View attendance statistics across all sessions assigned to the instructor — attendance rate, total sessions, total participants. |
+| `mark_attendance`     | —                                 | Mark a booking as attended or absent for a specific session. Accepts `booking_id` and `status` (attended / absent).                           |
+| `instructor_stats`    | —                                 | View attendance statistics across all sessions assigned to the instructor — attendance rate, total sessions, total participants.              |
 
 ### Admin tools (admin, super_admin only)
 
 These tools are defined in `mcp/packages/server/src/tools/`.
 
-| Tool | Actions | Description |
-|---|---|---|
-| `manage_activities` | `list`, `get`, `create`, `update`, `delete`, `generate_sessions` | Full CRUD for activities. Generate sessions for a recurring activity up to a given date. |
-| `manage_venues` | `list`, `get`, `create`, `update`, `delete` | Full CRUD for venues. |
-| `manage_spaces` | `list`, `get`, `create`, `update`, `delete` | Full CRUD for bookable spaces within venues. |
-| `manage_users` | `list`, `get`, `create`, `update`, `delete` | Full CRUD for user accounts. Supports role assignment. |
-| `admin_bookings` | `list`, `get`, `update`, `promote`, `refund`, `delete` | List all bookings with optional filters (status, activity, date range). Update booking status. Promote a waitlisted booking to pending. Refund a booking (requires `confirmed: true`). Delete a booking record (requires `confirmed: true`). |
-| `admin_reports` | `bookings`, `attendance`, `payments`, `activities`, `export_csv` | Pull booking, attendance, payment, and activity reports. Supports date range filtering. Export any report type as CSV data. |
-| `admin_gift_aid` | `overview`, `export` | View Gift Aid declaration and claim overview. Export Gift Aid data for HMRC submission. |
-| `admin_withdrawals` | `list`, `process`, `reject` | List pending and historical instructor withdrawal requests. Process (triggers Stripe refund) or reject a request (requires `confirmed: true`). |
-| `admin_settings` | `get`, `update` | View and update payment settings (Stripe keys). Super admin only. |
-| `admin_notify` | `preview`, `send`, `history` | Send ad-hoc email broadcasts to targeted customer groups. Two-step flow: preview shows recipient names + token, send consumes the token and emails all recipients. Supports `all_customers`, `activity`, `session`, and `user` audience types. History lists recent broadcasts. Always preview before sending. |
-| `admin_groups` | `list`, `get`, `create`, `update`, `delete`, `add_member`, `remove_member`, `search_participants`, `send_message`, `preview_age_assignment`, `apply_age_assignment`, `get_session_groups`, `set_session_groups` | Manage customer groups (activity-scoped participant rosters). Create groups, manage membership, bulk-assign members by age range, send messages to all group members, and control which groups are assigned to sessions. Sessions with groups assigned are restricted to members only. Children are assigned to a group automatically after their first paid session for the activity — not on registration. |
+| Tool                | Actions                                                                                                                                                                                                         | Description                                                                                                                                                                                                                                                                                                                                                                                                  |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `manage_activities` | `list`, `get`, `create`, `update`, `delete`, `generate_sessions`                                                                                                                                                | Full CRUD for activities. Generate sessions for a recurring activity up to a given date.                                                                                                                                                                                                                                                                                                                     |
+| `manage_venues`     | `list`, `get`, `create`, `update`, `delete`                                                                                                                                                                     | Full CRUD for venues.                                                                                                                                                                                                                                                                                                                                                                                        |
+| `manage_spaces`     | `list`, `get`, `create`, `update`, `delete`                                                                                                                                                                     | Full CRUD for bookable spaces within venues.                                                                                                                                                                                                                                                                                                                                                                 |
+| `manage_users`      | `list`, `get`, `create`, `update`, `delete`                                                                                                                                                                     | Full CRUD for user accounts. Supports role assignment.                                                                                                                                                                                                                                                                                                                                                       |
+| `admin_bookings`    | `list`, `get`, `update`, `promote`, `refund`, `delete`                                                                                                                                                          | List all bookings with optional filters (status, activity, date range). Update booking status. Promote a waitlisted booking to pending. Refund a booking (requires `confirmed: true`). Delete a booking record (requires `confirmed: true`).                                                                                                                                                                 |
+| `admin_reports`     | `bookings`, `attendance`, `payments`, `activities`, `export_csv`                                                                                                                                                | Pull booking, attendance, payment, and activity reports. Supports date range filtering. Export any report type as CSV data.                                                                                                                                                                                                                                                                                  |
+| `admin_gift_aid`    | `overview`, `export`                                                                                                                                                                                            | View Gift Aid declaration and claim overview. Export Gift Aid data for HMRC submission.                                                                                                                                                                                                                                                                                                                      |
+| `admin_withdrawals` | `list`, `process`, `reject`                                                                                                                                                                                     | List pending and historical instructor withdrawal requests. Process (triggers Stripe refund) or reject a request (requires `confirmed: true`).                                                                                                                                                                                                                                                               |
+| `admin_settings`    | `get`, `update`                                                                                                                                                                                                 | View and update payment settings (Stripe keys). Super admin only.                                                                                                                                                                                                                                                                                                                                            |
+| `admin_notify`      | `preview`, `send`, `history`                                                                                                                                                                                    | Send ad-hoc email broadcasts to targeted customer groups. Two-step flow: preview shows recipient names + token, send consumes the token and emails all recipients. Supports `all_customers`, `activity`, `session`, and `user` audience types. History lists recent broadcasts. Always preview before sending.                                                                                               |
+| `admin_groups`      | `list`, `get`, `create`, `update`, `delete`, `add_member`, `remove_member`, `search_participants`, `send_message`, `preview_age_assignment`, `apply_age_assignment`, `get_session_groups`, `set_session_groups` | Manage customer groups (activity-scoped participant rosters). Create groups, manage membership, bulk-assign members by age range, send messages to all group members, and control which groups are assigned to sessions. Sessions with groups assigned are restricted to members only. Children are assigned to a group automatically after their first paid session for the activity — not on registration. |
 
 ### Destructive action confirmation
 
@@ -181,21 +181,21 @@ Tool returns: { success: true, booking_id: 42, status: "cancelled" }
 
 Resources are readable data sources that an MCP client can access without making a tool call. Both the customer and admin packages expose these resources.
 
-| URI | Description |
-|---|---|
-| `wfcs://status` | Live connection status and authenticated user information (name, email, role). Refreshed on each read. |
+| URI                       | Description                                                                                                                        |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `wfcs://status`           | Live connection status and authenticated user information (name, email, role). Refreshed on each read.                             |
 | `wfcs://role-permissions` | A structured list of everything the current role is permitted to do. Useful for Claude to orient itself at the start of a session. |
 
 ### Prompts (admin package only)
 
 Prompts are pre-built multi-step conversation starters. They instruct Claude to call a sequence of tools and synthesise the results into a summary. Available in the admin package only.
 
-| Prompt | Parameters | What it does |
-|---|---|---|
-| `daily-briefing` | None | Calls `verify_connection`, `search_activities`, `admin_bookings`, and `admin_reports` to produce a morning briefing: bookings today, sessions happening today, pending waitlist actions, and any issues. |
-| `session-report` | `activity_slug`, `date_from` (optional), `date_to` (optional) | Fetches activity details and attendance data for the given slug and date range. Summarises attendance rates, no-shows, and trends. |
-| `waitlist-review` | None | Lists all waitlisted bookings and checks availability for each. Recommends which customers to promote and which to keep waiting. |
-| `revenue-summary` | `date_from` (optional), `date_to` (optional) | Pulls payment data for the period and summarises total revenue, breakdown by payment method (Stripe vs account credit), refunds issued, outstanding payments, and a comparison with the previous period where possible. |
+| Prompt            | Parameters                                                    | What it does                                                                                                                                                                                                            |
+| ----------------- | ------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `daily-briefing`  | None                                                          | Calls `verify_connection`, `search_activities`, `admin_bookings`, and `admin_reports` to produce a morning briefing: bookings today, sessions happening today, pending waitlist actions, and any issues.                |
+| `session-report`  | `activity_slug`, `date_from` (optional), `date_to` (optional) | Fetches activity details and attendance data for the given slug and date range. Summarises attendance rates, no-shows, and trends.                                                                                      |
+| `waitlist-review` | None                                                          | Lists all waitlisted bookings and checks availability for each. Recommends which customers to promote and which to keep waiting.                                                                                        |
+| `revenue-summary` | `date_from` (optional), `date_to` (optional)                  | Pulls payment data for the period and summarises total revenue, breakdown by payment method (Stripe vs account credit), refunds issued, outstanding payments, and a comparison with the previous period where possible. |
 
 ---
 
@@ -207,11 +207,11 @@ The Worker runs on Cloudflare's infrastructure and is accessible from any Claude
 
 The Worker exposes three endpoints, one per role:
 
-| Endpoint | Role | Tool count |
-|---|---|---|
-| `POST /customer` | Customer | 7 |
-| `POST /instructor` | Instructor | 10 |
-| `POST /admin` | Admin | 20 |
+| Endpoint           | Role       | Tool count |
+| ------------------ | ---------- | ---------- |
+| `POST /customer`   | Customer   | 7          |
+| `POST /instructor` | Instructor | 10         |
+| `POST /admin`      | Admin      | 20         |
 
 Auth is via `Authorization: Basic base64(email:password)` on every request.
 
@@ -329,7 +329,7 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json`:
       "command": "node",
       "args": ["/absolute/path/to/mcp/packages/server/dist/index.js"],
       "env": {
-        "WFCS_API_URL": "http://localhost:8080/booking",
+        "WFCS_API_URL": "https://booking.wfcs.co.uk",
         "WFCS_EMAIL": "your@email.com",
         "WFCS_PASSWORD": "yourpassword"
       }
@@ -349,7 +349,7 @@ Add to `.claude/settings.json` or `~/.claude/settings.json`:
       "command": "node",
       "args": ["/absolute/path/to/mcp/packages/server/dist/index.js"],
       "env": {
-        "WFCS_API_URL": "http://localhost:8080/booking",
+        "WFCS_API_URL": "https://booking.wfcs.co.uk",
         "WFCS_EMAIL": "your@email.com",
         "WFCS_PASSWORD": "yourpassword"
       }
@@ -360,11 +360,11 @@ Add to `.claude/settings.json` or `~/.claude/settings.json`:
 
 ### Environment variables
 
-| Variable | Required | Description | Example |
-|---|---|---|---|
-| `WFCS_API_URL` | Yes | Full base URL of the booking app | `http://localhost:8080/booking` |
-| `WFCS_EMAIL` | Yes | Email address to authenticate with | `admin@booking.local` |
-| `WFCS_PASSWORD` | Yes | Password for the above account | `password123` |
+| Variable        | Required | Description                        | Example                      |
+| --------------- | -------- | ---------------------------------- | ---------------------------- |
+| `WFCS_API_URL`  | Yes      | Full base URL of the booking app   | `https://booking.wfcs.co.uk` |
+| `WFCS_EMAIL`    | Yes      | Email address to authenticate with | `admin@booking.local`        |
+| `WFCS_PASSWORD` | Yes      | Password for the above account     | `password123`                |
 
 ### Verify the connection
 
@@ -380,12 +380,12 @@ Claude should respond with the authenticated user's name and role.
 
 Some operations cannot or should not be done via MCP.
 
-| Feature | Why not supported |
-|---|---|
-| **Image uploads** | MCP tool calls do not carry binary file data. Use the web UI to upload activity and venue images. |
-| **Stripe payment creation** | Creating a payment intent requires delivering a `client_secret` to a browser-based Stripe.js SDK. MCP cannot complete this loop. The tools can view payment records and issue refunds, but cannot initiate a customer payment. |
-| **Real-time updates** | MCP is a request/response protocol. Users call tools on demand; there is no push/subscription mechanism for live booking notifications. |
-| **Notification preferences** | The notification preference screen (email/SMS/WhatsApp toggles per user) has no REST API endpoint. Preferences are managed via the web UI only. |
+| Feature                      | Why not supported                                                                                                                                                                                                              |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Image uploads**            | MCP tool calls do not carry binary file data. Use the web UI to upload activity and venue images.                                                                                                                              |
+| **Stripe payment creation**  | Creating a payment intent requires delivering a `client_secret` to a browser-based Stripe.js SDK. MCP cannot complete this loop. The tools can view payment records and issue refunds, but cannot initiate a customer payment. |
+| **Real-time updates**        | MCP is a request/response protocol. Users call tools on demand; there is no push/subscription mechanism for live booking notifications.                                                                                        |
+| **Notification preferences** | The notification preference screen (email/SMS/WhatsApp toggles per user) has no REST API endpoint. Preferences are managed via the web UI only.                                                                                |
 
 ---
 
@@ -456,4 +456,4 @@ curl -X POST http://localhost:8787/admin \
 
 ---
 
-*Last updated: 2026-02-18. Group enrollment now triggered by payment, not registration.*
+_Last updated: 2026-02-18. Group enrollment now triggered by payment, not registration._
