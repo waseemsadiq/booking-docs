@@ -49,7 +49,6 @@ Full setup instructions: [Getting Started](Getting-Started)
 | Frontend | TailwindCSS v3, Vanilla JS |
 | Payments | Stripe (PaymentIntents) |
 | Email | Resend (HTTP API, no Composer dependency) |
-| SMS / WhatsApp | Bird (mock-able locally) |
 
 ---
 

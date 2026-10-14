@@ -502,16 +502,6 @@ Use this for cloud hosting where SMTP is blocked or unavailable.
 
 **No email driver configured yet?** The system handles this gracefully — if neither SMTP nor Resend has been set up, email notifications are silently skipped rather than showing errors to customers. Everything else (bookings, payments, waitlist) continues to work normally. You can configure email at any time and notifications will start sending immediately.
 
-**Bird (SMS / WhatsApp)**
-
-The Bird card has a toggle next to the heading. It is off by default — toggle it on to expand the configuration form.
-
-1. Toggle **Bird (SMS / WhatsApp)** on.
-2. Enter the **Bird API Key** — obtain this from your Bird account. Leave blank to keep the existing key.
-3. Enter the **SMS Originator** — the sender name or number displayed on SMS messages.
-4. Enter the **WhatsApp Workspace ID** and **WhatsApp Channel ID** — from your Bird WhatsApp configuration.
-5. Select **Save Bird Settings**.
-
 All API keys are encrypted at rest using AES-256-GCM. Database settings take priority over environment variables, so updates made here take effect immediately without server file access.
 
 ---
@@ -531,8 +521,7 @@ Go to **Settings**, then the **Account** sub-tab (available to all admin and sup
 You can configure which channels you receive notifications on:
 
 1. Use the toggles to enable or disable **Email** and **In-app** notifications.
-2. If Bird (SMS / WhatsApp) has been configured under Notification Services, **SMS** and **WhatsApp** toggles will also appear, along with a **Mobile number** field.
-3. Select **Save preferences**.
+2. Select **Save preferences**.
 
 ### Notification subscriptions
 
@@ -541,7 +530,7 @@ Subscriptions let you receive notifications for specific events on particular ac
 **Adding a subscription:**
 
 1. Select **+ Add subscription**.
-2. Choose the activity (and optionally a specific session), the event type you want to be notified about, and the channels (Email, SMS, WhatsApp).
+2. Choose the activity (and optionally a specific session), the event type you want to be notified about, and whether to receive it by email (admins can also choose in-app).
 3. Select **Add subscription**.
 
 **Editing a subscription:**

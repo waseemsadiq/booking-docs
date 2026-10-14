@@ -44,7 +44,7 @@ booking/                        # git root (local Galvani workspace, not pushed)
     ├── css/                    # Tailwind source
     ├── uploads/                # User-uploaded images
     ├── storage/                # Session files
-    └── logs/                   # Email + SMS mock logs
+    └── logs/                   # Email mock logs
 ```
 
 Served with: `./galvani` (from git root). App URL: `http://localhost:8080/booking/`.
@@ -121,7 +121,7 @@ Key repositories to know:
 
 | Repository | Owns |
 |---|---|
-| `AppSettingsRepository` | `app_settings` key-value store. Use `get($key)` / `set($key, $value)` / `getMultiple($keys[])` for Stripe keys, mail driver, SMTP/Bird credentials, and other admin-configurable settings. |
+| `AppSettingsRepository` | `app_settings` key-value store. Use `get($key)` / `set($key, $value)` / `getMultiple($keys[])` for Stripe keys, mail driver, SMTP credentials, and other admin-configurable settings. |
 | `NotificationSubscriptionRepository` | `user_notification_subscriptions`. CRUD for per-user event notification preferences (activity/session-specific subscriptions for admins and instructors). |
 | `BookingRepository` | `bookings` — core booking CRUD and availability queries. |
 | `PaymentRepository` | `payments` and `account_credit_transactions`. |

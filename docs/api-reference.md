@@ -1719,8 +1719,6 @@ These are HTML form POST routes (no JSON body), but document the server-side beh
 | `activity_id` | integer | No | Scope to specific activity |
 | `session_id` | integer | No | Scope to specific session |
 | `email_enabled` | checkbox | No | `0` or `1` |
-| `sms_enabled` | checkbox | No | `0` or `1` |
-| `whatsapp_enabled` | checkbox | No | `0` or `1` |
 | `in_app_enabled` | integer | No | `0` or `1` (admin-only field) |
 
 ### Instructor Notification Subscriptions
@@ -1739,9 +1737,6 @@ Same pattern under `/instructor/notification-subscriptions/*`. `activity_id` is 
 | Field | Type | Notes |
 |---|---|---|
 | `email_notifications` | checkbox | |
-| `sms_notifications` | checkbox | |
-| `whatsapp_notifications` | checkbox | |
-| `bird_notification_phone` | string | E.164 format for SMS/WhatsApp |
 
 ---
 

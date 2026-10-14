@@ -54,10 +54,9 @@ $_ENV['APP_KEY']                = 'your-32-char-aes-key';
 $_ENV['STRIPE_SECRET_KEY']      = 'sk_live_...';
 $_ENV['STRIPE_PUBLISHABLE_KEY'] = 'pk_live_...';
 $_ENV['STRIPE_WEBHOOK_SECRET']  = 'whsec_...';
-$_ENV['BIRD_MOCK']              = 'false';
 ```
 
-Leave email driver credentials (Resend API key or SMTP password) and Bird credentials blank if you are configuring them via the admin Settings page (recommended — avoids storing secrets in files).
+Leave email driver credentials (Resend API key or SMTP password) blank if you are configuring them via the admin Settings page (recommended — avoids storing secrets in files).
 
 ### `config/database.php`
 
@@ -159,7 +158,7 @@ Re-enter your Stripe secret key, publishable key, and webhook secret, then save.
 
 **Why**: The database dump contains Stripe keys encrypted with your local `APP_KEY`. The production server has a different `APP_KEY` in `config/env.php`, so the encrypted values from the dump cannot be decrypted. Re-saving via the UI re-encrypts them with the production key.
 
-The same applies to Settings > Notification Services for email (SMTP or Resend) and Bird SMS/WhatsApp credentials.
+The same applies to Settings > Notification Services for email (SMTP or Resend) credentials.
 
 ---
 
@@ -177,7 +176,7 @@ The same applies to Settings > Notification Services for email (SMTP or Resend) 
 1. Pull the latest code locally.
 2. Re-run `build.sh` (choose option 1 or 2 depending on whether you want to sync the database).
 3. Upload changed files from `dist/` to LAMP — you only need to upload modified files.
-4. If the database schema changed, run the migration or re-import `booking-install.sql`.
+4. If the database schema changed, run the migration or re-import `booking-install.sql`. The SMS/WhatsApp removal release needs `database/migrations/2026_10_14_remove_sms_whatsapp.sql`.
 
 Config files in `dist/config/` are preserved by `build.sh` on subsequent runs (it backs them up before wiping `dist/` and restores them after).
 

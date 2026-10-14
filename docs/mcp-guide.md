@@ -385,7 +385,7 @@ Some operations cannot or should not be done via MCP.
 | **Image uploads**            | MCP tool calls do not carry binary file data. Use the web UI to upload activity and venue images.                                                                                                                              |
 | **Stripe payment creation**  | Creating a payment intent requires delivering a `client_secret` to a browser-based Stripe.js SDK. MCP cannot complete this loop. The tools can view payment records and issue refunds, but cannot initiate a customer payment. |
 | **Real-time updates**        | MCP is a request/response protocol. Users call tools on demand; there is no push/subscription mechanism for live booking notifications.                                                                                        |
-| **Notification preferences** | The notification preference screen (email/SMS/WhatsApp toggles per user) has no REST API endpoint. Preferences are managed via the web UI only.                                                                                |
+| **Notification preferences** | The notification preference screen (email toggle per user) has no REST API endpoint. Preferences are managed via the web UI only.                                                                                |
 
 ---
 

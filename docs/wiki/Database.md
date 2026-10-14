@@ -259,12 +259,12 @@ One row per eligible payment. Linked to the declaration and tracks HMRC submissi
 ### Notification and audit tables
 
 #### `notifications`
-A log of every notification sent (email, SMS, WhatsApp, in-app) and its delivery status.
+A log of every notification sent (email, in-app) and its delivery status.
 
 | Column | Notes |
 |---|---|
-| `channel` | `email`, `sms`, `whatsapp`, `in_app` |
-| `cost` | decimal(8,4) — Bird SMS/WhatsApp costs tracked per message |
+| `channel` | `email`, `in_app` |
+| `cost` | decimal(8,4) — per-message cost; always 0 for email |
 | `status` | `pending`, `sent`, `failed` |
 | `read_at` | timestamp set when in-app notification is read |
 
@@ -292,7 +292,7 @@ Allows admins and instructors to subscribe to specific event types (e.g. "email 
 Immutable record of all significant actions (logins, payments, refunds, CRUD on key entities).
 
 #### `app_settings`
-Key-value store for admin-configurable settings. Stripe keys, SMTP password, Resend API key, and Bird credentials are stored encrypted with AES-256-GCM.
+Key-value store for admin-configurable settings. Stripe keys, SMTP password and Resend API key are stored encrypted with AES-256-GCM.
 
 ---
 

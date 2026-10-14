@@ -35,7 +35,6 @@ The system lets members book fitness classes and community activities, hire meet
 - Stripe payment integration with account credit priority
 - Gift Aid declaration and HMRC-claim tracking
 - Email notifications via SMTP or Resend (driver-switchable; SMTP uses stream_socket_client, no Composer dep)
-- SMS and WhatsApp notifications via Bird
 - Admin/instructor portal for attendance, refunds, GDPR, and reporting
 
 ### Who uses it
@@ -58,7 +57,6 @@ The system lets members book fitness classes and community activities, hire meet
 | Frontend | HTML + TailwindCSS v4 + Vanilla JS |
 | Payments | Stripe (PHP SDK via Composer, keys stored encrypted in DB) |
 | Email | SMTP (`stream_socket_client`, core PHP) or Resend HTTP API — driver-switchable via admin UI |
-| SMS/WhatsApp | Bird API (plain cURL, mock mode for development) |
 | CSS build | TailwindCSS CLI via npm |
 | Tests | PHPUnit 10 (unit tests only, no DB integration tests) |
 
@@ -119,7 +117,6 @@ DB_PASS=
 DB_HOST=
 DB_PORT=3306
 
-BIRD_MOCK=true                         # true = log to file, false = live Bird API
 REALTIME_ENABLED=true
 ```
 
@@ -191,11 +188,10 @@ booking/                          # Git root (local Galvani workspace — not pu
 │   │   │   ├── AppStorage.php    # Thread-safe in-memory key-value store (Galvani)
 │   │   │   ├── AttendanceService.php
 │   │   │   ├── AuthService.php
-│   │   │   ├── BirdService.php   # SMS/WhatsApp via Bird API
 │   │   │   ├── BookingService.php
 │   │   │   ├── GiftAidService.php
 │   │   │   ├── JWT.php           # HS256 JWT encode/decode
-│   │   │   ├── NotificationService.php  # Orchestrates email (SMTP or Resend) + Bird
+│   │   │   ├── NotificationService.php  # Orchestrates email (SMTP or Resend) + in-app
 │   │   │   ├── ParticipantService.php
 │   │   │   ├── PaymentService.php       # Stripe + account credit
 │   │   │   ├── ReportService.php
@@ -271,7 +267,6 @@ booking/                          # Git root (local Galvani workspace — not pu
 │   │   ├── app.php               # App config (timezone, JWT expiry, feature flags)
 │   │   ├── database.php          # DB config (auto-detects socket path for Galvani)
 │   │   ├── stripe.php            # Stripe config (keys now in DB, this is a stub)
-│   │   ├── sms.php               # Bird SMS config stub
 │   │   ├── smtp.php              # Email from-address config stub
 │   │   ├── app-shared.example.php        # Template for LAMP app.php
 │   │   ├── database-shared.example.php   # Template for LAMP database.php
@@ -287,7 +282,6 @@ booking/                          # Git root (local Galvani workspace — not pu
 │   │
 │   ├── storage/sessions/         # PHP session files (gitignored)
 │   └── logs/                     # Runtime logs (gitignored)
-│       ├── bird-mock.log         # Mock SMS/WhatsApp output (BIRD_MOCK=true)
 │       └── emails.log            # Email log when no driver is configured
 │
 ├── database/
@@ -565,7 +559,7 @@ class BookingService
 
 | Repository | Table(s) | Notes |
 |---|---|---|
-| `AppSettingsRepository` | `app_settings` | Key-value store for admin-configurable settings. Use `get($key)`, `set($key, $value)`, `getMultiple($keys[])`. All Stripe keys, mail driver, SMTP credentials, and Bird credentials go through this class. |
+| `AppSettingsRepository` | `app_settings` | Key-value store for admin-configurable settings. Use `get($key)`, `set($key, $value)`, `getMultiple($keys[])`. All Stripe keys, mail driver and SMTP credentials go through this class. |
 | `NotificationSubscriptionRepository` | `user_notification_subscriptions` | CRUD for per-user event notification preferences. Manages activity/session-specific subscriptions for admins and instructors. |
 | `BookingRepository` | `bookings` | Core booking CRUD, filters, block-booking queries. |
 | `PaymentRepository` | `payments`, `account_credit_transactions` | Payment records and credit ledger writes. |
@@ -951,7 +945,7 @@ $newId = $db->lastInsertId();
 
 | Table | Purpose |
 |---|---|
-| `app_settings` | Key-value store for admin-configurable settings. Stripe keys, email driver config (Resend API key, SMTP credentials), Bird credentials — sensitive values encrypted with AES-256-GCM |
+| `app_settings` | Key-value store for admin-configurable settings. Stripe keys, email driver config (Resend API key, SMTP credentials) — sensitive values encrypted with AES-256-GCM |
 | `cache` | Generic key-value cache table |
 
 **Groups:**
@@ -1216,23 +1210,6 @@ Settings priority: `app_settings` DB table → env var fallback → hardcoded de
 
 **To test emails locally (Resend):** Leave `resend_api_key` unset in `app_settings`. Emails print to `logs/emails.log` instead.
 
-### SMS and WhatsApp (Bird)
-
-```
-BirdService is constructed with:
-  - BIRD_MOCK env var: if true, writes to logs/bird-mock.log and returns success
-  - bird_api_key from app_settings (encrypted)
-  - bird_sms_originator, bird_whatsapp_workspace_id, bird_whatsapp_channel_id
-
-NotificationService dispatches SMS/WhatsApp via BirdService::sendSms() / sendWhatsApp()
-  alongside email for each notification event
-
-To go live:
-  1. Set credentials in Admin -> Settings -> Notification Services
-  2. Set BIRD_MOCK=false in booking/booking/.env
-  3. Restart Galvani
-```
-
 ---
 
 ## 9. Frontend Patterns
@@ -1409,7 +1386,7 @@ API routes call `$this->verifyCsrf()` inside `requireAuth()` automatically. HTML
 
 ### Encrypted settings
 
-Sensitive values in `app_settings` (Stripe keys, Resend API key, Bird credentials) are encrypted with AES-256-GCM before storage. The encryption key is `APP_KEY` (64-char hex, 256-bit) from `.env`.
+Sensitive values in `app_settings` (Stripe keys, Resend API key, SMTP password) are encrypted with AES-256-GCM before storage. The encryption key is `APP_KEY` (64-char hex, 256-bit) from `.env`.
 
 ```php
 // Encrypt before storing
@@ -1629,7 +1606,6 @@ cd booking/booking
 | `DB_PASS` | No | Database password | empty (dev) |
 | `DB_HOST` | No | MySQL host — leave blank for Galvani socket | `localhost` (LAMP) |
 | `DB_PORT` | No | MySQL port | `3306` |
-| `BIRD_MOCK` | No | If `true`, SMS/WhatsApp writes to log file | `true` (dev) / `false` (prod) |
 | `REALTIME_ENABLED` | No | Enable WebSocket real-time features | `true` |
 | `RESEND_API_KEY` | No | Fallback Resend key (DB setting takes priority) | `re_...` |
 | `MAIL_DRIVER` | No | Active email driver: `smtp` or `resend` | `resend` |
@@ -1656,10 +1632,6 @@ cd booking/booking
 | `smtp_encryption` | Encryption mode: `tls`, `ssl`, or `none` |
 | `mail_from_address` | Email from address |
 | `mail_from_name` | Email from display name |
-| `bird_api_key` | Bird SMS/WhatsApp API key (encrypted) |
-| `bird_sms_originator` | Bird SMS sender name/number |
-| `bird_whatsapp_workspace_id` | Bird WhatsApp workspace ID |
-| `bird_whatsapp_channel_id` | Bird WhatsApp channel ID |
 
 #### `booking/.env` (Galvani runtime — minimal)
 

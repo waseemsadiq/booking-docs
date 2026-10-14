@@ -77,10 +77,9 @@ RESEND_API_KEY=re_...          # Resend driver only — or leave blank to log em
 MAIL_FROM_ADDRESS=noreply@example.com
 MAIL_FROM_NAME=WFCS Booking
 
-BIRD_MOCK=true                 # true = log SMS/WhatsApp to logs/bird-mock.log (sends only — does not show Bird settings in UI)
 ```
 
-For local development, Stripe test keys and `BIRD_MOCK=true` are sufficient. Note: mock mode only intercepts outbound sends — the Bird settings UI in admin only appears when a real API key is configured. Email sending falls back to `logs/emails.log` if no driver is configured. For local SMTP testing use Mailpit (`brew install mailpit`) — configure host=localhost port=1025 encryption=none in Settings > Notification Services.
+For local development, Stripe test keys are sufficient. Email sending falls back to `logs/emails.log` if no driver is configured. For local SMTP testing use Mailpit (`brew install mailpit`) — configure host=localhost port=1025 encryption=none in Settings > Notification Services.
 
 ---
 
