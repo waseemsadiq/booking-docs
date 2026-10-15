@@ -52,7 +52,7 @@ What the build does:
 This is the only config file to edit. Fill in:
 
 ```php
-$_ENV['APP_URL'] = 'https://yourdomain.com';
+$_ENV['APP_URL'] = 'https://booking.wellfoundation.org.uk';
 
 $_ENV['DB_HOST'] = 'localhost';
 $_ENV['DB_PORT'] = '3306';
@@ -109,8 +109,8 @@ PHP must be able to write to `uploads/`, `storage/` and `logs/`. On most hosts `
 
 ## Step 6 — Check it works
 
-1. Visit `https://yourdomain.com/` — you should see the welcome page.
-2. Check the protected paths are refused: `https://yourdomain.com/config/env.php` and `https://yourdomain.com/logs/` should both give **403 Forbidden**. If they don't, `.htaccess` isn't being read: ask your host to enable `AllowOverride All`.
+1. Visit `https://booking.wellfoundation.org.uk/` — you should see the welcome page.
+2. Check the protected paths are refused: `https://booking.wellfoundation.org.uk/config/env.php`, `https://booking.wellfoundation.org.uk/logs/` and `https://booking.wellfoundation.org.uk/scripts/send-session-reminders.php` should all give **403 Forbidden**. If they don't, `.htaccess` isn't being read: ask your host to enable `AllowOverride All`.
 3. Log in as an admin.
 
 ---
@@ -124,7 +124,7 @@ The export leaves out anything encrypted with your local `APP_KEY`. Re-enter the
 
 Then register the Stripe webhook in the Stripe dashboard:
 
-- Endpoint URL: `https://yourdomain.com/api/payments/stripe/webhook`
+- Endpoint URL: `https://booking.wellfoundation.org.uk/api/payments/stripe/webhook`
 - Events: `payment_intent.succeeded`, `payment_intent.payment_failed`
 
 Make a test booking with a Stripe test card (`4242 4242 4242 4242`).
@@ -137,6 +137,16 @@ Email is in Test mode. When you're ready, choose **Live** under **Settings → E
 
 If the database was installed before this release, run `database/migrations/2026_10_15_mail_test_mode.sql` first: it replaces the old on/off switch with the delivery modes.
 
+
+Then schedule the three cron jobs in the hosting control panel (**Cron jobs** in cPanel, **Scheduled Tasks** on IONOS), with the real path to your web root:
+
+```cron
+0 8 * * * php /path/to/web-root/scripts/send-session-reminders.php >> /path/to/web-root/logs/cron.log 2>&1
+0 8 * * * php /path/to/web-root/scripts/send-attendance-confirmations.php >> /path/to/web-root/logs/cron.log 2>&1
+0 9 * * * php /path/to/web-root/scripts/send-payment-reminders.php >> /path/to/web-root/logs/cron.log 2>&1
+```
+
+They send session reminders, attendance confirmations and payment reminders. Don't schedule them before email is Live: they record each reminder as sent even when Test mode held the email back, so those customers wouldn't be reminded later. If the host's `php` is older than 8.1, use its newer binary (e.g. `/usr/bin/php8.3`). After the first run, `logs/cron.log` shows how many each one sent.
 ---
 
 ## Updating after a code change

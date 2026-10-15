@@ -2057,53 +2057,17 @@
     "title": "14. Scheduled Tasks (Cron Jobs)",
     "level": 2,
     "anchor": "14-scheduled-tasks-cron-jobs",
-    "snippet": "Two PHP scripts in `scripts/` must be scheduled on the production server. Both follow the same pattern as the existing payment reminder script: load t",
-    "content": "Two PHP scripts in `scripts/` must be scheduled on the production server. Both follow the same pattern as the existing payment reminder script: load the framework, run the service method, mark records sent, log output."
+    "snippet": "Three scripts in `scripts/` run on a schedule. `build.sh` ships only these (plus `scripts/cron-bootstrap.php`) into `dist/scripts/`; the rest of `scri",
+    "content": "Three scripts in `scripts/` run on a schedule. `build.sh` ships only these (plus `scripts/cron-bootstrap.php`) into `dist/scripts/`; the rest of `scripts/` is one-off local data work and never ships. Each script starts with `require __DIR__ . '/cron-bootstrap.php';`, which refuses anything but the command line (`PHP_SAPI !== 'cli'` → 403), loads settings exactly like `index.php` (`loadEnvironment()`: `config/env.php` on the server, `.env` under Galvani), and registers the autoloader and helpers. `.htaccess` also blocks `scripts/`, and `dist/scripts/` gets its own deny-all `.htaccess`. All their email goes through `GuardedMailer`, so the delivery mode applies (`CronScriptsTest`). | Script | What it does | Schedule | |---|---|---| | `send-session-reminders.php` | Reminds confirmed bookings about sessions in the next 7 days, on the activity's reminder day (template default: Monday) | daily, 08:00 | | `send-attendance-confirmations.php` | Asks group participants to confirm they're coming to next week's sessions, on the reminder day. Links use `APP_URL`; the script refuses to run without it | daily, 08:00 | | `send-payment-reminders.php` | Chases `unpaid_attended` bookings every `payment_reminder_days` (per activity) | daily, 09:00 | 0 8 * * * php /path/to/web-root/scripts/send-attendance-confirmations.php >> /path/to/web-root/logs/cron.log 2>&1 0 9 * * * php /path/to/web-root/scripts/send-payment-reminders.php >> /path/to/web-root/logs/cron.log 2>&1 `logs/` is inside the web root but denied by `.htaccess`. Use the host's PHP 8.1+ CLI binary if `php` on its path is older (hosts often name it e.g. `/usr/bin/php8.3`). **Schedule them on launch day, not before.** The scripts record a reminder or confirmation as sent whether or not the email went out (they ignore `dispatch()`'s result), so a run in Test mode marks everyone beyond the 25 redirected emails as reminded."
   },
   {
     "pageId": "developer-guide",
     "pageTitle": "Developer Guide",
-    "title": "Session reminders — `scripts/send-session-reminders.php`",
+    "title": "Adding cron jobs (cPanel, IONOS, or similar)",
     "level": 3,
-    "anchor": "session-reminders-scripts-send-session-reminders-php",
-    "snippet": "Finds all `scheduled` sessions starting within the next 24 hours that have not yet had a reminder sent (`sessions.reminder_sent_at IS NULL`), sends em",
-    "content": "Finds all `scheduled` sessions starting within the next 24 hours that have not yet had a reminder sent (`sessions.reminder_sent_at IS NULL`), sends email to every confirmed booking on that session, then stamps `reminder_sent_at` on the session row to prevent duplicates. **Recommended schedule:** hourly, so reminders fire as close to the 24-hour mark as possible."
-  },
-  {
-    "pageId": "developer-guide",
-    "pageTitle": "Developer Guide",
-    "title": "Session reminders — run every hour",
-    "level": 1,
-    "anchor": "session-reminders-run-every-hour",
-    "snippet": "0 * * * * php /var/www/html/booking/scripts/send-session-reminders.php >> /var/log/booking-session-reminders.log 2>&1",
-    "content": "0 * * * * php /var/www/html/booking/scripts/send-session-reminders.php >> /var/log/booking-session-reminders.log 2>&1"
-  },
-  {
-    "pageId": "developer-guide",
-    "pageTitle": "Developer Guide",
-    "title": "Payment reminders — `scripts/send-payment-reminders.php`",
-    "level": 3,
-    "anchor": "payment-reminders-scripts-send-payment-reminders-php",
-    "snippet": "Finds bookings with `booking_status = unpaid_attended` where the last payment reminder was sent more than `payment_reminder_days` (per activity) ago, ",
-    "content": "Finds bookings with `booking_status = unpaid_attended` where the last payment reminder was sent more than `payment_reminder_days` (per activity) ago, sends a reminder, then stamps `payment_reminder_sent_at` on the booking. **Recommended schedule:** daily at 09:00."
-  },
-  {
-    "pageId": "developer-guide",
-    "pageTitle": "Developer Guide",
-    "title": "Payment reminders — run daily at 09:00",
-    "level": 1,
-    "anchor": "payment-reminders-run-daily-at-09-00",
-    "snippet": "0 9 * * * php /var/www/html/booking/scripts/send-payment-reminders.php >> /var/log/booking-payment-reminders.log 2>&1",
-    "content": "0 9 * * * php /var/www/html/booking/scripts/send-payment-reminders.php >> /var/log/booking-payment-reminders.log 2>&1"
-  },
-  {
-    "pageId": "developer-guide",
-    "pageTitle": "Developer Guide",
-    "title": "Adding cron jobs on IONOS (or cPanel-based LAMP host)",
-    "level": 3,
-    "anchor": "adding-cron-jobs-on-ionos-or-cpanel-based-lamp-host",
-    "snippet": "1. Log in to the IONOS control panel (or cPanel) 2. Navigate to **Hosting → Cron jobs** (cPanel) or **Scheduled Tasks** (IONOS Managed Hosting) 3. Add",
-    "content": "1. Log in to the IONOS control panel (or cPanel) 2. Navigate to **Hosting → Cron jobs** (cPanel) or **Scheduled Tasks** (IONOS Managed Hosting) 3. Add each job above — adjust the path to match the actual `public_html` document root 4. Verify by tailing the log file after the first scheduled run: ```bash tail -f /var/log/booking-session-reminders.log ```"
+    "anchor": "adding-cron-jobs-cpanel-ionos-or-similar",
+    "snippet": "1. In the hosting control panel, open **Cron jobs** (cPanel) or **Scheduled Tasks** (IONOS). 2. Add the three lines above, with the real path to the w",
+    "content": "1. In the hosting control panel, open **Cron jobs** (cPanel) or **Scheduled Tasks** (IONOS). 2. Add the three lines above, with the real path to the web root. 3. After the first run, check `logs/cron.log` (over SFTP): each line reads like `2026-10-19 08:00:01 — Sent 42 session reminder(s)`."
   },
   {
     "pageId": "developer-guide",
@@ -3362,8 +3326,8 @@
     "title": "Step 6 — Check it works",
     "level": 2,
     "anchor": "step-6-check-it-works",
-    "snippet": "1. Visit `https://yourdomain.com/` — you should see the welcome page. 2. Check the protected paths are refused: `https://yourdomain.com/config/env.php",
-    "content": "1. Visit `https://yourdomain.com/` — you should see the welcome page. 2. Check the protected paths are refused: `https://yourdomain.com/config/env.php` and `https://yourdomain.com/logs/` should both give **403 Forbidden**. If they don't, `.htaccess` isn't being read: ask your host to enable `AllowOverride All`. 3. Log in as an admin. ---"
+    "snippet": "1. Visit `https://booking.wellfoundation.org.uk/` — you should see the welcome page. 2. Check the protected paths are refused: `https://booking.wellfo",
+    "content": "1. Visit `https://booking.wellfoundation.org.uk/` — you should see the welcome page. 2. Check the protected paths are refused: `https://booking.wellfoundation.org.uk/config/env.php`, `https://booking.wellfoundation.org.uk/logs/` and `https://booking.wellfoundation.org.uk/scripts/send-session-reminders.php` should all give **403 Forbidden**. If they don't, `.htaccess` isn't being read: ask your host to enable `AllowOverride All`. 3. Log in as an admin. ---"
   },
   {
     "pageId": "deployment",
@@ -3372,7 +3336,7 @@
     "level": 2,
     "anchor": "step-7-re-enter-credentials",
     "snippet": "The export leaves out anything encrypted with your local `APP_KEY`. Re-enter them: - **Settings → Stripe**: publishable key, secret key, webhook signi",
-    "content": "The export leaves out anything encrypted with your local `APP_KEY`. Re-enter them: - **Settings → Stripe**: publishable key, secret key, webhook signing secret, and the JustGiving details - **Settings → Email**: the SMTP password Then register the Stripe webhook in the Stripe dashboard: - Endpoint URL: `https://yourdomain.com/api/payments/stripe/webhook` - Events: `payment_intent.succeeded`, `payment_intent.payment_failed` Make a test booking with a Stripe test card (`4242 4242 4242 4242`). ---"
+    "content": "The export leaves out anything encrypted with your local `APP_KEY`. Re-enter them: - **Settings → Stripe**: publishable key, secret key, webhook signing secret, and the JustGiving details - **Settings → Email**: the SMTP password Then register the Stripe webhook in the Stripe dashboard: - Endpoint URL: `https://booking.wellfoundation.org.uk/api/payments/stripe/webhook` - Events: `payment_intent.succeeded`, `payment_intent.payment_failed` Make a test booking with a Stripe test card (`4242 4242 4242 4242`). ---"
   },
   {
     "pageId": "deployment",
@@ -3381,7 +3345,7 @@
     "level": 2,
     "anchor": "step-8-launch-day",
     "snippet": "Email is in Test mode. When you're ready, choose **Live** under **Settings → Email → Delivery** and select **Save delivery**. The server must have `AP",
-    "content": "Email is in Test mode. When you're ready, choose **Live** under **Settings → Email → Delivery** and select **Save delivery**. The server must have `APP_ENV` set to `production` in `config/env.php` (the template does), or Live behaves as Test. If the database was installed before this release, run `database/migrations/2026_10_15_mail_test_mode.sql` first: it replaces the old on/off switch with the delivery modes. ---"
+    "content": "Email is in Test mode. When you're ready, choose **Live** under **Settings → Email → Delivery** and select **Save delivery**. The server must have `APP_ENV` set to `production` in `config/env.php` (the template does), or Live behaves as Test. If the database was installed before this release, run `database/migrations/2026_10_15_mail_test_mode.sql` first: it replaces the old on/off switch with the delivery modes. Then schedule the three cron jobs in the hosting control panel (**Cron jobs** in cPanel, **Scheduled Tasks** on IONOS), with the real path to your web root: 0 8 * * * php /path/to/web-root/scripts/send-attendance-confirmations.php >> /path/to/web-root/logs/cron.log 2>&1 0 9 * * * php /path/to/web-root/scripts/send-payment-reminders.php >> /path/to/web-root/logs/cron.log 2>&1 They send session reminders, attendance confirmations and payment reminders. Don't schedule them before email is Live: they record each reminder as sent even when Test mode held the email back, so those customers wouldn't be reminded later. If the host's `php` is older than 8.1, use its newer binary (e.g. `/usr/bin/php8.3`). After the first run, `logs/cron.log` shows how many each one sent. ---"
   },
   {
     "pageId": "deployment",

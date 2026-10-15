@@ -1707,39 +1707,31 @@ Run from the booking folder: `bash build.sh`, then choose 1 (app files), 2 (data
 
 ## 14. Scheduled Tasks (Cron Jobs)
 
-Two PHP scripts in `scripts/` must be scheduled on the production server. Both follow the same pattern as the existing payment reminder script: load the framework, run the service method, mark records sent, log output.
+Three scripts in `scripts/` run on a schedule. `build.sh` ships only these (plus `scripts/cron-bootstrap.php`) into `dist/scripts/`; the rest of `scripts/` is one-off local data work and never ships.
 
-### Session reminders — `scripts/send-session-reminders.php`
+Each script starts with `require __DIR__ . '/cron-bootstrap.php';`, which refuses anything but the command line (`PHP_SAPI !== 'cli'` → 403), loads settings exactly like `index.php` (`loadEnvironment()`: `config/env.php` on the server, `.env` under Galvani), and registers the autoloader and helpers. `.htaccess` also blocks `scripts/`, and `dist/scripts/` gets its own deny-all `.htaccess`. All their email goes through `GuardedMailer`, so the delivery mode applies (`CronScriptsTest`).
 
-Finds all `scheduled` sessions starting within the next 24 hours that have not yet had a reminder sent (`sessions.reminder_sent_at IS NULL`), sends email to every confirmed booking on that session, then stamps `reminder_sent_at` on the session row to prevent duplicates.
-
-**Recommended schedule:** hourly, so reminders fire as close to the 24-hour mark as possible.
-
-```cron
-# Session reminders — run every hour
-0 * * * * php /var/www/html/booking/scripts/send-session-reminders.php >> /var/log/booking-session-reminders.log 2>&1
-```
-
-### Payment reminders — `scripts/send-payment-reminders.php`
-
-Finds bookings with `booking_status = unpaid_attended` where the last payment reminder was sent more than `payment_reminder_days` (per activity) ago, sends a reminder, then stamps `payment_reminder_sent_at` on the booking.
-
-**Recommended schedule:** daily at 09:00.
+| Script | What it does | Schedule |
+|---|---|---|
+| `send-session-reminders.php` | Reminds confirmed bookings about sessions in the next 7 days, on the activity's reminder day (template default: Monday) | daily, 08:00 |
+| `send-attendance-confirmations.php` | Asks group participants to confirm they're coming to next week's sessions, on the reminder day. Links use `APP_URL`; the script refuses to run without it | daily, 08:00 |
+| `send-payment-reminders.php` | Chases `unpaid_attended` bookings every `payment_reminder_days` (per activity) | daily, 09:00 |
 
 ```cron
-# Payment reminders — run daily at 09:00
-0 9 * * * php /var/www/html/booking/scripts/send-payment-reminders.php >> /var/log/booking-payment-reminders.log 2>&1
+0 8 * * * php /path/to/web-root/scripts/send-session-reminders.php >> /path/to/web-root/logs/cron.log 2>&1
+0 8 * * * php /path/to/web-root/scripts/send-attendance-confirmations.php >> /path/to/web-root/logs/cron.log 2>&1
+0 9 * * * php /path/to/web-root/scripts/send-payment-reminders.php >> /path/to/web-root/logs/cron.log 2>&1
 ```
 
-### Adding cron jobs on IONOS (or cPanel-based LAMP host)
+`logs/` is inside the web root but denied by `.htaccess`. Use the host's PHP 8.1+ CLI binary if `php` on its path is older (hosts often name it e.g. `/usr/bin/php8.3`).
 
-1. Log in to the IONOS control panel (or cPanel)
-2. Navigate to **Hosting → Cron jobs** (cPanel) or **Scheduled Tasks** (IONOS Managed Hosting)
-3. Add each job above — adjust the path to match the actual `public_html` document root
-4. Verify by tailing the log file after the first scheduled run:
-   ```bash
-   tail -f /var/log/booking-session-reminders.log
-   ```
+**Schedule them on launch day, not before.** The scripts record a reminder or confirmation as sent whether or not the email went out (they ignore `dispatch()`'s result), so a run in Test mode marks everyone beyond the 25 redirected emails as reminded.
+
+### Adding cron jobs (cPanel, IONOS, or similar)
+
+1. In the hosting control panel, open **Cron jobs** (cPanel) or **Scheduled Tasks** (IONOS).
+2. Add the three lines above, with the real path to the web root.
+3. After the first run, check `logs/cron.log` (over SFTP): each line reads like `2026-10-19 08:00:01 — Sent 42 session reminder(s)`.
 
 ### Schema note
 
