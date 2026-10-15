@@ -45,7 +45,7 @@ All database queries must go through Repository classes in `app/Repositories/`. 
 
 ## Schema drift — keeping schema.sql and the live DB in sync
 
-`build.sh` uses `schema.sql` for table structure and `mysqldump --complete-insert` for data. Because `--complete-insert` lists every column explicitly, **any column that exists in the live DB but not in schema.sql will break the install SQL**.
+The `build.sh` database export uses `schema.sql` for table structure and `mysqldump --complete-insert` for data. Because `--complete-insert` lists every column explicitly, **any column that exists in the local DB but not in schema.sql will break the installer**.
 
 **Rule:** whenever you change `schema.sql` (add/remove/rename a column), you must also run the equivalent `ALTER TABLE` against the local Galvani DB immediately. Do not rely on `db-init.php` to fix it — that wipes all data.
 
@@ -57,12 +57,12 @@ ALTER TABLE participants DROP COLUMN emergency_contact_name, DROP COLUMN emergen
 ALTER TABLE participants ADD COLUMN new_field varchar(100) DEFAULT NULL AFTER medical_notes;
 ```
 
-If you ever hit a `#1054 - Unknown column` error when importing the dist SQL, it means the live DB has drifted from `schema.sql`. To fix:
+If you ever hit a `#1054 - Unknown column` error when importing the export, it means the local DB has drifted from `schema.sql`. To fix:
 1. Identify the orphaned columns in the live DB (`SHOW COLUMNS FROM table_name`)
 2. Check whether any rows have data in those columns before dropping
 3. If data exists, migrate it to its new home first
 4. Drop the orphaned columns with `ALTER TABLE`
-5. Re-run `build.sh` option 4
+5. Re-run `build.sh` option 2 (database export)
 
 ---
 

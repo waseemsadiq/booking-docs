@@ -180,13 +180,13 @@ All view links and `header('Location: ...)` calls prefix with `$basePath`. The s
 |---|---|---|
 | PHP runtime | Galvani embedded | Standard PHP |
 | Database | Embedded MariaDB via Unix socket | MySQL via TCP |
-| PDO prepares | `ATTR_EMULATE_PREPARES = true` (emulated) | Native prepares (`Database-shared.php`) |
+| PDO prepares | `ATTR_EMULATE_PREPARES = true` (emulated) | Same — one `Database.php` everywhere |
 | Config | `booking/.env` text file | `booking/config/env.php` (sets `$_ENV`) |
 | Build step | None | Run `build.sh` → creates `dist/` folder |
 | Static files | Galvani serves natively | Apache serves via `.htaccess` |
-| CSS | Source in `booking/css/` | Pre-built `booking/dist/app.css` in `dist/` |
+| CSS | Source in `booking/css/` | Pre-built `css/output.css`, shipped as-is |
 
-`build.sh` swaps `Database.php` for `Database-shared.php` automatically. The shared hosting version uses native prepares (compatible with standard MySQL) while the Galvani version uses emulated prepares (required to avoid date/time corruption on the long-running singleton connection).
+Both environments run the same `Database.php`: emulated prepares (required on Galvani to avoid date/time corruption, and fine on standard MySQL), `READ COMMITTED`, and an explicit `sql_mode` so MySQL 8's stricter defaults (`ONLY_FULL_GROUP_BY`, `NO_ZERO_DATE`) don't change how queries behave. `groups` is a reserved word in MySQL 8, so always write the table name as `` `groups` ``.
 
 ---
 

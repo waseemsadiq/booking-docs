@@ -1,184 +1,149 @@
 # Deployment
 
-This covers deploying WFCS Booking to **shared LAMP hosting** (LAMP: PHP + MySQL). The app is designed for a standard `public_html/` directory structure.
+This covers deploying WFCS Booking to a **LAMP server** (Apache, PHP, MySQL) with the app at the domain root, using SFTP for files and phpMyAdmin for the database.
+
+`build.sh` makes two separate things:
+
+- **`dist/`** — the app files. You upload the contents of this folder.
+- **`db-export/`** — a database installer for phpMyAdmin. It contains customer data, so it stays on your computer: you import it from your browser and never upload it to the server.
 
 ---
 
 ## Prerequisites
 
-- hosting account with PHP and MySQL access
-- phpMyAdmin or MySQL CLI access
-- FTP/SFTP client (e.g. FileZilla) or your host's file manager
-- Node.js installed locally (to build CSS)
+- PHP 8.1 or newer with `pdo_mysql`, `mbstring`, `curl`, `openssl` and `zip`
+- MySQL 8 (or MariaDB 10.6+)
+- Apache with `mod_rewrite`, and `AllowOverride All` for the web root (so `.htaccess` works)
+- phpMyAdmin and an SFTP client (e.g. FileZilla)
+- Galvani running locally (the database export reads the local database)
 
 ---
 
-## Step 1 — Run build.sh
+## Step 1 — Build
 
-From the git root on your local machine:
+From the booking folder on your computer:
 
 ```bash
-cd well-booking/booking
-./build.sh
+bash build.sh
 ```
 
-`build.sh` does the following automatically:
+Choose:
 
-1. Runs `npm run build:css` to produce the production CSS file in `dist/`.
-2. Copies all app files into `booking/dist/` (excluding `.env`, dev configs, etc.).
-3. **Swaps `Database.php` for `Database-shared.php`** — the shared hosting version uses native PDO prepares (required for standard MySQL; Galvani uses emulated prepares).
-4. Creates `dist/booking-install.sql` by combining `database/schema.sql` with either seed data or a live database snapshot (your choice via interactive prompt).
-5. Also produces `dist/booking-install.sql.gz` (compressed for phpMyAdmin upload).
-6. Creates `uploads/`, `storage/`, and `logs/` directories with appropriate `.htaccess` protection.
+- **1) App files** — `dist/` only. Use this for code updates.
+- **2) Database export** — `db-export/booking-mirror-<date>.sql.gz` only.
+- **3) Full mirror** — app files, uploaded images and the database export. Use this for the first install.
 
-When prompted, choose:
-- **Option 1** — seed data (fresh install with test accounts and sample activities)
-- **Option 2** — live snapshot (copies the running Galvani database; also syncs `database/schema.sql` and `database/seeds.sql` from live data)
+What the build does:
 
-The build output is in `booking/dist/`.
+1. Copies the app into `dist/` (everything in `.distignore` is left out: `.env`, docs, tests, dumps, logs, dev scripts).
+2. Creates `dist/config/env.php` with a fresh `APP_KEY` and `JWT_SECRET`. On later builds it keeps the `dist/config/env.php` you've already edited.
+3. Adds the `uploads/`, `storage/` and `logs/` folders with their `.htaccess` protection, plus the uploaded images for a full mirror.
+4. For the database export, makes a temporary copy of the local database and cleans it:
+   - removes the test accounts (`@test.local`), the audit log and the cache
+   - removes the Stripe, JustGiving and SMTP credentials (they're encrypted with your local `APP_KEY`, so they couldn't be read on the server anyway)
+   - leaves email switched off (`notifications_disabled = 1`), so testing on the new server can't email customers
+
+   The installer takes its table structure from `database/schema.sql` and the data from that cleaned copy. Your local database isn't changed.
 
 ---
 
-## Step 2 — Edit config files
+## Step 2 — Edit `dist/config/env.php`
 
-Before uploading, edit the three config files in `booking/dist/config/`:
-
-### `config/env.php`
-
-This replaces `.env` on shared hosting. It sets `$_ENV` values directly from PHP (Shared hosting does not support dotfiles in the document root).
+This is the only config file to edit. Fill in:
 
 ```php
-<?php
-$_ENV['JWT_SECRET']             = 'your-long-random-secret';
-$_ENV['APP_KEY']                = 'your-32-char-aes-key';
-$_ENV['STRIPE_SECRET_KEY']      = 'sk_live_...';
-$_ENV['STRIPE_PUBLISHABLE_KEY'] = 'pk_live_...';
-$_ENV['STRIPE_WEBHOOK_SECRET']  = 'whsec_...';
+$_ENV['APP_URL'] = 'https://yourdomain.com';
+
+$_ENV['DB_HOST'] = 'localhost';
+$_ENV['DB_PORT'] = '3306';
+$_ENV['DB_NAME'] = 'your_database';
+$_ENV['DB_USER'] = 'your_database_user';
+$_ENV['DB_PASS'] = 'your_database_password';
 ```
 
-Leave email driver credentials (Resend API key or SMTP password) blank if you are configuring them via the admin Settings page (recommended — avoids storing secrets in files).
-
-### `config/database.php`
-
-Set your LAMP MySQL credentials:
-
-```php
-<?php
-return [
-    'host'     => '127.0.0.1',
-    'port'     => 3306,
-    'dbname'   => 'your_db_name',
-    'username' => 'your_db_user',
-    'password' => 'your_db_password',
-    'charset'  => 'utf8mb4',
-];
-```
-
-### `config/app.php`
-
-Set the application URL and environment:
-
-```php
-<?php
-return [
-    'env'      => 'production',
-    'url'      => 'https://yourdomain.com',
-    'debug'    => false,
-];
-```
+`APP_KEY` and `JWT_SECRET` are already filled in with random values. Keep them private, and don't change `APP_KEY` once you've saved credentials in Settings: they're encrypted with it.
 
 ---
 
 ## Step 3 — Import the database
 
-1. Log in to phpMyAdmin.
-2. Create a new database (e.g. `wfcs_booking`) if it does not exist. Set charset to `utf8mb4`, collation `utf8mb4_unicode_ci`.
-3. Select the database.
-4. Click **Import** → upload `dist/booking-install.sql.gz`.
-   - phpMyAdmin accepts `.sql.gz` natively and this bypasses the upload size limit.
-   - Alternatively, import the uncompressed `dist/booking-install.sql` via the CLI: `mysql -u user -p dbname < booking-install.sql`
-5. Confirm the tables were created (you should see ~20+ tables listed).
+1. In your hosting control panel, create an empty MySQL database and user (`utf8mb4`, collation `utf8mb4_unicode_ci`).
+2. Open phpMyAdmin and select that database.
+3. Choose **Import**, pick the `.sql.gz` file from `db-export/` on your computer, and select **Import**. phpMyAdmin reads `.gz` files directly.
+4. Check you see about 40 tables.
+
+The installer drops and recreates every table, so importing it again resets the database to the export.
+
+Once the import has worked, delete the export from your computer.
 
 ---
 
-## Step 4 — Upload files
+## Step 4 — Upload the files
 
-Upload the **contents** of `booking/dist/` to `public_html/booking/` on your LAMP host. Do not upload the `dist/` folder itself — upload what is inside it.
-
-Your LAMP directory structure should look like:
+Upload the **contents** of `dist/` (not the folder itself) to the web root over SFTP. Make sure hidden files are included: `.htaccess` at the root and in `uploads/`, `storage/` and `logs/`.
 
 ```
 public_html/
-└── booking/
-    ├── index.php
-    ├── .htaccess
-    ├── app/
-    ├── config/
-    │   ├── env.php          (your production secrets)
-    │   ├── database.php     (your MySQL credentials)
-    │   └── app.php
-    ├── dist/
-    │   └── app.css          (compiled Tailwind CSS)
-    ├── uploads/
-    ├── storage/
-    └── logs/
+├── .htaccess
+├── index.php
+├── app/
+├── config/
+│   └── env.php        (your database login and secrets)
+├── css/
+├── images/
+├── js/
+├── uploads/
+├── storage/
+└── logs/
 ```
 
----
-
-## Step 5 — Set directory permissions
-
-SSH into LAMP or use the file manager to set permissions:
-
-```
-uploads/     — 755
-storage/     — 755
-logs/        — 755
-```
-
-PHP must be able to write to these directories. If uploads fail, check the owner/group matches the PHP process user.
+The app works out its own path, so it also runs from a subfolder if you ever need that.
 
 ---
 
-## Step 6 — Verify the .htaccess
+## Step 5 — Permissions
 
-The `booking/.htaccess` is included in the build and handles:
-- Routing all requests through `index.php` (mod_rewrite required)
-- Protecting the `storage/` and `logs/` directories from direct access
-
-If the site returns 404 or 500 errors after upload, check that **mod_rewrite is enabled** on your your hosting plan (it is enabled by default on most shared LAMP hosting plans).
+PHP must be able to write to `uploads/`, `storage/` and `logs/`. On most hosts `755` folders owned by your account work; if image uploads fail, check the folders belong to the user PHP runs as.
 
 ---
 
-## Step 7 — Re-save Stripe keys in Settings
+## Step 6 — Check it works
 
-After importing the database, log in as `admin@booking.local` (or your production super_admin account) and go to **Settings > Stripe**.
-
-Re-enter your Stripe secret key, publishable key, and webhook secret, then save.
-
-**Why**: The database dump contains Stripe keys encrypted with your local `APP_KEY`. The production server has a different `APP_KEY` in `config/env.php`, so the encrypted values from the dump cannot be decrypted. Re-saving via the UI re-encrypts them with the production key.
-
-The same applies to Settings > Notification Services for email (SMTP or Resend) credentials.
+1. Visit `https://yourdomain.com/` — you should see the welcome page.
+2. Check the protected paths are refused: `https://yourdomain.com/config/env.php` and `https://yourdomain.com/logs/` should both give **403 Forbidden**. If they don't, `.htaccess` isn't being read: ask your host to enable `AllowOverride All`.
+3. Log in as an admin.
 
 ---
 
-## Step 8 — Confirm the site works
+## Step 7 — Re-enter credentials
 
-1. Visit `https://yourdomain.com/booking/` — you should see the login page.
-2. Log in with the admin account.
-3. Navigate to Settings > Stripe and confirm your keys are saved.
-4. Make a test booking with a Stripe test card (`4242 4242 4242 4242`).
+The export leaves out anything encrypted with your local `APP_KEY`. Re-enter them:
+
+- **Settings → Stripe**: publishable key, secret key, webhook signing secret, and the JustGiving details
+- **Settings → Email**: the SMTP password
+
+Then register the Stripe webhook in the Stripe dashboard:
+
+- Endpoint URL: `https://yourdomain.com/api/payments/stripe/webhook`
+- Events: `payment_intent.succeeded`, `payment_intent.payment_failed`
+
+Make a test booking with a Stripe test card (`4242 4242 4242 4242`).
+
+---
+
+## Step 8 — Launch day
+
+Emails are off. When you're ready, turn them on in **Settings → Email**.
 
 ---
 
 ## Updating after a code change
 
-1. Pull the latest code locally.
-2. Re-run `build.sh` (choose option 1 or 2 depending on whether you want to sync the database).
-3. Upload changed files from `dist/` to LAMP — you only need to upload modified files.
-4. If the database schema changed, run the migration or re-import `booking-install.sql`. The SMS/WhatsApp removal release needs `database/migrations/2026_10_14_remove_sms_whatsapp.sql`.
+1. Pull the latest code locally and run `bash build.sh`, option **1**.
+2. Upload the changed files from `dist/`. Your server's `config/env.php` isn't overwritten as long as you don't upload `dist/config/env.php` over it (the build keeps your edited copy in `dist/` anyway).
+3. If the release includes a file in `database/migrations/`, run it in phpMyAdmin (**SQL** tab) before or straight after uploading.
 
-Config files in `dist/config/` are preserved by `build.sh` on subsequent runs (it backs them up before wiping `dist/` and restores them after).
+Don't re-import a mirror export once the site is live: it replaces all live data.
 
 ---
 
@@ -186,15 +151,8 @@ Config files in `dist/config/` are preserved by `build.sh` on subsequent runs (i
 
 ### "Your session expired. Please try again." on login
 
-This appears when the CSRF session cookie is missing — typically because the browser was closed and reopened between loading the login page and submitting the form. It is self-healing: the page reloads automatically with a fresh cookie and the next submit succeeds. No action required.
+This appears when the CSRF cookie is missing — typically because the browser was closed and reopened between loading the login page and submitting the form. The page reloads with a fresh cookie and the next submit succeeds.
 
-If login is failing with a blank white error instead of this message, you are running an older build — redeploy with the latest `dist/`.
+### A page shows "500" with no details
 
-## Stripe webhook setup
-
-For Stripe payment confirmation to work on the live site, register the webhook endpoint in the Stripe dashboard:
-
-- Endpoint URL: `https://yourdomain.com/booking/api/stripe/webhook`
-- Events to listen for: `payment_intent.succeeded`, `payment_intent.payment_failed`
-
-Copy the webhook signing secret and save it via Settings > Stripe in the admin UI.
+PHP errors are never shown to visitors unless `APP_DEBUG` is `'true'` in `config/env.php`. Look in the host's PHP error log instead.

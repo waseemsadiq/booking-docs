@@ -67,9 +67,9 @@ The codebase runs in two environments with different characteristics:
 
 **Local development (Galvani):** Long-running multi-threaded PHP process. Embedded MariaDB accessed via Unix socket. PHP classes cached in memory between requests — restart required after editing PHP class files. Views are re-read on each request, no restart needed.
 
-**Production (LAMP):** Standard Apache + PHP-FPM. TCP connection to MySQL. No long-running singleton issues — each request gets a fresh PHP process. Uses a different `Database.php` class (native prepares, no socket).
+**Production (LAMP):** Standard Apache + PHP-FPM. TCP connection to MySQL. No long-running singleton issues — each request gets a fresh PHP process. Runs the same `Database.php` (emulated prepares, explicit `sql_mode`), connecting over TCP because `config/env.php` sets `DB_HOST`.
 
-The `build.sh` script handles the transformation between environments automatically.
+`build.sh` packages the app (`dist/`) and exports the database for phpMyAdmin (`db-export/`). See section 13.
 
 ---
 
@@ -226,8 +226,7 @@ booking/                          # Git root (local Galvani workspace — not pu
 │   │   │   └── WithdrawalRepository.php
 │   │   │
 │   │   ├── Models/
-│   │   │   ├── Database.php          # Galvani version (emulated prepares, socket)
-│   │   │   └── Database-shared.php   # LAMP version (native prepares, TCP)
+│   │   │   └── Database.php          # PDO singleton for Galvani (socket) and LAMP (TCP)
 │   │   │
 │   │   ├── Helpers/              # Global functions loaded on every request
 │   │   │   ├── auth.php          # getAuthUser(), setAuthCookie(), getCsrfToken(), buildNavForRole()
@@ -271,9 +270,7 @@ booking/                          # Git root (local Galvani workspace — not pu
 │   │   ├── database.php          # DB config (auto-detects socket path for Galvani)
 │   │   ├── stripe.php            # Stripe config (keys now in DB, this is a stub)
 │   │   ├── smtp.php              # Email from-address config stub
-│   │   ├── app-shared.example.php        # Template for LAMP app.php
-│   │   ├── database-shared.example.php   # Template for LAMP database.php
-│   │   └── env-shared.example.php        # Template for LAMP env.php
+│   │   └── env-shared.example.php        # Template for the server's config/env.php (the only file edited there)
 │   │
 │   ├── css/
 │   │   ├── tailwind.css          # TailwindCSS source (input)
@@ -326,7 +323,7 @@ booking/                          # Git root (local Galvani workspace — not pu
 
 **`booking/booking/app/Router.php`** — Lightweight API router. Registers named routes with path patterns (`/api/bookings/:id`), matches method + path regex, extracts parameters, and calls the handler. All API routes are registered in a `createRouter()` function.
 
-**`booking/booking/build.sh`** — Builds `dist/` for .htaccess deployment. Swaps `Database.php`, config files, strips secrets, generates `booking-install.sql` (schema + seeds or live dump).
+**`booking/build.sh`** — Builds `dist/` for LAMP deployment and/or a phpMyAdmin installer in `db-export/` (schema.sql structure + a cleaned copy of the local data). See section 13.
 
 **`booking/db-init.php`** — Wiping and re-seeding the local database. Preserves `app_settings` (Stripe keys etc.) before wipe. Run via `./galvani db-init.php`.
 
@@ -640,7 +637,7 @@ $db = new Database();   // exhausts connection pool
 
 **Why it breaks:** Galvani's embedded MySQL driver corrupts `DATE` and `TIME` column values when native prepared statements are used. Dates come back as `0000-00-00` or blank. This is a driver-level bug in the embedded MariaDB that emulated prepares work around by converting everything to strings before sending.
 
-Note: `Database-shared.php` (the LAMP version) uses `EMULATE_PREPARES => false` and native prepares, which is correct for standard MySQL.
+The same class runs on LAMP: emulated prepares are safe on standard MySQL, and shipping the tested configuration means values come back as strings everywhere, as the code expects.
 
 ```php
 // Correct (Galvani Database.php)
@@ -877,14 +874,7 @@ The `config/database.php` file handles this automatically:
 
 ### Connection classes
 
-Two versions of `Database.php` exist side by side:
-
-| File | Used by | Prepares | Connection |
-|---|---|---|---|
-| `Database.php` | Galvani (dev) | Emulated (`EMULATE_PREPARES = true`) | Unix socket |
-| `Database-shared.php` | LAMP (prod) | Native (`EMULATE_PREPARES = false`) | TCP host |
-
-The `build.sh` script renames `Database-shared.php` to `Database.php` in the `dist/` folder at build time.
+One `Database.php` serves both environments. It connects over TCP when `DB_HOST` is set (LAMP, via `config/env.php`) and over the Unix socket otherwise (Galvani). On every connection it sets `READ COMMITTED` and an explicit `sql_mode` (`STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION`), so MySQL 8's stricter defaults (`ONLY_FULL_GROUP_BY`, `NO_ZERO_DATE`) don't change how queries behave. `groups` is a reserved word in MySQL 8: always write the table as `` `groups` ``.
 
 ### Database methods
 
@@ -988,7 +978,7 @@ bash db-reset.sh   # from the booking directory
 
 ### Schema location
 
-`booking/database/schema.sql` is the source of truth. The `build.sh` script can sync it from the live Galvani database when building a production release (option 2 when prompted).
+`booking/database/schema.sql` is the source of truth. The `build.sh` database export uses it for the structure, so keep the local database in step with it (see `wiki/Database.md`, schema drift).
 
 ---
 
@@ -1642,37 +1632,24 @@ See `docs/mcp-guide.md` for the complete guide, including:
 
 ### Building for LAMP (production)
 
-Run from `booking/booking/`:
+Run from the booking folder: `bash build.sh`, then choose 1 (app files), 2 (database export) or 3 (full mirror: both, plus uploaded images). The step-by-step deploy is in `wiki/Deployment.md`.
 
-```bash
-cd booking/booking
-./build.sh
-```
+**App files (`dist/`)**
 
-**What `build.sh` does, step by step:**
+1. Rebuilds the CSS (falls back to the committed `css/output.css` if Node fails)
+2. rsyncs the app into a fresh `dist/`, excluding everything in `.distignore`
+3. Keeps an existing `dist/config/env.php`; otherwise creates it from `config/env-shared.example.php` with a random `APP_KEY` and `JWT_SECRET`. `config/app.php` and `config/database.php` ship unchanged: they read `$_ENV`
+4. Creates `storage/`, `logs/` and `uploads/` with their `.htaccess` rules (full mirror: copies the uploaded images too)
+5. Refuses to finish if any `.sql` file ended up in `dist/`
 
-1. **Build CSS** — runs `npm run build:css` from the git root to regenerate `output.css`
-2. **Back up existing configs** — if `dist/config/*.php` already exists (previous build or live config), saves them to `/tmp/` so your LAMP credentials are not overwritten
-3. **Wipe and recreate `dist/`** — removes old dist folder, creates fresh one
-4. **rsync app files** — copies everything from `booking/booking/` to `dist/`, excluding `.env`, `build.sh`, test data, and session files
-5. **Swap Database class** — renames `dist/app/Models/Database-shared.php` to `dist/app/Models/Database.php`, replacing the Galvani version with the LAMP version
-6. **Swap config files** — restores any backed-up configs, otherwise copies the `*-shared.example.php` templates as starter configs
-7. **Clean up templates** — removes example config files from `dist/` (they should not be on the live server)
-8. **Create directories** — creates `dist/uploads/activities/`, `dist/uploads/venues/`, `dist/storage/sessions/`, `dist/logs/`
-9. **Protect sensitive directories** — writes `Deny from all` to `.htaccess` in `dist/storage/` and `dist/logs/`
-10. **Build SQL installer** — prompts: option 1 uses seed data, option 2 takes a live dump from Galvani. Generates `dist/booking-install.sql` and `dist/booking-install.sql.gz`
+**Database export (`db-export/`)**
 
-### LAMP deployment procedure
+1. Copies `booking_app` into a temporary database: structure via `mysqldump --no-data`, data server-side with `INSERT … SELECT`
+2. Cleans the copy: deletes `@test.local` accounts (their rows cascade), empties `audit_logs` and `cache`, deletes `enc:` settings (encrypted with the local `APP_KEY`), sets `notifications_disabled = 1`
+3. Converts the copy's text columns to binary and dumps the data with `--hex-blob --replace`. The Galvani MySQL gives the `mysql`/`mysqldump` clients a latin1 session whatever they ask for, so text must never pass through them as text; `--replace` lets the real `notification_templates` rows overwrite the defaults `schema.sql` seeds
+4. Writes `DROP TABLE IF EXISTS` for every table + `schema.sql` + the data, gzipped, to `db-export/booking-mirror-<date>.sql.gz`, and drops the temporary database
 
-1. Run `./build.sh` locally — choose option 2 (live snapshot) for production deployments
-2. Edit `dist/config/database.php` — set LAMP MySQL host, database name, username, password
-3. Edit `dist/config/env.php` — set `APP_KEY`, `JWT_SECRET`, `APP_URL`, `APP_ENV=production`
-4. Import `dist/booking-install.sql.gz` via phpMyAdmin (or `dist/booking-install.sql` via CLI)
-5. Upload contents of `dist/` to `public_html/booking/` on your LAMP host (FTP or SSH)
-6. Ensure `uploads/` and `storage/` directories are writable: `chmod 755` (or as LAMP requires)
-7. Log in as super_admin and re-save Stripe keys at Admin → Settings → Stripe
-
-**Important:** The database dump contains Stripe keys encrypted with your **local** `APP_KEY`. The production server needs its own `APP_KEY` in `env.php`, and you must re-enter Stripe keys after deploying so they are encrypted with the production key.
+`db-export/` is gitignored and excluded from `dist/`: it contains customer data and is imported through phpMyAdmin from your computer, never uploaded.
 
 ### Environment variables reference
 
