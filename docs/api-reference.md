@@ -55,7 +55,7 @@ All auth endpoints verify the CSRF token via `Controller::verifyCsrf()`.
 
 ### `POST /api/auth/register`
 
-Register a new customer account. On success, creates the account and sends a verification email. **No session is created — the user must verify their email before they can log in.**
+Register a new customer account. On success, auto-logs in and sets the `auth_token` cookie.
 
 **Auth required:** None (public)
 **CSRF required:** Yes
@@ -82,13 +82,10 @@ Register a new customer account. On success, creates the account and sends a ver
   "email": "user@example.com",
   "first_name": "Jane",
   "last_name": "Smith",
-  "role": "customer",
-  "message": "Registration successful. Please check your email to verify your account.",
-  "needs_verification": true
+  "token": "<jwt>",
+  "user": { "id": 42, "role": "customer", ... }
 }
 ```
-
-No `auth_token` cookie is set. The user must click the link in the verification email before they can log in.
 
 **Errors**
 
@@ -132,7 +129,6 @@ Sets `auth_token` HTTP-only cookie.
 |---|---|
 | `400` | `Email and password are required` |
 | `401` | Invalid credentials (from AuthService) |
-| `403` | `Please verify your email before logging in.` — account exists but email not yet verified |
 
 ---
 
@@ -220,7 +216,7 @@ List published activities with optional filters. Room-hire activities are includ
 
 | Param | Type | Notes |
 |---|---|---|
-| `status` | string | e.g. `published`, `draft`, `all` |
+| `status` | string | Admins only: `published` (default), `draft`, `archived` or `all`. Ignored for everyone else, who only see published activities |
 | `activity_type_id` | integer | Filter by type |
 | `venue_id` | integer | Filter by venue |
 | `category` | string | Free-text category |
@@ -344,7 +340,8 @@ Create a new activity.
 | `description` | string | No | |
 | `activity_type_id` | integer | No | |
 | `bookable_space_id` | integer | Yes | |
-| `instructor_id` | integer | No | |
+| `primary_instructor_id` | integer | No | User ID of the primary instructor |
+| `co_instructor_ids` | integer[] | No | Array of user IDs for co-instructors |
 | `price_per_session` | float | Yes | |
 | `capacity` | integer | Yes | |
 | `min_age` | integer | No | |
@@ -357,6 +354,7 @@ Create a new activity.
 | `allow_waiting_list` | integer | No | `0` or `1` |
 | `status` | string | No | `draft` or `published` |
 | `pricing_type` | string | No | `per_booking` or `per_hour` |
+| `group_ids` | integer[] | No | Group IDs to assign to this activity via `activity_groups` junction table |
 
 **Success:** `201 Created` — created activity object
 
@@ -873,31 +871,9 @@ Get current credit balance.
 
 ---
 
-### `POST /api/user/account-credit/topup`
-
-Add credit to account after a Stripe payment has been completed on the client side.
-
-**Auth required:** customer
-**CSRF required:** Yes
-
-**Request body (JSON)**
-
-| Field | Type | Required | Notes |
-|---|---|---|---|
-| `amount` | float | Yes | |
-| `payment_intent_id` | string | Yes | |
-
-**Success:** `201 Created`
-
-```json
-{ "balance": 60.00, "credited": 10.00 }
-```
-
----
-
 ### `POST /api/user/account-credit/withdraw`
 
-Request a withdrawal of credit back to a payment card (creates a pending withdrawal request for admin approval).
+Request a withdrawal of credit back to a payment card (creates a pending withdrawal request for admin approval). The amount is held until the request is approved or rejected: it can't be spent or withdrawn again, and the request is refused (`422 Insufficient credit balance`) if it exceeds the balance less other pending withdrawals.
 
 **Auth required:** customer
 **CSRF required:** Yes
@@ -1427,6 +1403,8 @@ Create a user.
 | `last_name` | string | No |
 | `phone` | string | No |
 | `role` | string | No — defaults to `customer`; only super_admin can set `super_admin` |
+| `is_customer` | integer | No — `1` to show customer nav for staff accounts; also auto-creates a self-participant |
+| `is_global_instructor` | integer | No — `1` to display this user on all activity/session pages as a global instructor |
 
 **Success:** `201 Created`
 
@@ -1438,6 +1416,18 @@ Update a user. Cannot escalate to `super_admin` unless you are `super_admin`.
 
 **Auth required:** admin
 **CSRF required:** Yes
+
+**Request body (JSON)** — all fields optional
+
+| Field | Type | Notes |
+|---|---|---|
+| `first_name` | string | |
+| `last_name` | string | |
+| `email` | string | Must be unique |
+| `password` | string | If provided, replaces current password |
+| `role` | string | Only super_admin can set `super_admin` |
+| `is_customer` | integer | `1` to enable customer nav; auto-creates self-participant if missing |
+| `is_global_instructor` | integer | `1` to show on all activity/session pages |
 
 ---
 
@@ -1901,6 +1891,105 @@ HTTP long-poll fallback for LAMP deployments. Returns notifications/updates sinc
 
 ---
 
+## 14. Discount Codes
+
+### `POST /api/discount-codes/validate`
+
+Validate a discount code and get the discounted price for a booking.
+
+**Auth required:** Any authenticated user
+**CSRF required:** Yes
+
+**Request body (JSON)**
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `code` | string | Yes | The discount code to validate |
+| `activity_id` | integer | Yes | Activity the code is being applied to |
+| `original_price` | float | Yes | Full price before discount |
+
+**Success:** `200 OK`
+
+```json
+{ "valid": true, "code": "SUMMER10", "discount_type": "percentage", "discount_value": 10, "discounted_price": 9.00, "savings": 1.00 }
+```
+
+**Error (invalid code):** `200 OK` (not 4xx — always check `valid` field)
+
+```json
+{ "valid": false, "message": "Code not found or expired" }
+```
+
+---
+
+### `GET /api/discount-codes/auto-check`
+
+Auto-check if a discount code should be pre-applied (e.g. from a referral link).
+
+**Auth required:** Any authenticated user
+
+**Query params:** `code`, `activity_id`, `original_price`
+
+**Success:** `200 OK` — same shape as validate
+
+---
+
+### `GET /api/admin/discount-codes`
+
+List all discount codes.
+
+**Auth required:** admin / super_admin
+
+**Success:** `200 OK` — array of discount code objects
+
+---
+
+### `POST /api/admin/discount-codes`
+
+Create a discount code.
+
+**Auth required:** admin / super_admin
+**CSRF required:** Yes
+
+**Request body (JSON)**
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `code` | string | Yes | Unique code string |
+| `type` | string | Yes | `percentage` or `fixed` |
+| `value` | float | Yes | Percentage (0–100) or fixed £ amount |
+| `max_uses` | integer | No | Null = unlimited |
+| `expires_at` | string | No | YYYY-MM-DD |
+| `activity_id` | integer | No | Null = applies to all activities |
+
+**Success:** `201 Created` — created code object
+
+---
+
+### `PUT /api/admin/discount-codes/{id}`
+
+Update a discount code.
+
+**Auth required:** admin / super_admin
+**CSRF required:** Yes
+
+**Request body:** same fields as create (all optional on update)
+
+**Success:** `200 OK`
+
+---
+
+### `DELETE /api/admin/discount-codes/{id}`
+
+Delete a discount code.
+
+**Auth required:** admin / super_admin
+**CSRF required:** Yes — `_csrf_token` query param
+
+**Success:** `200 OK`
+
+---
+
 ## Route Summary Table
 
 | Method | Path | Auth | Domain |
@@ -1939,7 +2028,6 @@ HTTP long-poll fallback for LAMP deployments. Returns notifications/updates sinc
 | `POST` | `/api/payments/stripe/confirm` | any auth | Payments |
 | `GET` | `/api/user/payments` | customer | Payments |
 | `GET` | `/api/user/account-credit` | customer | Credit |
-| `POST` | `/api/user/account-credit/topup` | customer | Credit |
 | `POST` | `/api/user/account-credit/withdraw` | customer | Credit |
 | `GET` | `/api/user/account-credit/transactions` | customer | Credit |
 | `GET` | `/api/withdrawals/{id}` | customer | Credit |
@@ -2006,4 +2094,10 @@ HTTP long-poll fallback for LAMP deployments. Returns notifications/updates sinc
 | `POST` | `/api/admin/notifications/preview` | admin | Notifications |
 | `POST` | `/api/admin/notifications/send` | admin | Notifications |
 | `GET` | `/api/admin/notifications/history` | admin | Notifications |
+| `POST` | `/api/discount-codes/validate` | any auth | Discounts |
+| `GET` | `/api/discount-codes/auto-check` | any auth | Discounts |
+| `GET` | `/api/admin/discount-codes` | admin | Discounts |
+| `POST` | `/api/admin/discount-codes` | admin | Discounts |
+| `PUT` | `/api/admin/discount-codes/{id}` | admin | Discounts |
+| `DELETE` | `/api/admin/discount-codes/{id}` | admin | Discounts |
 | `GET` | `/api/updates` | any auth | Real-time |

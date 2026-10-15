@@ -19,6 +19,7 @@ A complete reference for developers working on the WFCS Booking system. Read thi
 11. [Testing](#11-testing)
 12. [MCP Servers](#12-mcp-servers)
 13. [Build and Deploy](#13-build-and-deploy)
+14. [Scheduled Tasks (Cron Jobs)](#14-scheduled-tasks-cron-jobs)
 
 ---
 
@@ -148,9 +149,11 @@ Test accounts (all password: `password123`):
 | Email | Role |
 |---|---|
 | customer@booking.local | customer |
+| customer2@booking.local | customer |
+| parent.alex@booking.local | customer |
 | instructor@booking.local | instructor |
-| admin@booking.local | super_admin |
-| admin2@booking.local | admin |
+| admin@booking.local | admin |
+| superadmin@booking.local | super_admin |
 
 ---
 
@@ -286,7 +289,8 @@ booking/                          # Git root (local Galvani workspace — not pu
 │
 ├── database/
 │   ├── schema.sql                # MariaDB schema — source of truth
-│   └── seeds.sql                 # Sample data for development
+│   ├── seeds-customers.sql       # Fictional customer seed data (committed)
+│   └── seeds-wfcs-data.sql       # Real staff/activity/venue data (gitignored — never commit)
 │
 ├── tests/
 │   ├── bootstrap.php             # PHPUnit bootstrap (sets JWT_SECRET, APP_KEY)
@@ -909,7 +913,7 @@ $newId = $db->lastInsertId();
 
 | Table | Purpose |
 |---|---|
-| `users` | User accounts. Roles: customer, instructor, admin, super_admin. `email_verified` (0/1) controls login access. `email_verification_token` and `email_verification_expires_at` hold the 64-char hex token and 24-hour expiry used during registration; both are NULLed once verified. |
+| `users` | User accounts. Roles: customer, instructor, admin, super_admin. Flags: `is_customer` (shows customer nav for staff), `is_global_instructor` (instructor shown on all activities/sessions) |
 | `participants` | Bookable people (self + children). Linked to user |
 | `gdpr_consents` | UK GDPR consent records per user per consent type |
 | `audit_logs` | Login attempts, password resets, payment events |
@@ -921,9 +925,10 @@ $newId = $db->lastInsertId();
 | `venues` | Physical locations (Bellshill, Eurocentral) |
 | `bookable_spaces` | Rooms/pitches within venues. `space_type` includes `room_hire` |
 | `activity_types` | Categories: sports, classes, outdoor, indoor, meeting_room |
-| `activities` | Programmes. Has `slug` (unique), `capacity`, `price_per_session`, `allow_waiting_list` |
+| `activities` | Programmes. Has `slug` (unique), `capacity`, `price_per_session`, `allow_waiting_list`. No direct `instructor_id` — instructors managed via `activity_instructors` |
+| `activity_instructors` | Junction table: activity ↔ instructor. `is_primary=1` for primary instructor, `0` for co-instructors. Global instructors (flag on `users`) appear on all sessions |
 | `activity_images` | Multiple images per activity. `is_thumbnail` flag |
-| `sessions` | Individual dated occurrences of an activity |
+| `sessions` | Individual dated occurrences of an activity. No `instructor_id` column — inherited from `activity_instructors` |
 
 **Bookings and payments:**
 
@@ -933,6 +938,9 @@ $newId = $db->lastInsertId();
 | `payments` | Stripe payment intent records |
 | `account_credit_transactions` | Credit ledger. `transaction_type`: topup, deduction, refund, admin_adjustment |
 | `attendance_logs` | Attendance records per booking per session |
+| `discount_codes` | Discount codes. `type`: percentage/fixed (manual entry), third_child_free/bulk_session (auto). `min_sessions` used by bulk_session for "every Nth free" calculation |
+| `discount_code_restrictions` | Chip-based scope filters. `axis` (activity/activity_type/venue/account_type/staff_role/user/booking_type) + `value_id` / `value_text`. OR within an axis, AND across axes. No rows = unrestricted. A `user` or `staff_role` row makes the code auto-apply at checkout |
+| `discount_code_usages` | Per-booking usage log for discount codes |
 
 **Notifications:**
 
@@ -952,7 +960,8 @@ $newId = $db->lastInsertId();
 
 | Table | Purpose |
 |---|---|
-| `groups` | Activity-scoped participant rosters. Has `min_age`/`max_age` for auto-assignment |
+| `groups` | Independent participant rosters. `activity_id` is nullable (legacy). Has `min_age`/`max_age` for auto-assignment |
+| `activity_groups` | Many-to-many: activity ↔ group assignment (preferred over `groups.activity_id`) |
 | `group_participants` | Many-to-many: participant ↔ group membership |
 | `session_groups` | Many-to-many: session ↔ group (restricts booking to group members only) |
 
@@ -966,11 +975,16 @@ $newId = $db->lastInsertId();
 ### Database reset
 
 ```bash
-# Complete wipe + reimport (preserves app_settings)
-./galvani db-init.php
+# Complete wipe + reimport (from git root)
+bash db-reset.sh   # from the booking directory
 ```
 
-This drops all tables, but first saves `app_settings` (Stripe keys etc.), then drops all tables, reimports `database/schema.sql`, reimports `database/seeds.sql`, then restores the saved settings.
+`db-reset.sh` imports `schema.sql` → `seeds-wfcs-data.sql` → `seeds-customers.sql` (or `seeds-customers-live.sql` if present) via the mysql CLI directly, with FK checks disabled. This is the only reliable reset method — `./galvani db-init.php` does not persist data to the socket-accessible database.
+
+**Manual single-file import:**
+```bash
+{ printf "SET FOREIGN_KEY_CHECKS=0;\n"; cat file.sql; printf "\nSET FOREIGN_KEY_CHECKS=1;\n"; } | mysql --socket=/path/to/mysql.sock -u root --skip-ssl booking_app
+```
 
 ### Schema location
 
@@ -980,70 +994,30 @@ This drops all tables, but first saves `app_settings` (Stripe keys etc.), then d
 
 ## 8. Key Business Flows
 
-### Registration and email verification
+### Walk-in attendees
 
-Login is fully blocked until a user verifies their email. No session is created at registration time.
+An instructor records someone who turned up without an account or booking: `POST /instructor/sessions/{slug}/{date}/walk-in` → `WalkInService::validate()` → `WalkInService::add()`.
 
-```
-Client: POST /api/auth/register { email, password, first_name, last_name, ... }
+- **Checks, all before any write (autocommit):**
+  - the instructor is on the activity (`belongsToInstructor`)
+  - not room hire, and the session isn't in the future
+  - the group is one the instructor can see
+  - age, using a matched participant's stored DOB if there is one (`effectiveDob`), else the typed DOB (`ActivityService::isEligibleByDob`)
+  - an existing email must belong to a **customer** account, and the typed parent/adult first and last name must match it (`holderMatchesAccount`, case/space-insensitive)
+- **Account:** the email is looked up. A new email gets `createUser()` with a NULL `password_hash` (unverified), plus `createUserPreferences()` and `applyRoleChange(null, 'customer')`, which sets up the default reminder. An existing customer account is reused, and its records are never edited from instructor input.
+- **Participant:** matched by `matchParticipant()` (an adult's self-participant, or a child with the same name and DOB), otherwise created.
+- **Booking:** if the participant is already booked on the session, that booking is just marked attended. Otherwise a `createSessionBooking()` with:
+  - `source = 'walk_in'`, `added_by_user_id`
+  - `booking_status = 'confirmed'`, `payment_status = 'unpaid_attended'`, `amount_paid = price_per_session`
 
-AuthService::register()
-  1. Validate uniqueness — UserRepository::findByEmail()
-  2. Hash password — password_hash(PASSWORD_DEFAULT)
-  3. Generate token — bin2hex(random_bytes(32)) → 64-char hex
-  4. Set expiry — NOW() + 24 hours
-  5. UserRepository::createUser() — stores user with email_verified=0, token, expiry
-  6. NotificationService::sendVerificationEmail() — sends link to /verify-email?token=<TOKEN>
-  7. Return { id, email, first_name, last_name, role, needs_verification: true }
-  — No auth cookie is set
-
-AuthController: responds 201, no token/cookie
-
-Client is redirected (web) or informed (API) to check inbox
-```
-
-**Verification:**
-
-```
-GET /verify-email?token=<TOKEN>  (HTML form route in index.php)
-
-AuthService::verifyEmail($token)
-  1. UserRepository::findByVerificationToken() — WHERE token = ? AND expires_at > NOW()
-  2. If not found → throw "Invalid or expired verification token"
-  3. UserRepository::markEmailVerified() — SET email_verified=1, token=NULL, expires_at=NULL
-  4. If UPDATE fails → log + throw "Verification could not be saved"
-  5. logAudit('email_verified', userId)
-  6. Return merged user row
-
-index.php: sets $verifySuccess = true — view shows success + login link
-```
-
-**Resend:**
-
-```
-POST /resend-verification { email }  (HTML form route in index.php, no auth required)
-
-AuthService::resendVerification($email)
-  1. UserRepository::findByEmail() — if not found or already verified → silent return
-  2. Generate new token + 24h expiry
-  3. UserRepository::update() — persist new token; if UPDATE fails → log + return (don't send)
-  4. NotificationService::sendVerificationEmail() — resend link
-
-Always shows generic "check your inbox" message (prevents user enumeration)
-```
-
-**Login guard:**
-
-```
-AuthService::login()
-  — password_verify() passes
-  — if email_verified == 0 → throw Exception('...', code: 1001)
-
-index.php catches code 1001 → redirect to /verify-email?resend=1
-AuthController catches code 1001 → 403 JSON error
-```
-
----
+  Then `AttendanceService::markAttendance()` writes `attendance_logs`, which the register reads. Because the status isn't `pending`, `markAttendance()` sends no payment request of its own. Payment goes through the basket flow (`batch-pay` accepts `unpaid_attended`).
+- **Groups:** `GroupService::addMember(..., 'regular', false)`. There's no auto-enrolment until payment, when `enrollAfterPayment()` takes over.
+- **Email:**
+  - **New account:** `NotificationService::sendWalkInWelcome()` (template `walk_in_welcome`) with `AuthService::createInviteUrl()`, a 7-day `password_reset` JWT carrying `invite: true`. A `new_user` subscriber alert is also sent.
+  - **Existing account:** `sendPaymentRequest()`.
+- **Set-up page:** `/reset-password?token=…` detects invites (`AuthService::isInviteToken`) and asks for the three consents (`partials/atoms/consent-toggles.php`). `resetPassword(..., $consents)` records them. `updatePasswordHash()` already sets `email_verified = 1`, and the existing `password_changed_at > iat` check makes the link single-use. Login refuses accounts with no password.
+- **Instructor messages:** only `InvalidArgumentException` messages are shown. The success message is the same whether or not the account already existed.
+- **Admin:** `/admin/bookings?source=walk_in`, a Walk-in badge, "Added by" on booking detail, and `POST /admin/bookings/{id}/resend-invite` (walk-in accounts with no password only).
 
 ### Booking creation
 
@@ -1182,6 +1156,54 @@ Lazy expiry (runs on each booking list read):
   -> Cancels them, frees the spot
 ```
 
+### Notification events
+
+All outbound notifications flow through `NotificationService`. The table below lists every event, which channels fire, and what triggers the dispatch.
+
+| Event | Channels | Trigger |
+|---|---|---|
+| Email verification | Email | Registration, or resend request |
+| Password reset | Email | Forgotten password request |
+| Email change verification | Email | Customer updates their email address |
+| Booking confirmation | Email | Payment confirmed (Stripe or credit) |
+| Booking cancellation | Email | Customer cancels a booking |
+| Session cancellation | Email | Admin cancels a session (fires per affected booking) |
+| Session reminder | Email | Cron — 24 h before session start (see Scheduled Tasks) |
+| Attendance confirmation request | Email | Cron — configurable hours before session (default 24 h, see Notification Templates) |
+| Payment request | Email | Instructor marks booking attended and payment_status is pending |
+| Payment reminder | Email | Post-session sweep — attended but unpaid |
+| Group broadcast | Email | Admin sends message to a group |
+| Staff subscriber alert | Email, In-app | New booking / cancellation / attendance reminder, if staff has a subscription for that activity |
+| Test email | Email | Admin → Settings → Notification Services |
+
+Staff subscribers receive notifications through `dispatchToSubscribers()` for `new_booking`, `cancellation`, and `attendance_reminder` events. Admins with `in_app_notifications = 1` always receive in-app alerts for those events even without a subscription.
+
+### Notification channels
+
+Email is the only customer notification channel (SMS/WhatsApp via Bird were removed in October 2026). Staff also get in-app toasts.
+
+**The email toggle is honoured.** `NotificationService::dispatch()` skips email when the user's `user_preferences.email_notifications = 0` (no row or NULL = on, via `UserRepository::emailPrefAllows()`). Staff subscriber emails check the same preference. Use it to silence notification emails for an account, e.g. auto-booked sessions before go-live.
+
+**Booking does not require email to be on.** A customer with email off can still book; they just aren't emailed.
+
+**Toggle switches post a hidden input that is always present** (`value="0"` or `"1"`). Read them with `postFlag('field')` from `app/Helpers/helpers.php`, never `isset($_POST['field'])`.
+
+**App-wide kill switch:** `app_settings.notifications_disabled = '1'` stops customer emails and staff subscriber emails/in-app alerts. Admin and instructor broadcasts go through the same gate (`NotificationService::sendToUser()`) and refuse with 409 while it's on.
+
+**Staff subscription events** are listed once in `NotificationSubscriptionRepository::EVENT_LABELS` (must match the `event_type` enum; `SubscriptionEventTypesTest` enforces it). `eventTypesForRole()` drives the form and route validation. Send an event with `NotificationService::notifySubscribers($eventType, $subject, $summary, $activityId, $sessionId)`; unknown types throw. Fan-out only reaches staff (admin, super_admin, instructor).
+
+| Event | Sent from |
+|---|---|
+| `new_session_booking` / `new_room_booking` | `sendBookingConfirmation()` (room hire → `new_room_booking`) |
+| `cancellation` | `sendCancellationNotification()` |
+| `attendance_reminder` | `sendSessionReminder()` |
+| `payment_received` | `PaymentService` — Stripe single/batch and account credit |
+| `payment_failed` | `StripeWebhookService` via `POST /api/payments/stripe/webhook` (signature-verified, needs `stripe_webhook_secret`) |
+| `withdrawal_requested` | `BookingController::requestWithdrawal()` |
+| `new_user` | `AuthService::register()` |
+
+**Customer session reminders:** a customer's own reminder is sent only for activities in their "Booking reminders" choices (`attendance_reminder` rows; `activity_id` NULL = all). New customers get an "All" row (`addDefaultCustomerReminder()`); existing ones were backfilled by `2026_10_14_customer_reminder_default.sql`. Customer rows are never fanned out to other users.
+
 ### Email notifications
 
 Emails are sent by either `SmtpService` or `ResendService`, selected by the `mail_driver` setting (default: `resend`). `NotificationService` reads the driver at construction time and routes all `sendEmail()` calls to the active mailer.
@@ -1209,6 +1231,68 @@ Settings priority: `app_settings` DB table → env var fallback → hardcoded de
 **To test emails locally (SMTP):** Run Mailpit (`brew install mailpit`, then `mailpit`). Configure in Settings: driver=SMTP, host=`localhost`, port=`1025`, encryption=`none`. Captured mail appears at `http://localhost:8025`.
 
 **To test emails locally (Resend):** Leave `resend_api_key` unset in `app_settings`. Emails print to `logs/emails.log` instead.
+
+### Attendance confirmation flow (soft-decline)
+
+The attendance confirmation is a yes/no email sent to the account holder before the session. "No" is a **soft decline** — it records the response but does not cancel or refund.
+
+```
+Customer receives attendance confirmation link (via cron or manual trigger)
+  ↓
+Clicks YES → POST /booking/confirm-attendance?token=…&response=yes
+  AttendanceConfirmationService::processResponse()
+  - booking_status → 'confirmed', attendance_response = 'yes'
+  - No further action (payment handled separately via AttendanceService)
+
+Clicks NO → POST /booking/confirm-attendance?token=…&response=no
+  AttendanceConfirmationService::processResponse()
+  - attendance_response = 'no'
+  - booking_status stays as-is (NOT cancelled, NOT refunded)
+  - Returns: "Got it — you have been marked as not attending."
+```
+
+Downstream when instructor marks attendance (`AttendanceService::markAttendance()`):
+
+```
+status = 'attended' + payment_status = 'pending'
+  → NotificationService::sendPaymentRequest() — asks customer to pay
+
+status = 'absent' + payment_status = 'paid' + booking_status != 'pending'
+  → BookingService::cancelBooking(..., isAdmin: true) with reason 'Absent — refund issued'
+    (same refund as a cancellation: net of discount, capped for block sessions, to account credit)
+
+status = 'absent' + booking_status = 'pending'
+  → BookingRepository::cancelWithReason('Absent and booking not confirmed')
+  (nothing was paid, so no refund)
+```
+
+The instructor session-detail view shows an **Unpaid** badge for any booking with `payment_status = 'pending'` (visible to both instructors and admins — not admin-only).
+
+### Notification templates
+
+Admins (super_admin only) can override the subject, body, and short summary for 7 notification types without a code deploy. The system checks for a DB override first and falls back to the hardcoded default if none exists.
+
+**DB table:** `notification_templates`
+
+| Column | Type | Notes |
+|---|---|---|
+| `notification_type` | varchar(50) UNIQUE | One of the 7 editable types |
+| `email_subject` | varchar(255) NULL | NULL = use hardcoded default |
+| `email_body` | text NULL | Plain text; newlines → `<br>` on send |
+| `short_message` | varchar(500) NULL | Plain-text summary for in-app notifications and staff alert emails |
+| `send_day_of_week` | tinyint NULL | Session reminder + attendance confirmation only; 1=Mon…7=Sun (ISO-8601), NULL=Monday |
+
+**Editable types:** `booking_confirmation`, `cancellation_notification`, `session_cancellation`, `session_reminder`, `attendance_confirmation`, `payment_request`, `payment_reminder`.
+
+**Resolution:** `NotificationService::resolveTemplate(type, ...)` queries `NotificationTemplateRepository::getByType()`. Non-null DB fields override their hardcoded counterparts; null fields fall through to the hardcoded string.
+
+**Placeholders:** `{participant_name}`, `{activity_title}`, `{date}`, `{time}`, `{amount}`, `{venue}`, `{refund_amount}`, `{first_name}`, `{booking_id}`, `{yes_url}`, `{no_url}` — availability varies by type. Required placeholders are validated client-side and server-side on save.
+
+**`send_day_of_week`:** Controls which day of the week reminders are batched and sent. Both cron scripts (`send-session-reminders.php`, `send-attendance-confirmations.php`) run daily, check if today matches the configured day (default Monday), then send reminders for all sessions from the following day through the next 7 days. Sessions already reminded (`reminder_sent_at IS NOT NULL`) are skipped automatically.
+
+**Admin UI:** `GET /admin/notification-templates/{type}` (super_admin only). Left nav lists all 7 types with a dot indicator for customised ones. Right form: placeholder toolbar, email subject input, email body textarea, short summary textarea, and day-of-week dropdown for time-based types. Inputs pre-fill with the hardcoded defaults when no DB override exists. "Reset to default" button clears all fields for the current type.
+
+**Key files:** `NotificationTemplateRepository.php`, `NotificationService::resolveTemplate()`, `app/Views/admin/notification-templates.php`, `app/Routes/admin.php` (~line 2881), `scripts/send-session-reminders.php`, `scripts/send-attendance-confirmations.php`.
 
 ---
 
@@ -1642,4 +1726,48 @@ cd booking/booking
 
 ---
 
-*Last updated: 2026-02-15. Branch: feature/4-spa-to-mvc.*
+---
+
+## 14. Scheduled Tasks (Cron Jobs)
+
+Two PHP scripts in `scripts/` must be scheduled on the production server. Both follow the same pattern as the existing payment reminder script: load the framework, run the service method, mark records sent, log output.
+
+### Session reminders — `scripts/send-session-reminders.php`
+
+Finds all `scheduled` sessions starting within the next 24 hours that have not yet had a reminder sent (`sessions.reminder_sent_at IS NULL`), sends email to every confirmed booking on that session, then stamps `reminder_sent_at` on the session row to prevent duplicates.
+
+**Recommended schedule:** hourly, so reminders fire as close to the 24-hour mark as possible.
+
+```cron
+# Session reminders — run every hour
+0 * * * * php /var/www/html/booking/scripts/send-session-reminders.php >> /var/log/booking-session-reminders.log 2>&1
+```
+
+### Payment reminders — `scripts/send-payment-reminders.php`
+
+Finds bookings with `booking_status = unpaid_attended` where the last payment reminder was sent more than `payment_reminder_days` (per activity) ago, sends a reminder, then stamps `payment_reminder_sent_at` on the booking.
+
+**Recommended schedule:** daily at 09:00.
+
+```cron
+# Payment reminders — run daily at 09:00
+0 9 * * * php /var/www/html/booking/scripts/send-payment-reminders.php >> /var/log/booking-payment-reminders.log 2>&1
+```
+
+### Adding cron jobs on IONOS (or cPanel-based LAMP host)
+
+1. Log in to the IONOS control panel (or cPanel)
+2. Navigate to **Hosting → Cron jobs** (cPanel) or **Scheduled Tasks** (IONOS Managed Hosting)
+3. Add each job above — adjust the path to match the actual `public_html` document root
+4. Verify by tailing the log file after the first scheduled run:
+   ```bash
+   tail -f /var/log/booking-session-reminders.log
+   ```
+
+### Schema note
+
+`sessions.reminder_sent_at` (DATETIME, nullable) was added by migration `database/migrations/2026_03_19_sessions_reminder_sent_at.sql`. Ensure this migration has been applied to the production database before enabling the cron.
+
+---
+
+*Last updated: 2026-10-14. SMS/WhatsApp removed — email is the only customer channel.*

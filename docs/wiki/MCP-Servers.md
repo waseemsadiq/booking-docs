@@ -28,7 +28,7 @@ No need to choose a package — role is detected from your login credentials.
 | `search_activities` | Browse activities, check availability, view sessions |
 | `my_bookings` | List, view, create, cancel, and pay for bookings |
 | `my_participants` | Manage child/dependent participants |
-| `my_credit` | View balance, transactions, top up, withdraw |
+| `my_credit` | View balance and transactions, request a withdrawal (top-ups are by card on the website) |
 | `my_gift_aid` | Gift Aid declarations and claims |
 | `my_profile` | View and update profile |
 

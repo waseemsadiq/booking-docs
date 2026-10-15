@@ -33,7 +33,7 @@
     "level": 3,
     "anchor": "dashboard-orientation",
     "snippet": "The dashboard gives you an at-a-glance view of the day's activity. At the top you will find two tabs: - **Activities** — a calendar of scheduled sessi",
-    "content": "The dashboard gives you an at-a-glance view of the day's activity. At the top you will find two tabs: - **Activities** — a calendar of scheduled sessions with a toggle between Month and Day view. Each session slot shows the time, activity name, and booking count against capacity. Colour coding tells you at a glance whether a session is available (blue), full (amber), or past (grey). - **Meeting rooms** — a horizontal timeline showing which rooms are booked and at what times for the selected date. Below the calendar, stat cards summarise Total Users, Activities, Sessions, Active Bookings, and Waiting List count. Super admins also see Revenue and Awaiting Payment figures. To jump to a different month on the calendar, use the **Prev** and **Next** arrows. To move to a different day in Day view, use the date navigation arrows or select **Today**. Clicking any session slot on the calendar opens a quick-view panel showing the activity title, date, time, instructor, venue, and booking progress bar. Select **Manage session** from that panel to go to the full session detail page."
+    "content": "The dashboard gives you an at-a-glance view of the day's activity. At the top you will find two tabs: - **Activities** — a calendar of scheduled sessions with a toggle between Month, Week, and Day view. Each session slot shows the time, activity name, and booking count against capacity. Colour coding tells you at a glance whether a session is available (blue), full (amber), or past (grey). - **Meeting rooms** — a horizontal timeline showing which rooms are booked and at what times for the selected date. Below the calendar, stat cards summarise Total Users, Activities, Sessions, Active Bookings, and Waiting List count. Super admins also see Revenue and Awaiting Payment figures. To jump to a different month or week on the calendar, use the **Prev** and **Next** arrows. A **Back to today** button appears when you have navigated away from the current period. To move to a different day in Day view, use the date navigation arrows or select **Today**. Clicking any session slot on the calendar opens a quick-view panel showing the activity title, date, time, instructor, venue, and booking progress bar. Select **Manage session** from that panel to go to the full session detail page."
   },
   {
     "pageId": "admin-guide",
@@ -42,7 +42,7 @@
     "level": 3,
     "anchor": "navigation",
     "snippet": "**Admin** role sees: Dashboard, Bookings, Users, Resources, Log out. **Super admin** role sees: Dashboard, Bookings, Users, Payments, Resources, Setti",
-    "content": "**Admin** role sees: Dashboard, Bookings, Users, Resources, Log out. **Super admin** role sees: Dashboard, Bookings, Users, Payments, Resources, Settings, Log out. Sub-tabs appear within each section: - Bookings: Bookings, Attendance, Waitlist, Meeting rooms - Payments: Cancellations, Payments received, Refunds, Withdrawals, Gift Aid, Credit accounts - Resources: Activities, Meeting rooms, Spaces, Venues - Settings: Stripe, Notification Services, Account ---"
+    "content": "**Admin** role sees: Dashboard, Bookings, Users, Resources, Log out. **Super admin** role sees: Dashboard, Bookings, Users, Payments, Resources, Settings, Log out. Sub-tabs appear within each section: - Bookings: Bookings, Attendance, Waitlist, Meeting rooms - Payments: Cancellations, Payments received, Refunds, Withdrawals, Gift Aid, Credit accounts, Discount codes - Resources: Activities, Meeting rooms, Spaces, Venues - Settings: Stripe, Notification Services, Notification Templates, Account ---"
   },
   {
     "pageId": "admin-guide",
@@ -59,8 +59,8 @@
     "title": "Viewing the bookings list",
     "level": 3,
     "anchor": "viewing-the-bookings-list",
-    "snippet": "The bookings list shows all bookings with columns for Booking number, Participant, Activity, Session date, Amount paid, and Status. Stat cards at the ",
-    "content": "The bookings list shows all bookings with columns for Booking number, Participant, Activity, Session date, Amount paid, and Status. Stat cards at the top of the page show: Total, Confirmed, Waitlisted, Awaiting payment, Cancelled, and (for super admins) Revenue and Average value, plus overall attendance rate. Status badges tell you the state of each booking: | Badge | Meaning | |---|---| | Confirmed (green) | Active booking, payment received | | Awaiting payment (amber) | Booking held, payment not yet complete | | Waiting list (blue) | On the waitlist, not yet confirmed | | Cancellation requested (amber) | Customer has asked to cancel | | Cancelled (red) | Booking has been cancelled | | Expired (unpaid) (grey) | Promoted from waitlist but payment was not made before the session |"
+    "snippet": "The bookings list shows upcoming bookings (today and future sessions) ordered by session date, most recent first. Columns show: Booking number, Partic",
+    "content": "The bookings list shows upcoming bookings (today and future sessions) ordered by session date, most recent first. Columns show: Booking number, Participant, Activity, Session date, Amount paid, and Status. Past bookings are available in the Payments section. Stat cards at the top of the page reflect the same upcoming-only view: Total, Confirmed, Awaiting payment, and (for super admins) Revenue and Average value. Status badges tell you the state of each booking: | Badge | Meaning | |---|---| | Confirmed (green) | Active booking, payment received | | Awaiting payment (amber) | Booking held, payment not yet complete | | Waiting list (blue) | On the waitlist, not yet confirmed | | Cancellation requested (amber) | Customer has asked to cancel | | Cancelled (red) | Booking has been cancelled | | Expired (unpaid) (grey) | Promoted from waitlist but payment was not made before the session |"
   },
   {
     "pageId": "admin-guide",
@@ -70,6 +70,15 @@
     "anchor": "viewing-booking-details",
     "snippet": "1. Click any row in the bookings table. 2. A detail panel opens showing: participant, date of birth, booked by (account holder), activity, session, ve",
     "content": "1. Click any row in the bookings table. 2. A detail panel opens showing: participant, date of birth, booked by (account holder), activity, session, venue, booking type (Single or Block), booking date, booking and payment status, attendance status, amount paid, payment method, paid-on date, and any cancellation information."
+  },
+  {
+    "pageId": "admin-guide",
+    "pageTitle": "Admin Guide",
+    "title": "Walk-ins",
+    "level": 3,
+    "anchor": "walk-ins",
+    "snippet": "When someone turns up to a session without an account or a booking, the instructor adds them from the session register (see *Instructor features → Add",
+    "content": "When someone turns up to a session without an account or a booking, the instructor adds them from the session register (see *Instructor features → Adding a walk-in*). Their booking appears here like any other, with a purple **Walk-in** badge. - **Find them:** use the **All sources → Walk-ins** filter on the bookings list. - **Payment:** a walk-in booking is left unpaid, so it shows under **Awaiting payment**. The customer pays from their account like any outstanding booking. - **New accounts:** someone who didn't have an account is emailed a link to set one up (valid for 7 days). On the booking's detail page you'll see who added them. While they haven't set a password yet, there's also a **Resend set-up email** button. - **Onboarding:** add any missing details (address, medical notes, emergency contacts) from the user's edit page as usual."
   },
   {
     "pageId": "admin-guide",
@@ -105,7 +114,7 @@
     "level": 2,
     "anchor": "4-attendance",
     "snippet": "Go to **Bookings**, then select the **Attendance** sub-tab. You can view attendance two ways: - **By Activity** — one row per activity showing total s",
-    "content": "Go to **Bookings**, then select the **Attendance** sub-tab. You can view attendance two ways: - **By Activity** — one row per activity showing total sessions, total bookings, attended, absent, unmarked, and attendance rate. - **By Session** — one row per session showing date, activity name, and the same breakdown. Select the **By Activity** or **By Session** buttons to switch views. Attendance rates are colour coded: green for 80% and above, amber for 60–79%, and red below 60%. Instructors mark attendance from their own session detail pages (see [Instructor features](#12-instructor-features)). The data feeds directly into these reports. ---"
+    "content": "Go to **Bookings**, then select the **Attendance** sub-tab. You can view attendance two ways: - **By Activity** — one row per activity showing total sessions, total bookings, attended, absent, unmarked, and attendance rate. - **By Session** — one row per session showing date, activity name, and the same breakdown. Select the **By Activity** or **By Session** buttons to switch views. Attendance rates are colour coded: green for 80% and above, amber for 60–79%, and red below 60%. Instructors mark attendance from their own session detail pages (see [Instructor features](#12-instructor-features)). The data feeds directly into these reports. **Note:** Marking a participant as absent cancels their booking. If the booking was paid, what they paid (less any discount) is refunded to their account credit, the same as a cancellation. If it was never confirmed (for example a group enrolment), it is simply cancelled. Marking someone as attended who hasn't paid sends them a payment request. ---"
   },
   {
     "pageId": "admin-guide",
@@ -185,8 +194,8 @@
     "title": "Creating an activity",
     "level": 3,
     "anchor": "creating-an-activity",
-    "snippet": "1. Select **Add activity** at the top right. 2. A panel opens. Fill in: - **Title** (required) - **Instructor** — select from the list of instructor-r",
-    "content": "1. Select **Add activity** at the top right. 2. A panel opens. Fill in: - **Title** (required) - **Instructor** — select from the list of instructor-role users - **Space** — select the venue and space where this activity takes place - **Price per session** (in pounds — enter 0 for free) - **Capacity** — maximum number of bookings per session - **Frequency** — Weekly, Fortnightly, Monthly, or One-off - **Status** — Draft (not visible to customers), Published, or Archived - **Start time** and **End time** - **Start date** and **End date** (optional — limits when sessions are generated) - **Allow waiting list** toggle — when enabled, customers can join a waitlist when a session is full 3. Select **Save activity**. For recurring activities (weekly, fortnightly, monthly), the system automatically generates sessions up to one year ahead each time an admin logs into the dashboard."
+    "snippet": "1. Select **Add activity** at the top right. 2. A panel opens. Fill in: - **Title** (required) - **Primary instructor** — the instructor responsible f",
+    "content": "1. Select **Add activity** at the top right. 2. A panel opens. Fill in: - **Title** (required) - **Primary instructor** — the instructor responsible for the activity (selected from instructor-role users) - **Co-instructors** — optional additional instructors who can also mark attendance - **Space** — select the venue and space where this activity takes place - **Price per session** (in pounds — enter 0 for free) - **Capacity** — maximum number of bookings per session - **Frequency** — Weekly, Fortnightly, Monthly, or One-off - **Status** — Draft (not visible to customers), Published, or Archived - **Start time** and **End time** - **Start date** and **End date** (optional — limits when sessions are generated) - **Allow waiting list** toggle — when enabled, customers can join a waitlist when a session is full 3. Select **Save activity**. For recurring activities (weekly, fortnightly, monthly), the system automatically generates sessions up to one year ahead each time an admin logs into the dashboard."
   },
   {
     "pageId": "admin-guide",
@@ -222,7 +231,7 @@
     "level": 3,
     "anchor": "managing-sessions",
     "snippet": "Sessions are individual occurrences of an activity. For recurring activities, sessions are generated automatically. For one-off activities, you create",
-    "content": "Sessions are individual occurrences of an activity. For recurring activities, sessions are generated automatically. For one-off activities, you create sessions manually. **Viewing sessions** — Go to **Resources**, then the **Sessions** sub-tab. A monthly calendar shows all sessions. Click a date to navigate to that session's detail page. **Adding a one-off session from the dashboard:** 1. On the Dashboard, click any date on the month calendar. 2. An \"Add one-off session\" panel opens. 3. Select the activity (only published one-off activities appear), date, start and end times. 4. Optionally set a capacity override (overrides the activity's default capacity for this session only). 5. Optionally add instructor notes. 6. Select **Add session**. **Viewing a session's detail and participant list:** 1. Click a session slot on the dashboard or sessions calendar. 2. Select **Manage session** from the quick-view panel. 3. The session detail page shows date, time, instructor, venue, and a table of all booked participants with their attendance status. ---"
+    "content": "Sessions are individual occurrences of an activity. For recurring activities, sessions are generated automatically. For one-off activities, you create sessions manually. **Viewing sessions** — Go to **Resources**, then the **Sessions** sub-tab. A calendar shows all sessions with a toggle between Month and Week view. A **Back to today** button appears when you have navigated away from the current period. Click any session slot to navigate to that session's detail page. **Adding a one-off session from the dashboard:** 1. On the Dashboard, click any date on the month calendar. 2. An \"Add one-off session\" panel opens. 3. Select the activity (only published one-off activities appear), date, start and end times. 4. Optionally set a capacity override (overrides the activity's default capacity for this session only). 5. Optionally add instructor notes. 6. Select **Add session**. **Viewing a session's detail and participant list:** 1. Click a session slot on the dashboard or sessions calendar. 2. Select **Manage session** from the quick-view panel. 3. The session detail page shows date, time, instructor, venue, and a table of all booked participants with their attendance status. ---"
   },
   {
     "pageId": "admin-guide",
@@ -329,8 +338,8 @@
     "title": "9. Payments (super admin)",
     "level": 2,
     "anchor": "9-payments-super-admin",
-    "snippet": "The Payments section is only visible to super admins. Go to **Payments** in the top navigation. The Payments section has six sub-tabs: Cancellations, ",
-    "content": "The Payments section is only visible to super admins. Go to **Payments** in the top navigation. The Payments section has six sub-tabs: Cancellations, Payments received, Refunds, Withdrawals, Gift Aid, and Credit accounts."
+    "snippet": "The Payments section is only visible to super admins. Go to **Payments** in the top navigation. The Payments section has seven sub-tabs: Cancellations",
+    "content": "The Payments section is only visible to super admins. Go to **Payments** in the top navigation. The Payments section has seven sub-tabs: Cancellations, Payments received, Refunds, Withdrawals, Gift Aid, Credit accounts, and Discount codes."
   },
   {
     "pageId": "admin-guide",
@@ -338,8 +347,8 @@
     "title": "Cancellations",
     "level": 3,
     "anchor": "cancellations",
-    "snippet": "This tab lists all cancelled bookings showing: Booking number, Participant, Activity, Cancellation date, Amount paid, and Amount refunded. Click any r",
-    "content": "This tab lists all cancelled bookings showing: Booking number, Participant, Activity, Cancellation date, Amount paid, and Amount refunded. Click any row to open the detail panel showing the full booking and cancellation information, including who processed the refund and when."
+    "snippet": "This tab lists all cancelled bookings showing: Booking number, Participant, Activity, Cancellation date, Amount paid, and Amount refunded. Rows are or",
+    "content": "This tab lists all cancelled bookings showing: Booking number, Participant, Activity, Cancellation date, Amount paid, and Amount refunded. Rows are ordered by session date, most recent first. Use the filters at the top to narrow results by venue, space, activity, group, and year (defaults to the current year). A date range picker lets you filter by exact cancellation date. Select **All years** to see the full history. Click any row to open the detail panel showing the full booking and cancellation information, including who processed the refund and when."
   },
   {
     "pageId": "admin-guide",
@@ -347,8 +356,8 @@
     "title": "Payments received",
     "level": 3,
     "anchor": "payments-received",
-    "snippet": "This tab lists all bookings where payment has been received. It shows: Booking number, Participant, Activity, Session date, Amount paid, and Status. C",
-    "content": "This tab lists all bookings where payment has been received. It shows: Booking number, Participant, Activity, Session date, Amount paid, and Status. Click any row to open the detail panel. From the panel you can **cancel the booking and refund the payment**: 1. Click the row to open the detail panel. 2. Verify the booking and payment details. 3. The refund section shows the full amount paid. Select **Cancel booking and refund payment**. 4. The booking is cancelled and the amount is credited back to the customer's account credit."
+    "snippet": "This tab lists all bookings where payment has been received. It shows: Booking number, Participant, Activity, Session date, Amount paid, and Status. R",
+    "content": "This tab lists all bookings where payment has been received. It shows: Booking number, Participant, Activity, Session date, Amount paid, and Status. Rows are ordered by session date, most recent first. Use the filters at the top to narrow results by venue, space, activity, group, and year (defaults to the current year). A date range picker lets you filter by exact payment date. Select **All years** to see the full history. Click any row to open the detail panel. From the panel you can **cancel the booking and refund the payment**: 1. Click the row to open the detail panel. 2. Verify the booking and payment details. 3. The refund section shows the full amount paid. Select **Cancel booking and refund payment**. 4. The booking is cancelled and the amount is credited back to the customer's account credit."
   },
   {
     "pageId": "admin-guide",
@@ -356,8 +365,8 @@
     "title": "Refunds",
     "level": 3,
     "anchor": "refunds",
-    "snippet": "This tab lists all bookings that have been refunded. Columns show: Booking number, Participant, Activity, Refund date, and Amount refunded. Click any ",
-    "content": "This tab lists all bookings that have been refunded. Columns show: Booking number, Participant, Activity, Refund date, and Amount refunded. Click any row to see the full refund detail including original payment method, paid-on date, amount refunded, and which admin processed the refund."
+    "snippet": "This tab lists all bookings that have been refunded. Columns show: Booking number, Participant, Activity, Refund date, and Amount refunded. Rows are o",
+    "content": "This tab lists all bookings that have been refunded. Columns show: Booking number, Participant, Activity, Refund date, and Amount refunded. Rows are ordered by session date, most recent first. Use the filters at the top to narrow results by venue, space, activity, group, refunder, and year (defaults to the current year). A date range picker lets you filter by exact refund date. Select **All years** to see the full history. Click any row to see the full refund detail including original payment method, paid-on date, amount refunded, and which admin processed the refund."
   },
   {
     "pageId": "admin-guide",
@@ -393,7 +402,70 @@
     "level": 3,
     "anchor": "credit-accounts",
     "snippet": "Go to **Payments**, then the **Credit accounts** sub-tab. This table lists every user who holds account credit. Columns show: Name, Email, Balance, Tr",
-    "content": "Go to **Payments**, then the **Credit accounts** sub-tab. This table lists every user who holds account credit. Columns show: Name, Email, Balance, Transaction count, and any pending withdrawal request. **Viewing a user's credit history:** 1. Click the user's name in the table. 2. A panel opens showing their current balance and a full transaction history: date, description, amount (positive for credits, negative for debits), and the running balance after each transaction. **Processing or rejecting a withdrawal request from this page:** If a user has a pending withdrawal request, it appears in the Withdrawal request column. You can select **Process** or **Reject** directly from this table, following the same steps as the Withdrawals tab above. ---"
+    "content": "Go to **Payments**, then the **Credit accounts** sub-tab. This table lists every user who holds account credit. Columns show: Name, Email, Balance, Transaction count, and any pending withdrawal request. **Viewing a user's credit history:** 1. Click the user's name in the table. 2. A panel opens showing their current balance and a full transaction history: date, description, amount (positive for credits, negative for debits), and the running balance after each transaction. **Processing or rejecting a withdrawal request from this page:** If a user has a pending withdrawal request, it appears in the Withdrawal request column. You can select **Process** or **Reject** directly from this table, following the same steps as the Withdrawals tab above."
+  },
+  {
+    "pageId": "admin-guide",
+    "pageTitle": "Admin Guide",
+    "title": "Discount codes",
+    "level": 3,
+    "anchor": "discount-codes",
+    "snippet": "Go to **Payments**, then the **Discount codes** sub-tab. This page lists all discount codes as cards. Each card shows the code (or **AUTO** for codes ",
+    "content": "Go to **Payments**, then the **Discount codes** sub-tab. This page lists all discount codes as cards. Each card shows the code (or **AUTO** for codes that apply automatically), type, value, usage count, scope, and status."
+  },
+  {
+    "pageId": "admin-guide",
+    "pageTitle": "Admin Guide",
+    "title": "Discount types",
+    "level": 4,
+    "anchor": "discount-types",
+    "snippet": "| Type | How it works | |---|---| | Percentage | Reduces the total by a percentage (e.g. 10%) | | Fixed amount | Reduces the total by a fixed £ amount",
+    "content": "| Type | How it works | |---|---| | Percentage | Reduces the total by a percentage (e.g. 10%) | | Fixed amount | Reduces the total by a fixed £ amount | | Every Nth session free | For block bookings: one session is free for every N sessions booked in a single transaction (e.g. every 3rd session free) | | Third child free | Applied automatically when a family books a third or later child into the same session |"
+  },
+  {
+    "pageId": "admin-guide",
+    "pageTitle": "Admin Guide",
+    "title": "Scopes — who the code applies to",
+    "level": 4,
+    "anchor": "scopes-who-the-code-applies-to",
+    "snippet": "| Scope | Behaviour | |---|---| | Global | Applies to all activities; customers enter the code at checkout | | Activity | Applies to a single activity",
+    "content": "| Scope | Behaviour | |---|---| | Global | Applies to all activities; customers enter the code at checkout | | Activity | Applies to a single activity; customers enter the code at checkout | | Activity type | Applies to all activities of a given type; customers enter the code at checkout | | Venue | Applies to all activities at a specific venue; customers enter the code at checkout | | Account type | Applies based on the customer's account type; customers enter the code at checkout | | Room hire | Applies to meeting room bookings only; customers enter the code at checkout | | Staff | Applied automatically by role — no code needed; the customer never types anything | | Per user | Applied automatically to one or more specific users — no code needed | Codes with **Staff** or **Per user** scope show **AUTO** instead of a code string. When a customer eligible for an auto-applied discount opens the booking popover, the discount is detected and applied immediately. If the discount covers the full session cost, the Stripe payment form is hidden and the button reads **Confirm Booking** instead of **Pay £X**."
+  },
+  {
+    "pageId": "admin-guide",
+    "pageTitle": "Admin Guide",
+    "title": "Adding a discount code",
+    "level": 4,
+    "anchor": "adding-a-discount-code",
+    "snippet": "1. Select **Add discount code**. 2. A panel opens. Choose the **Scope** first — this controls which other fields appear. 3. For most scopes, enter a *",
+    "content": "1. Select **Add discount code**. 2. A panel opens. Choose the **Scope** first — this controls which other fields appear. 3. For most scopes, enter a **Code** string (e.g. `SUMMER10`). For Staff and Per user scopes the code field is hidden (auto-applied codes have no code). 4. Fill in: - **Name** — a plain-English label shown to customers when the discount is applied - **Type** — Percentage, Fixed amount, Every Nth session free, or Third child free - **Value** — the percentage or fixed amount (not shown for session-free types) - **Min sessions** — for \"Every Nth session free\": the N (e.g. 3 means every 3rd session is free) - **Max uses** — leave blank for unlimited uses - **Expires at** — optional expiry date; leave blank for no expiry - **Activity** — for Activity scope, select the specific activity - **Users** — for Per user scope, search and select one or more users 5. Select **Save**."
+  },
+  {
+    "pageId": "admin-guide",
+    "pageTitle": "Admin Guide",
+    "title": "Editing a discount code",
+    "level": 4,
+    "anchor": "editing-a-discount-code",
+    "snippet": "1. Click the **Edit** button on any card. 2. Update the fields and select **Update**.",
+    "content": "1. Click the **Edit** button on any card. 2. Update the fields and select **Update**."
+  },
+  {
+    "pageId": "admin-guide",
+    "pageTitle": "Admin Guide",
+    "title": "Deleting a discount code",
+    "level": 4,
+    "anchor": "deleting-a-discount-code",
+    "snippet": "1. Click the **Delete** button on any card and confirm. If a code has been used at least once, deleting it deactivates it rather than removing it — th",
+    "content": "1. Click the **Delete** button on any card and confirm. If a code has been used at least once, deleting it deactivates it rather than removing it — the usage history is preserved. Codes with zero uses are deleted immediately."
+  },
+  {
+    "pageId": "admin-guide",
+    "pageTitle": "Admin Guide",
+    "title": "How customers see discounts",
+    "level": 4,
+    "anchor": "how-customers-see-discounts",
+    "snippet": "- **Manual codes** — a \"Have a discount code?\" link appears on the booking popover. The customer enters the code and the discounted price updates imme",
+    "content": "- **Manual codes** — a \"Have a discount code?\" link appears on the booking popover. The customer enters the code and the discounted price updates immediately. - **Auto-applied discounts** — the discount appears automatically when the popover opens. A notice explains the saving (e.g. \"You're booking 3 sessions — 1 session is free!\" for a bulk discount, or \"Staff discount applied automatically.\" for a staff discount). The \"Amount to Pay\" label changes to \"Your Price\". If the total drops to £0, it shows **FREE** and the payment form is hidden. ---"
   },
   {
     "pageId": "admin-guide",
@@ -411,7 +483,7 @@
     "level": 3,
     "anchor": "stripe",
     "snippet": "Go to **Settings**, then the **Stripe** sub-tab. This is where you configure the Stripe API keys used for payment processing. 1. Enter the **Stripe Pu",
-    "content": "Go to **Settings**, then the **Stripe** sub-tab. This is where you configure the Stripe API keys used for payment processing. 1. Enter the **Stripe Publishable Key** (starts with `pk_live_` for live or `pk_test_` for test mode). 2. Enter the **Stripe Secret Key** (starts with `sk_live_` or `sk_test_`). 3. Select **Save Settings**. The current key values are masked for security — only the last four characters are shown. Leave a field blank to keep the existing value. **Switching between test and live mode:** Replace both keys with the corresponding test or live pair. Test keys (prefixed `pk_test_` / `sk_test_`) allow you to process payments using Stripe's test card numbers without real charges."
+    "content": "Go to **Settings**, then the **Stripe** sub-tab. This is where you configure the Stripe API keys used for payment processing. 1. Enter the **Stripe Publishable Key** (starts with `pk_live_` for live or `pk_test_` for test mode). 2. Enter the **Stripe Secret Key** (starts with `sk_live_` or `sk_test_`). 3. Select **Save Settings**. The current key values are masked for security — only the last four characters are shown. Leave a field blank to keep the existing value. **Switching between test and live mode:** Replace both keys with the corresponding test or live pair. Test keys (prefixed `pk_test_` / `sk_test_`) allow you to process payments using Stripe's test card numbers without real charges. **Payment failure alerts (webhook):** Card payments are confirmed in the customer's browser, so the booking system only hears about a *failed* payment through a Stripe webhook. To turn on \"Payment failed\" alerts: 1. In the Stripe dashboard, go to **Developers → Webhooks → Add endpoint**. 2. Set the endpoint URL to `https://<your booking site>/api/payments/stripe/webhook` and select the event **payment_intent.payment_failed**. 3. Copy the endpoint's **Signing secret** (starts with `whsec_`) into the **Webhook Secret** field here and select **Save Settings**. Do this once for test mode and once for live mode; each has its own signing secret. Until a secret is saved, the endpoint refuses every request."
   },
   {
     "pageId": "admin-guide",
@@ -420,7 +492,16 @@
     "level": 3,
     "anchor": "notification-services",
     "snippet": "Go to **Settings**, then the **Notification Services** sub-tab. This page configures two services: **Email Driver** The toggle at the top of the card ",
-    "content": "Go to **Settings**, then the **Notification Services** sub-tab. This page configures two services: **Email Driver** The toggle at the top of the card selects the active driver — **SMTP** (default) or **Resend**. Switching the toggle shows the settings for that driver. Select **Save** to persist the driver choice along with the From address and From name. **SMTP** Use this for Office 365, Gmail, or any SMTP server. No external account required beyond your existing email credentials. 1. Enter the **From address** and **From name** — shown to recipients on all emails. 2. Toggle the driver to **SMTP** and select **Save**. 3. In the SMTP settings card, enter: - **SMTP Host** — e.g. `smtp.office365.com` - **Port** — `587` for TLS/STARTTLS, `465` for SSL - **Username** — your full email address (e.g. `info@wellfoundation.org.uk`) - **Password** — your account password. If MFA is enabled on Microsoft 365, generate an App Password. Leave blank to keep the existing value. Stored encrypted. - **Encryption** — `TLS / STARTTLS` for port 587, `SSL` for port 465 4. Select **Save SMTP Settings**. **Resend** Use this for cloud hosting where SMTP is blocked or unavailable. 1. Toggle the driver to **Resend** and select **Save**. 2. Enter the **Resend API Key** — obtain this from your Resend account. Leave blank to keep the existing key. 3. Select **Save Resend Settings**. **Important note:** If using Resend, the domain `wellfoundation.org.uk` must be verified in your Resend account before going live. Until then, emails only deliver reliably from `onboarding@resend.dev`. **No email driver configured yet?** The system handles this gracefully — if neither SMTP nor Resend has been set up, email notifications are silently skipped rather than showing errors to customers. Everything else (bookings, payments, waitlist) continues to work normally. You can configure email at any time and notifications will start sending immediately. **Bird (SMS / WhatsApp)** The Bird card has a toggle next to the heading. It is off by default — toggle it on to expand the configuration form. 1. Toggle **Bird (SMS / WhatsApp)** on. 2. Enter the **Bird API Key** — obtain this from your Bird account. Leave blank to keep the existing key. 3. Enter the **SMS Originator** — the sender name or number displayed on SMS messages. 4. Enter the **WhatsApp Workspace ID** and **WhatsApp Channel ID** — from your Bird WhatsApp configuration. 5. Select **Save Bird Settings**. All API keys are encrypted at rest using AES-256-GCM. Database settings take priority over environment variables, so updates made here take effect immediately without server file access. ---"
+    "content": "Go to **Settings**, then the **Notification Services** sub-tab. This page configures two services: **Email Driver** The toggle at the top of the card selects the active driver — **SMTP** (default) or **Resend**. Switching the toggle shows the settings for that driver. Select **Save** to persist the driver choice along with the From address and From name. **SMTP** Use this for Office 365, Gmail, or any SMTP server. No external account required beyond your existing email credentials. 1. Enter the **From address** and **From name** — shown to recipients on all emails. 2. Toggle the driver to **SMTP** and select **Save**. 3. In the SMTP settings card, enter: - **SMTP Host** — e.g. `smtp.office365.com` - **Port** — `587` for TLS/STARTTLS, `465` for SSL - **Username** — your full email address (e.g. `info@wellfoundation.org.uk`) - **Password** — your account password. If MFA is enabled on Microsoft 365, generate an App Password. Leave blank to keep the existing value. Stored encrypted. - **Encryption** — `TLS / STARTTLS` for port 587, `SSL` for port 465 4. Select **Save SMTP Settings**. **Resend** Use this for cloud hosting where SMTP is blocked or unavailable. 1. Toggle the driver to **Resend** and select **Save**. 2. Enter the **Resend API Key** — obtain this from your Resend account. Leave blank to keep the existing key. 3. Select **Save Resend Settings**. **Important note:** If using Resend, the domain `wellfoundation.org.uk` must be verified in your Resend account before going live. Until then, emails only deliver reliably from `onboarding@resend.dev`. **No email driver configured yet?** The system handles this gracefully — if neither SMTP nor Resend has been set up, email notifications are silently skipped rather than showing errors to customers. Everything else (bookings, payments, waitlist) continues to work normally. You can configure email at any time and notifications will start sending immediately. All API keys are encrypted at rest using AES-256-GCM. Database settings take priority over environment variables, so updates made here take effect immediately without server file access."
+  },
+  {
+    "pageId": "admin-guide",
+    "pageTitle": "Admin Guide",
+    "title": "Notification Templates",
+    "level": 3,
+    "anchor": "notification-templates",
+    "snippet": "Go to **Settings**, then the **Notification Templates** sub-tab (super admin only). This page lists all automated notification events — booking confir",
+    "content": "Go to **Settings**, then the **Notification Templates** sub-tab (super admin only). This page lists all automated notification events — booking confirmations, payment requests, cancellations, attendance reminders, and others. For each event you can see the trigger condition described in plain English, and customise the email subject line and body, plus the short summary used for in-app notifications and staff alert emails. **Customising a template:** 1. Find the notification event you want to edit. 2. Select **Edit**. 3. Update the **Subject** (email only) and **Body** fields. 4. Templates support placeholder tokens — these are replaced with real values when the notification is sent. The available tokens are shown beneath each field (e.g. `{{participant_name}}`, `{{session_date}}`, `{{activity_title}}`). 5. Select **Save**. **Restoring the default:** If you want to revert a template to the built-in default text, select **Reset to default** and confirm. Custom templates are stored in the database and override the built-in defaults. This means notification copy can be updated without any code changes or server access. ---"
   },
   {
     "pageId": "admin-guide",
@@ -446,8 +527,8 @@
     "title": "Notification preferences",
     "level": 3,
     "anchor": "notification-preferences",
-    "snippet": "You can configure which channels you receive notifications on: 1. Use the toggles to enable or disable **Email** and **In-app** notifications. 2. If B",
-    "content": "You can configure which channels you receive notifications on: 1. Use the toggles to enable or disable **Email** and **In-app** notifications. 2. If Bird (SMS / WhatsApp) has been configured under Notification Services, **SMS** and **WhatsApp** toggles will also appear, along with a **Mobile number** field. 3. Select **Save preferences**."
+    "snippet": "You can configure which channels you receive notifications on: 1. Use the toggles to enable or disable **Email** and **In-app** notifications. 2. Sele",
+    "content": "You can configure which channels you receive notifications on: 1. Use the toggles to enable or disable **Email** and **In-app** notifications. 2. Select **Save preferences**."
   },
   {
     "pageId": "admin-guide",
@@ -456,7 +537,7 @@
     "level": 3,
     "anchor": "notification-subscriptions",
     "snippet": "Subscriptions let you receive notifications for specific events on particular activities or sessions. **Adding a subscription:** 1. Select **+ Add sub",
-    "content": "Subscriptions let you receive notifications for specific events on particular activities or sessions. **Adding a subscription:** 1. Select **+ Add subscription**. 2. Choose the activity (and optionally a specific session), the event type you want to be notified about, and the channels (Email, SMS, WhatsApp). 3. Select **Add subscription**. **Editing a subscription:** 1. Find the subscription card and select **Edit**. 2. Update the settings and select **Save changes**. **Deleting a subscription:** 1. Find the subscription card and select **Delete** (or the delete action on the card). 2. Confirm the deletion. ---"
+    "content": "Subscriptions let you receive notifications for specific events on particular activities or sessions. **Adding a subscription:** 1. Select **+ Add subscription**. 2. Choose the activity (and optionally a specific session), the event type you want to be notified about, and whether to receive it by email (admins can also choose in-app). 3. Select **Add subscription**. **Editing a subscription:** 1. Find the subscription card and select **Edit**. 2. Update the settings and select **Save changes**. **Deleting a subscription:** 1. Find the subscription card and select **Delete** (or the delete action on the card). 2. Confirm the deletion. ---"
   },
   {
     "pageId": "admin-guide",
@@ -473,8 +554,17 @@
     "title": "Instructor dashboard",
     "level": 3,
     "anchor": "instructor-dashboard",
-    "snippet": "The instructor dashboard shows stat cards for: Total Sessions, Activities, Participants, and Attendance Rate. Below the stats is a monthly calendar sh",
-    "content": "The instructor dashboard shows stat cards for: Total Sessions, Activities, Participants, and Attendance Rate. Below the stats is a monthly calendar showing all sessions assigned to the instructor. Each slot shows the activity name, time, and booking count against capacity. Full sessions are shown in red."
+    "snippet": "The instructor dashboard shows stat cards for: Total Sessions, Activities, Participants, and Attendance Rate. Below the stats is a calendar showing al",
+    "content": "The instructor dashboard shows stat cards for: Total Sessions, Activities, Participants, and Attendance Rate. Below the stats is a calendar showing all sessions assigned to the instructor, with a toggle between Month and Week view. Each slot shows the activity name, time, and booking count against capacity. Full sessions are shown in red. A **Back to today** button appears when navigated away from the current period."
+  },
+  {
+    "pageId": "admin-guide",
+    "pageTitle": "Admin Guide",
+    "title": "Adding a walk-in",
+    "level": 3,
+    "anchor": "adding-a-walk-in",
+    "snippet": "If someone turns up who isn't booked, or doesn't have an account yet, open the session's register and select **Add walk-in**. The button only appears ",
+    "content": "If someone turns up who isn't booked, or doesn't have an account yet, open the session's register and select **Add walk-in**. The button only appears on the day of the session or afterwards. 1. Choose **A child** or **An adult, for themselves**. 2. Enter the parent's or guardian's details (or the adult's own): first name, last name, email and mobile. 3. For a child, enter the child's first and last name. 4. Enter the date of birth (the child's, or the adult's). Walk-ins must be within the activity's age range. 5. If the session has groups, choose the group. 6. Select **Add walk-in**. If the email already belongs to an account, the parent's (or adult's) name must match that account; otherwise you'll be asked to check the details or get an admin to help. They're marked as attended straight away and the booking is left unpaid. The account holder is emailed about payment. If they didn't have an account, the email includes a link to set one up. If anything is wrong, the form stays open with your details kept so you can fix it."
   },
   {
     "pageId": "admin-guide",
@@ -546,7 +636,7 @@
     "level": 3,
     "anchor": "confirmation-for-destructive-actions",
     "snippet": "Claude will never cancel a booking, issue a refund, delete a record, or process a withdrawal without asking you first: You say yes, and only then does",
-    "content": "Claude will never cancel a booking, issue a refund, delete a record, or process a withdrawal without asking you first: You say yes, and only then does Claude proceed. --- *This guide covers the WFCS booking system as of February 2026. The Well Foundation (SC040105) — info@wellfoundation.org.uk.*"
+    "content": "Claude will never cancel a booking, issue a refund, delete a record, or process a withdrawal without asking you first: You say yes, and only then does Claude proceed. --- *This guide covers the WFCS booking system as of March 2026. The Well Foundation (SC040105) — info@wellfoundation.org.uk.*"
   },
   {
     "pageId": "getting-started",
@@ -609,7 +699,7 @@
     "level": 3,
     "anchor": "app-env-application-secrets",
     "snippet": "Create `well-booking/booking/.env`: APP_KEY=another-32-char-random-string STRIPE_SECRET_KEY=sk_test_... STRIPE_PUBLISHABLE_KEY=pk_test_... STRIPE_WEBH",
-    "content": "Create `well-booking/booking/.env`: APP_KEY=another-32-char-random-string STRIPE_SECRET_KEY=sk_test_... STRIPE_PUBLISHABLE_KEY=pk_test_... STRIPE_WEBHOOK_SECRET=whsec_... RESEND_API_KEY=re_...          # Resend driver only — or leave blank to log emails to logs/emails.log MAIL_FROM_ADDRESS=noreply@example.com MAIL_FROM_NAME=WFCS Booking BIRD_MOCK=true                 # true = log SMS/WhatsApp to logs/bird-mock.log (sends only — does not show Bird settings in UI) For local development, Stripe test keys and `BIRD_MOCK=true` are sufficient. Note: mock mode only intercepts outbound sends — the Bird settings UI in admin only appears when a real API key is configured. Email sending falls back to `logs/emails.log` if no driver is configured. For local SMTP testing use Mailpit (`brew install mailpit`) — configure host=localhost port=1025 encryption=none in Settings > Notification Services. ---"
+    "content": "Create `well-booking/booking/.env`: APP_KEY=another-32-char-random-string STRIPE_SECRET_KEY=sk_test_... STRIPE_PUBLISHABLE_KEY=pk_test_... STRIPE_WEBHOOK_SECRET=whsec_... RESEND_API_KEY=re_...          # Resend driver only — or leave blank to log emails to logs/emails.log MAIL_FROM_ADDRESS=noreply@example.com MAIL_FROM_NAME=WFCS Booking For local development, Stripe test keys are sufficient. Email sending falls back to `logs/emails.log` if no driver is configured. For local SMTP testing use Mailpit (`brew install mailpit`) — configure host=localhost port=1025 encryption=none in Settings > Notification Services. ---"
   },
   {
     "pageId": "getting-started",
@@ -681,7 +771,7 @@
     "level": 2,
     "anchor": "directory-layout",
     "snippet": "├── galvani # dev server binary (gitignored) ├── .env # Galvani thread count only (gitignored) ├── data/ # Embedded MariaDB data (gitignored) └── book",
-    "content": "├── galvani                     # dev server binary (gitignored) ├── .env                        # Galvani thread count only (gitignored) ├── data/                       # Embedded MariaDB data (gitignored) └── booking/                    # THE APP — its own GitHub repo ├── index.php               # single entry point ├── db-init.php             # full DB reset ├── composer.json           # PHP deps (Stripe, PHPUnit) ├── package.json            # Node deps (TailwindCSS) ├── database/ │   ├── schema.sql │   └── seeds.sql ├── app/ │   ├── Controllers/        # HTTP request handlers │   ├── Models/             # Database singleton │   ├── Repositories/       # ALL SQL queries live here │   ├── Services/           # Business logic, no direct DB access │   ├── Helpers/            # Pure functions (auth, validation, etc.) │   ├── Routes/             # Role-scoped route files │   ├── Views/              # PHP view files (server-rendered HTML) │   │   ├── layouts/        # app.php base layout │   │   ├── shared/         # Popover dialogs included in every page │   │   ├── admin/ │   │   ├── customer/ │   │   ├── instructor/ │   │   └── partials/       # Reusable view fragments │   └── Workers/            # Background job workers ├── config/                 # DB credentials, Stripe config ├── css/                    # Tailwind source ├── uploads/                # User-uploaded images ├── storage/                # Session files └── logs/                   # Email + SMS mock logs Served with: `./galvani` (from git root). App URL: `http://localhost:8080/booking/`. ---"
+    "content": "├── galvani                     # dev server binary (gitignored) ├── .env                        # Galvani thread count only (gitignored) ├── data/                       # Embedded MariaDB data (gitignored) └── booking/                    # THE APP — its own GitHub repo ├── index.php               # single entry point ├── db-init.php             # full DB reset ├── composer.json           # PHP deps (Stripe, PHPUnit) ├── package.json            # Node deps (TailwindCSS) ├── database/ │   ├── schema.sql │   └── seeds.sql ├── app/ │   ├── Controllers/        # HTTP request handlers │   ├── Models/             # Database singleton │   ├── Repositories/       # ALL SQL queries live here │   ├── Services/           # Business logic, no direct DB access │   ├── Helpers/            # Pure functions (auth, validation, etc.) │   ├── Routes/             # Role-scoped route files │   ├── Views/              # PHP view files (server-rendered HTML) │   │   ├── layouts/        # app.php base layout │   │   ├── shared/         # Popover dialogs included in every page │   │   ├── admin/ │   │   ├── customer/ │   │   ├── instructor/ │   │   └── partials/       # Reusable view fragments │   └── Workers/            # Background job workers ├── config/                 # DB credentials, Stripe config ├── css/                    # Tailwind source ├── uploads/                # User-uploaded images ├── storage/                # Session files └── logs/                   # Email mock logs Served with: `./galvani` (from git root). App URL: `http://localhost:8080/booking/`. ---"
   },
   {
     "pageId": "architecture",
@@ -690,7 +780,16 @@
     "level": 2,
     "anchor": "mvc-layers",
     "snippet": "│ Browser │ │ HTML form POST / GET │ └─────────────────────┬───────────────────────────────┘ │ HTTP request ▼ ┌───────────────────────────────────────",
-    "content": "│                     Browser                         │ │              HTML form POST / GET                   │ └─────────────────────┬───────────────────────────────┘ │ HTTP request ▼ ┌─────────────────────────────────────────────────────┐ │                  index.php                          │ │  - Calculates $basePath dynamically                 │ │  - Loads .env, helpers, autoloader                  │ │  - Handles auth, CSRF on page-level POSTs           │ │  - Dispatches to: Routes/customer.php               │ │                   Routes/admin.php                  │ │                   Routes/instructor.php             │ │                   Router.php (API)                  │ └─────────────────────┬───────────────────────────────┘ │ ▼ ┌─────────────────────────────────────────────────────┐ │              Routes/*.php (page routing)            │ │  Plain PHP if/elseif chains on $request_uri.        │ │  Instantiate services, render views directly.       │ │  OR                                                 │ │              Router.php (API routing)               │ │  Regex-based REST router → Controller methods.      │ └──────┬──────────────────────────────────┬───────────┘ │ page routes                      │ API routes ▼                                  ▼ ┌─────────────┐                  ┌─────────────────────┐ │  Views/     │                  │  Controllers/       │ │  *.php      │                  │  *Controller.php    │ │             │                  │  extend Controller  │ │  Server-    │                  │  base class         │ │  rendered   │                  └────────┬────────────┘ │  HTML       │                           │ └─────────────┘                           ▼ ┌─────────────────────┐ │  Services/          │ │  *Service.php       │ │  Business logic     │ │  only — no direct   │ │  DB access          │ └────────┬────────────┘ │ ▼ ┌─────────────────────┐ │  Repositories/      │ │  *Repository.php    │ │  ALL SQL lives here │ └────────┬────────────┘ │ ▼ ┌─────────────────────┐ │  Models/Database.php│ │  PDO singleton      │ │  Database::getInstance()│ └─────────────────────┘ ---"
+    "content": "│                     Browser                         │ │              HTML form POST / GET                   │ └─────────────────────┬───────────────────────────────┘ │ HTTP request ▼ ┌─────────────────────────────────────────────────────┐ │                  index.php                          │ │  - Calculates $basePath dynamically                 │ │  - Loads .env, helpers, autoloader                  │ │  - Handles auth, CSRF on page-level POSTs           │ │  - Dispatches to: Routes/customer.php               │ │                   Routes/admin.php                  │ │                   Routes/instructor.php             │ │                   Router.php (API)                  │ └─────────────────────┬───────────────────────────────┘ │ ▼ ┌─────────────────────────────────────────────────────┐ │              Routes/*.php (page routing)            │ │  Plain PHP if/elseif chains on $request_uri.        │ │  Instantiate services, render views directly.       │ │  OR                                                 │ │              Router.php (API routing)               │ │  Regex-based REST router → Controller methods.      │ └──────┬──────────────────────────────────┬───────────┘ │ page routes                      │ API routes ▼                                  ▼ ┌─────────────┐                  ┌─────────────────────┐ │  Views/     │                  │  Controllers/       │ │  *.php      │                  │  *Controller.php    │ │             │                  │  extend Controller  │ │  Server-    │                  │  base class         │ │  rendered   │                  └────────┬────────────┘ │  HTML       │                           │ └─────────────┘                           ▼ ┌─────────────────────┐ │  Services/          │ │  *Service.php       │ │  Business logic     │ │  only — no direct   │ │  DB access          │ └────────┬────────────┘ │ ▼ ┌─────────────────────┐ │  Repositories/      │ │  *Repository.php    │ │  ALL SQL lives here │ └────────┬────────────┘ │ ▼ ┌─────────────────────┐ │  Models/Database.php│ │  PDO singleton      │ │  Database::getInstance()│ └─────────────────────┘"
+  },
+  {
+    "pageId": "architecture",
+    "pageTitle": "Architecture",
+    "title": "Repository index",
+    "level": 3,
+    "anchor": "repository-index",
+    "snippet": "All SQL is exclusive to Repository classes in `app/Repositories/`. Services and Controllers never call `Database::getInstance()` directly. Key reposit",
+    "content": "All SQL is exclusive to Repository classes in `app/Repositories/`. Services and Controllers never call `Database::getInstance()` directly. Key repositories to know: | Repository | Owns | |---|---| | `AppSettingsRepository` | `app_settings` key-value store. Use `get($key)` / `set($key, $value)` / `getMultiple($keys[])` for Stripe keys, mail driver, SMTP credentials, and other admin-configurable settings. | | `NotificationSubscriptionRepository` | `user_notification_subscriptions`. CRUD for per-user event notification preferences (activity/session-specific subscriptions for admins and instructors). | | `BookingRepository` | `bookings` — core booking CRUD and availability queries. | | `PaymentRepository` | `payments` and `account_credit_transactions`. | | `SessionRepository` | `sessions` — generation and availability. | | `UserRepository` | `users` and `participants`. | ---"
   },
   {
     "pageId": "architecture",
@@ -708,7 +807,7 @@
     "level": 3,
     "anchor": "example-admin-fetches-bookings-json",
     "snippet": "1. **Browser** sends `GET /api/admin/bookings?status=confirmed` (JS fetch from an admin view). 2. **`index.php`** falls through page routes, reaches `",
-    "content": "1. **Browser** sends `GET /api/admin/bookings?status=confirmed` (JS fetch from an admin view). 2. **`index.php`** falls through page routes, reaches `Router.php`. 3. **`Router`** matches `GET /api/admin/bookings` → calls `AdminController::listBookings()`. 4. **`AdminController`** calls `BookingRepository`, returns `json_encode($data)`. ---"
+    "content": "1. **Browser** sends `GET /api/admin/bookings?status=confirmed` (JS fetch from an admin view). 2. **`index.php`** falls through page routes, reaches `Router.php`. 3. **`Router`** matches `GET /api/admin/bookings` → calls `AdminController::listBookings()`. 4. **`AdminController`** calls `BookingService`, which calls `BookingRepository`, and returns `json_encode($data)`. ---"
   },
   {
     "pageId": "architecture",
@@ -893,6 +992,24 @@
   {
     "pageId": "database",
     "pageTitle": "Database",
+    "title": "SQL Access Patterns",
+    "level": 2,
+    "anchor": "sql-access-patterns",
+    "snippet": "All database queries must go through Repository classes in `app/Repositories/`. Never call `Database::getInstance()` directly in Services, Controllers",
+    "content": "All database queries must go through Repository classes in `app/Repositories/`. Never call `Database::getInstance()` directly in Services, Controllers, Route files, or Views. **Pattern:** 1. Find the appropriate Repository for the table (e.g. users → `UserRepository`, bookings → `BookingRepository`) 2. Add a method to the Repository if one does not exist 3. Call the Repository method from your Service or Controller **AppSettings access:** Use `AppSettingsRepository::get($key)` / `::set($key, $value)` instead of querying `app_settings` directly. Use `getMultiple($keys[])` to fetch several settings in one query. **NotificationSubscriptions access:** Use `NotificationSubscriptionRepository` for all reads and writes to `user_notification_subscriptions`. Do not query this table from Services or Controllers. **Quick reference:** | Table | Repository | |---|---| | `app_settings` | `AppSettingsRepository` | | `user_notification_subscriptions` | `NotificationSubscriptionRepository` | | `bookings` | `BookingRepository` | | `payments`, `account_credit_transactions` | `PaymentRepository` | | `sessions` | `SessionRepository` | | `users`, `participants` | `UserRepository` | | `activities` | `ActivityRepository` | | `venues` | `VenueRepository` | | `bookable_spaces` | `SpaceRepository` | | `attendance_logs` | `AttendanceRepository` | | `gift_aid_declarations`, `gift_aid_claims` | `GiftAidRepository` | | `audit_logs` | `AuditLogRepository` | | `notification_logs`, `notification_broadcasts` | `NotificationRepository` | | `withdrawal_requests` | `WithdrawalRepository` | ---"
+  },
+  {
+    "pageId": "database",
+    "pageTitle": "Database",
+    "title": "Schema drift — keeping schema.sql and the live DB in sync",
+    "level": 2,
+    "anchor": "schema-drift-keeping-schema-sql-and-the-live-db-in-sync",
+    "snippet": "`build.sh` uses `schema.sql` for table structure and `mysqldump --complete-insert` for data. Because `--complete-insert` lists every column explicitly",
+    "content": "`build.sh` uses `schema.sql` for table structure and `mysqldump --complete-insert` for data. Because `--complete-insert` lists every column explicitly, **any column that exists in the live DB but not in schema.sql will break the install SQL**. **Rule:** whenever you change `schema.sql` (add/remove/rename a column), you must also run the equivalent `ALTER TABLE` against the local Galvani DB immediately. Do not rely on `db-init.php` to fix it — that wipes all data. ALTER TABLE participants DROP COLUMN emergency_contact_name, DROP COLUMN emergency_contact_phone; -- Example: adding a column ALTER TABLE participants ADD COLUMN new_field varchar(100) DEFAULT NULL AFTER medical_notes; If you ever hit a `#1054 - Unknown column` error when importing the dist SQL, it means the live DB has drifted from `schema.sql`. To fix: 1. Identify the orphaned columns in the live DB (`SHOW COLUMNS FROM table_name`) 2. Check whether any rows have data in those columns before dropping 3. If data exists, migrate it to its new home first 4. Drop the orphaned columns with `ALTER TABLE` 5. Re-run `build.sh` option 4 ---"
+  },
+  {
+    "pageId": "database",
+    "pageTitle": "Database",
     "title": "Reset the database",
     "level": 2,
     "anchor": "reset-the-database",
@@ -915,7 +1032,7 @@
     "level": 4,
     "anchor": "participants",
     "snippet": "A participant is the person who actually attends an activity — either the user themselves (`relationship = 'self'`) or a child/dependent they manage. ",
-    "content": "A participant is the person who actually attends an activity — either the user themselves (`relationship = 'self'`) or a child/dependent they manage. | Column | Notes | |---|---| | `user_id` | FK → `users.id` (the account holder) | | `relationship` | `self`, `child`, `dependent` | | `parental_consent` | tinyint(1) required for minors | | `medical_notes` | free text | | `emergency_contact_name/phone` | |"
+    "content": "A participant is the person who actually attends an activity — either the user themselves (`relationship = 'self'`) or a child/dependent they manage. | Column | Notes | |---|---| | `user_id` | FK → `users.id` (the account holder) | | `relationship` | `self`, `child`, `dependent` | | `parental_consent` | tinyint(1) required for minors | | `medical_notes` | free text | | `profile_image` | path in `uploads/users/` |"
   },
   {
     "pageId": "database",
@@ -1067,8 +1184,8 @@
     "title": "`notifications`",
     "level": 4,
     "anchor": "notifications",
-    "snippet": "A log of every notification sent (email, SMS, WhatsApp, in-app) and its delivery status. | Column | Notes | |---|---| | `channel` | `email`, `sms`, `w",
-    "content": "A log of every notification sent (email, SMS, WhatsApp, in-app) and its delivery status. | Column | Notes | |---|---| | `channel` | `email`, `sms`, `whatsapp`, `in_app` | | `cost` | decimal(8,4) — Bird SMS/WhatsApp costs tracked per message | | `status` | `pending`, `sent`, `failed` | | `read_at` | timestamp set when in-app notification is read |"
+    "snippet": "A log of every notification sent (email, in-app) and its delivery status. | Column | Notes | |---|---| | `channel` | `email`, `in_app` | | `cost` | de",
+    "content": "A log of every notification sent (email, in-app) and its delivery status. | Column | Notes | |---|---| | `channel` | `email`, `in_app` | | `cost` | decimal(8,4) — per-message cost; always 0 for email | | `status` | `pending`, `sent`, `failed` | | `read_at` | timestamp set when in-app notification is read |"
   },
   {
     "pageId": "database",
@@ -1112,8 +1229,8 @@
     "title": "`app_settings`",
     "level": 4,
     "anchor": "app-settings",
-    "snippet": "Key-value store for admin-configurable settings. Stripe keys, SMTP password, Resend API key, and Bird credentials are stored encrypted with AES-256-GC",
-    "content": "Key-value store for admin-configurable settings. Stripe keys, SMTP password, Resend API key, and Bird credentials are stored encrypted with AES-256-GCM. ---"
+    "snippet": "Key-value store for admin-configurable settings. Stripe keys, SMTP password and Resend API key are stored encrypted with AES-256-GCM. ---",
+    "content": "Key-value store for admin-configurable settings. Stripe keys, SMTP password and Resend API key are stored encrypted with AES-256-GCM. ---"
   },
   {
     "pageId": "database",
@@ -1149,7 +1266,7 @@
     "level": 2,
     "anchor": "table-of-contents",
     "snippet": "1. [Project Overview](#1-project-overview) 2. [Prerequisites and Local Setup](#2-prerequisites-and-local-setup) 3. [Project Structure](#3-project-stru",
-    "content": "1. [Project Overview](#1-project-overview) 2. [Prerequisites and Local Setup](#2-prerequisites-and-local-setup) 3. [Project Structure](#3-project-structure) 4. [Request Lifecycle](#4-request-lifecycle) 5. [Architecture Layers](#5-architecture-layers) 6. [The 13 Galvani Rules](#6-the-13-galvani-rules) 7. [Database](#7-database) 8. [Key Business Flows](#8-key-business-flows) 9. [Frontend Patterns](#9-frontend-patterns) 10. [Security](#10-security) 11. [Testing](#11-testing) 12. [MCP Servers](#12-mcp-servers) 13. [Build and Deploy](#13-build-and-deploy) ---"
+    "content": "1. [Project Overview](#1-project-overview) 2. [Prerequisites and Local Setup](#2-prerequisites-and-local-setup) 3. [Project Structure](#3-project-structure) 4. [Request Lifecycle](#4-request-lifecycle) 5. [Architecture Layers](#5-architecture-layers) 6. [The 13 Galvani Rules](#6-the-13-galvani-rules) 7. [Database](#7-database) 8. [Key Business Flows](#8-key-business-flows) 9. [Frontend Patterns](#9-frontend-patterns) 10. [Security](#10-security) 11. [Testing](#11-testing) 12. [MCP Servers](#12-mcp-servers) 13. [Build and Deploy](#13-build-and-deploy) 14. [Scheduled Tasks (Cron Jobs)](#14-scheduled-tasks-cron-jobs) ---"
   },
   {
     "pageId": "developer-guide",
@@ -1167,7 +1284,7 @@
     "level": 3,
     "anchor": "what-it-does",
     "snippet": "- Customer-facing booking for sports/fitness sessions (individual and block), with waitlisting - Meeting room hire with time-slot-based availability -",
-    "content": "- Customer-facing booking for sports/fitness sessions (individual and block), with waitlisting - Meeting room hire with time-slot-based availability - Stripe payment integration with account credit priority - Gift Aid declaration and HMRC-claim tracking - Email notifications via SMTP or Resend (driver-switchable; SMTP uses stream_socket_client, no Composer dep) - SMS and WhatsApp notifications via Bird - Admin/instructor portal for attendance, refunds, GDPR, and reporting"
+    "content": "- Customer-facing booking for sports/fitness sessions (individual and block), with waitlisting - Meeting room hire with time-slot-based availability - Stripe payment integration with account credit priority - Gift Aid declaration and HMRC-claim tracking - Email notifications via SMTP or Resend (driver-switchable; SMTP uses stream_socket_client, no Composer dep) - Admin/instructor portal for attendance, refunds, GDPR, and reporting"
   },
   {
     "pageId": "developer-guide",
@@ -1185,7 +1302,7 @@
     "level": 3,
     "anchor": "tech-stack",
     "snippet": "| Layer | Technology | |---|---| | PHP runtime (dev) | Galvani — async multi-threaded, embedded MariaDB | | PHP runtime (prod) | shared LAMP — Apache,",
-    "content": "| Layer | Technology | |---|---| | PHP runtime (dev) | Galvani — async multi-threaded, embedded MariaDB | | PHP runtime (prod) | shared LAMP — Apache, PHP 8+, MySQL/MariaDB | | Language | PHP 8.0+ | | Database | MariaDB (via Galvani embedded socket / LAMP MySQL) | | Frontend | HTML + TailwindCSS v4 + Vanilla JS | | Payments | Stripe (PHP SDK via Composer, keys stored encrypted in DB) | | Email | SMTP (`stream_socket_client`, core PHP) or Resend HTTP API — driver-switchable via admin UI | | SMS/WhatsApp | Bird API (plain cURL, mock mode for development) | | CSS build | TailwindCSS CLI via npm | | Tests | PHPUnit 10 (unit tests only, no DB integration tests) |"
+    "content": "| Layer | Technology | |---|---| | PHP runtime (dev) | Galvani — async multi-threaded, embedded MariaDB | | PHP runtime (prod) | shared LAMP — Apache, PHP 8+, MySQL/MariaDB | | Language | PHP 8.0+ | | Database | MariaDB (via Galvani embedded socket / LAMP MySQL) | | Frontend | HTML + TailwindCSS v4 + Vanilla JS | | Payments | Stripe (PHP SDK via Composer, keys stored encrypted in DB) | | Email | SMTP (`stream_socket_client`, core PHP) or Resend HTTP API — driver-switchable via admin UI | | CSS build | TailwindCSS CLI via npm | | Tests | PHPUnit 10 (unit tests only, no DB integration tests) |"
   },
   {
     "pageId": "developer-guide",
@@ -1265,8 +1382,8 @@
     "title": "Database (leave DB_HOST blank to use socket on Galvani)",
     "level": 1,
     "anchor": "database-leave-db-host-blank-to-use-socket-on-galvani",
-    "snippet": "DB_NAME=booking_app DB_USER=root DB_PASS= DB_HOST= DB_PORT=3306 BIRD_MOCK=true # true = log to file, false = live Bird API REALTIME_ENABLED=true The G",
-    "content": "DB_NAME=booking_app DB_USER=root DB_PASS= DB_HOST= DB_PORT=3306 BIRD_MOCK=true                         # true = log to file, false = live Bird API REALTIME_ENABLED=true The Galvani MySQL paths must be **absolute** and point to the git root's `data/` directory. This is because `./galvani` loads the app's `.env` (not the git root's), and relative paths would resolve to the wrong directory. To generate `APP_KEY`:"
+    "snippet": "DB_NAME=booking_app DB_USER=root DB_PASS= DB_HOST= DB_PORT=3306 REALTIME_ENABLED=true The Galvani MySQL paths must be **absolute** and point to the gi",
+    "content": "DB_NAME=booking_app DB_USER=root DB_PASS= DB_HOST= DB_PORT=3306 REALTIME_ENABLED=true The Galvani MySQL paths must be **absolute** and point to the git root's `data/` directory. This is because `./galvani` loads the app's `.env` (not the git root's), and relative paths would resolve to the wrong directory. To generate `APP_KEY`:"
   },
   {
     "pageId": "developer-guide",
@@ -1284,7 +1401,7 @@
     "level": 3,
     "anchor": "confirm-it-works",
     "snippet": "http://localhost:8080/booking/activities → Activities list (after login) http://localhost:8080/booking/admin → Admin dashboard Test accounts (all pass",
-    "content": "http://localhost:8080/booking/activities → Activities list (after login) http://localhost:8080/booking/admin → Admin dashboard Test accounts (all password: `password123`): | Email | Role | |---|---| | customer@booking.local | customer | | instructor@booking.local | instructor | | admin@booking.local | super_admin | | admin2@booking.local | admin | ---"
+    "content": "http://localhost:8080/booking/activities → Activities list (after login) http://localhost:8080/booking/admin → Admin dashboard Test accounts (all password: `password123`): | Email | Role | |---|---| | customer@booking.local | customer | | customer2@booking.local | customer | | parent.alex@booking.local | customer | | instructor@booking.local | instructor | | admin@booking.local | admin | | superadmin@booking.local | super_admin | ---"
   },
   {
     "pageId": "developer-guide",
@@ -1293,7 +1410,7 @@
     "level": 2,
     "anchor": "3-project-structure",
     "snippet": "├── galvani # Galvani binary (gitignored — obtain separately) ├── .env # Galvani thread count only (gitignored) ├── data/ # Embedded MariaDB data file",
-    "content": "├── galvani                       # Galvani binary (gitignored — obtain separately) ├── .env                          # Galvani thread count only (gitignored) ├── data/                         # Embedded MariaDB data files (gitignored) ├── EXAMPLE-CLAUDE.md             # Template for new Galvani projects │ └── booking/                      # THE APP — its own GitHub repo when deployed ├── index.php                 # Single entry point — all requests arrive here ├── db-init.php               # Full DB reset (run via ./galvani booking/db-init.php) ├── composer.json             # PHP deps: Stripe SDK, PHPUnit ├── phpunit.xml               # PHPUnit config ├── package.json              # Node deps: TailwindCSS CLI ├── build.sh                  # Builds dist/ for LAMP deployment ├── .env                      # App vars + Galvani MySQL paths (gitignored) ├── .htaccess                 # Apache rewrite rules for LAMP │   │ │   ├── app/ │   │   ├── Controllers/          # HTTP layer — thin orchestrators │   │   │   ├── Controller.php    # Abstract base (auth, json(), redirect(), verifyCsrf()) │   │   │   ├── ActivityController.php │   │   │   ├── AdminController.php │   │   │   ├── AuthController.php │   │   │   ├── BookingController.php │   │   │   ├── InstructorController.php │   │   │   └── RealtimeController.php │   │   │ │   │   ├── Services/             # Business logic — call repositories, no direct SQL │   │   │   ├── ActivityService.php │   │   │   ├── AppStorage.php    # Thread-safe in-memory key-value store (Galvani) │   │   │   ├── AttendanceService.php │   │   │   ├── AuthService.php │   │   │   ├── BirdService.php   # SMS/WhatsApp via Bird API │   │   │   ├── BookingService.php │   │   │   ├── GiftAidService.php │   │   │   ├── JWT.php           # HS256 JWT encode/decode │   │   │   ├── NotificationService.php  # Orchestrates email (SMTP or Resend) + Bird │   │   │   ├── ParticipantService.php │   │   │   ├── PaymentService.php       # Stripe + account credit │   │   │   ├── ReportService.php │   │   │   ├── ResendService.php        # Email via Resend HTTP API │   │   │   ├── SmtpService.php          # Email via SMTP (stream_socket_client, STARTTLS/SSL) │   │   │   ├── RoomHireService.php │   │   │   ├── SessionService.php │   │   │   ├── UploadService.php        # Image upload validation + move │   │   │   └── WebSocketService.php     # Real-time (Galvani only) │   │   │ │   │   ├── Repositories/         # All SQL lives here — SELECT/INSERT/UPDATE/DELETE │   │   │   ├── ActivityRepository.php │   │   │   ├── AttendanceRepository.php │   │   │   ├── AuditLogRepository.php │   │   │   ├── BookingRepository.php │   │   │   ├── GdprConsentRepository.php │   │   │   ├── GiftAidRepository.php │   │   │   ├── NotificationRepository.php │   │   │   ├── ParticipantRepository.php │   │   │   ├── PaymentRepository.php │   │   │   ├── RoomHireRepository.php │   │   │   ├── SessionRepository.php │   │   │   ├── SpaceRepository.php │   │   │   ├── SpaceReservationRepository.php │   │   │   ├── UserRepository.php │   │   │   ├── VenueRepository.php │   │   │   └── WithdrawalRepository.php │   │   │ │   │   ├── Models/ │   │   │   ├── Database.php          # Galvani version (emulated prepares, socket) │   │   │   └── Database-shared.php   # LAMP version (native prepares, TCP) │   │   │ │   │   ├── Helpers/              # Global functions loaded on every request │   │   │   ├── auth.php          # getAuthUser(), setAuthCookie(), getCsrfToken(), buildNavForRole() │   │   │   ├── calendar_helper.php │   │   │   ├── config.php        # config() helper + env() wrapper │   │   │   ├── date_helper.php │   │   │   ├── environment.php   # isGalvani(), isLAMP(), isDevelopment() │   │   │   ├── gift_aid_helper.php │   │   │   ├── helpers.php       # e(), encryptSetting(), decryptSetting() │   │   │   ├── validation.php    # isValidEmail(), isValidPhoneNumber(), isValidPostcode() │   │   │   └── view.php          # render() helper │   │   │ │   │   ├── Routes/               # Page routing — includes views for matched paths │   │   │   ├── admin.php         # /admin/* page routes │   │   │   ├── customer.php      # /activities, /bookings, /account/* routes │   │   │   └── instructor.php    # /instructor/* routes │   │   │ │   │   ├── Views/ │   │   │   ├── layouts/app.php       # Main layout shell (nav, shared dialogs) │   │   │   ├── partials/             # Sub-components included by views │   │   │   │   ├── head.php │   │   │   │   ├── header.php │   │   │   │   ├── footer.php │   │   │   │   ├── scripts.php │   │   │   │   └── atoms/            # Small reusable fragments │   │   │   ├── shared/               # Global dialogs — already in layout, do NOT re-include │   │   │   │   ├── alert-dialog.php │   │   │   │   ├── confirm-dialog.php │   │   │   │   ├── prompt-dialog.php │   │   │   │   ├── cancel-booking-dialog.php │   │   │   │   └── room-booking-dialog.php │   │   │   ├── admin/            # Admin views │   │   │   ├── customer/         # Customer views │   │   │   ├── instructor/       # Instructor views │   │   │   └── errors/404.php │   │   │ │   │   └── Router.php            # API router (GET/POST/PUT/PATCH/DELETE) │   │ │   ├── config/ │   │   ├── app.php               # App config (timezone, JWT expiry, feature flags) │   │   ├── database.php          # DB config (auto-detects socket path for Galvani) │   │   ├── stripe.php            # Stripe config (keys now in DB, this is a stub) │   │   ├── sms.php               # Bird SMS config stub │   │   ├── smtp.php              # Email from-address config stub │   │   ├── app-shared.example.php        # Template for LAMP app.php │   │   ├── database-shared.example.php   # Template for LAMP database.php │   │   └── env-shared.example.php        # Template for LAMP env.php │   │ │   ├── css/ │   │   ├── tailwind.css          # TailwindCSS source (input) │   │   └── output.css            # Compiled CSS (output — checked in for convenience) │   │ │   ├── uploads/                  # User-uploaded images (gitignored contents) │   │   ├── activities/ │   │   └── venues/ │   │ │   ├── storage/sessions/         # PHP session files (gitignored) │   └── logs/                     # Runtime logs (gitignored) │       ├── bird-mock.log         # Mock SMS/WhatsApp output (BIRD_MOCK=true) │       └── emails.log            # Email log when no driver is configured │ ├── database/ │   ├── schema.sql                # MariaDB schema — source of truth │   └── seeds.sql                 # Sample data for development │ ├── tests/ │   ├── bootstrap.php             # PHPUnit bootstrap (sets JWT_SECRET, APP_KEY) │   └── Unit/                     # Pure unit tests (no DB) │       ├── AuthHelperTest.php │       ├── CsvSafeTest.php │       ├── DateHelperTest.php │       ├── GiftAidHelperTest.php │       ├── HelpersTest.php │       ├── JWTTest.php │       ├── RoomHireServiceTest.php │       ├── SlugGeneratorTest.php │       └── ValidationHelperTest.php │ └── docs/ ├── dev-guide.md              # This file ├── admin-guide.md ├── api-reference.md ├── wiki/ └── plans/"
+    "content": "├── galvani                       # Galvani binary (gitignored — obtain separately) ├── .env                          # Galvani thread count only (gitignored) ├── data/                         # Embedded MariaDB data files (gitignored) ├── EXAMPLE-CLAUDE.md             # Template for new Galvani projects │ └── booking/                      # THE APP — its own GitHub repo when deployed ├── index.php                 # Single entry point — all requests arrive here ├── db-init.php               # Full DB reset (run via ./galvani booking/db-init.php) ├── composer.json             # PHP deps: Stripe SDK, PHPUnit ├── phpunit.xml               # PHPUnit config ├── package.json              # Node deps: TailwindCSS CLI ├── build.sh                  # Builds dist/ for LAMP deployment ├── .env                      # App vars + Galvani MySQL paths (gitignored) ├── .htaccess                 # Apache rewrite rules for LAMP │   │ │   ├── app/ │   │   ├── Controllers/          # HTTP layer — thin orchestrators │   │   │   ├── Controller.php    # Abstract base (auth, json(), redirect(), verifyCsrf()) │   │   │   ├── ActivityController.php │   │   │   ├── AdminController.php │   │   │   ├── AuthController.php │   │   │   ├── BookingController.php │   │   │   ├── InstructorController.php │   │   │   └── RealtimeController.php │   │   │ │   │   ├── Services/             # Business logic — call repositories, no direct SQL │   │   │   ├── ActivityService.php │   │   │   ├── AppStorage.php    # Thread-safe in-memory key-value store (Galvani) │   │   │   ├── AttendanceService.php │   │   │   ├── AuthService.php │   │   │   ├── BookingService.php │   │   │   ├── GiftAidService.php │   │   │   ├── JWT.php           # HS256 JWT encode/decode │   │   │   ├── NotificationService.php  # Orchestrates email (SMTP or Resend) + in-app │   │   │   ├── ParticipantService.php │   │   │   ├── PaymentService.php       # Stripe + account credit │   │   │   ├── ReportService.php │   │   │   ├── ResendService.php        # Email via Resend HTTP API │   │   │   ├── SmtpService.php          # Email via SMTP (stream_socket_client, STARTTLS/SSL) │   │   │   ├── RoomHireService.php │   │   │   ├── SessionService.php │   │   │   ├── UploadService.php        # Image upload validation + move │   │   │   └── WebSocketService.php     # Real-time (Galvani only) │   │   │ │   │   ├── Repositories/         # All SQL lives here — SELECT/INSERT/UPDATE/DELETE │   │   │   ├── ActivityRepository.php │   │   │   ├── AppSettingsRepository.php │   │   │   ├── AttendanceRepository.php │   │   │   ├── AuditLogRepository.php │   │   │   ├── BookingRepository.php │   │   │   ├── GdprConsentRepository.php │   │   │   ├── GiftAidRepository.php │   │   │   ├── NotificationRepository.php │   │   │   ├── NotificationSubscriptionRepository.php │   │   │   ├── ParticipantRepository.php │   │   │   ├── PaymentRepository.php │   │   │   ├── RoomHireRepository.php │   │   │   ├── SessionRepository.php │   │   │   ├── SpaceRepository.php │   │   │   ├── SpaceReservationRepository.php │   │   │   ├── UserRepository.php │   │   │   ├── VenueRepository.php │   │   │   └── WithdrawalRepository.php │   │   │ │   │   ├── Models/ │   │   │   ├── Database.php          # Galvani version (emulated prepares, socket) │   │   │   └── Database-shared.php   # LAMP version (native prepares, TCP) │   │   │ │   │   ├── Helpers/              # Global functions loaded on every request │   │   │   ├── auth.php          # getAuthUser(), setAuthCookie(), getCsrfToken(), buildNavForRole() │   │   │   ├── calendar_helper.php │   │   │   ├── config.php        # config() helper + env() wrapper │   │   │   ├── date_helper.php │   │   │   ├── environment.php   # isGalvani(), isLAMP(), isDevelopment() │   │   │   ├── gift_aid_helper.php │   │   │   ├── helpers.php       # e(), encryptSetting(), decryptSetting() │   │   │   ├── validation.php    # isValidEmail(), isValidPhoneNumber(), isValidPostcode() │   │   │   └── view.php          # render() helper │   │   │ │   │   ├── Routes/               # Page routing — includes views for matched paths │   │   │   ├── admin.php         # /admin/* page routes │   │   │   ├── customer.php      # /activities, /bookings, /account/* routes │   │   │   └── instructor.php    # /instructor/* routes │   │   │ │   │   ├── Views/ │   │   │   ├── layouts/app.php       # Main layout shell (nav, shared dialogs) │   │   │   ├── partials/             # Sub-components included by views │   │   │   │   ├── head.php │   │   │   │   ├── header.php │   │   │   │   ├── footer.php │   │   │   │   ├── scripts.php │   │   │   │   └── atoms/            # Small reusable fragments │   │   │   ├── shared/               # Global dialogs — already in layout, do NOT re-include │   │   │   │   ├── alert-dialog.php │   │   │   │   ├── confirm-dialog.php │   │   │   │   ├── prompt-dialog.php │   │   │   │   ├── cancel-booking-dialog.php │   │   │   │   └── room-booking-dialog.php │   │   │   ├── admin/            # Admin views │   │   │   ├── customer/         # Customer views │   │   │   ├── instructor/       # Instructor views │   │   │   └── errors/404.php │   │   │ │   │   └── Router.php            # API router (GET/POST/PUT/PATCH/DELETE) │   │ │   ├── config/ │   │   ├── app.php               # App config (timezone, JWT expiry, feature flags) │   │   ├── database.php          # DB config (auto-detects socket path for Galvani) │   │   ├── stripe.php            # Stripe config (keys now in DB, this is a stub) │   │   ├── smtp.php              # Email from-address config stub │   │   ├── app-shared.example.php        # Template for LAMP app.php │   │   ├── database-shared.example.php   # Template for LAMP database.php │   │   └── env-shared.example.php        # Template for LAMP env.php │   │ │   ├── css/ │   │   ├── tailwind.css          # TailwindCSS source (input) │   │   └── output.css            # Compiled CSS (output — checked in for convenience) │   │ │   ├── uploads/                  # User-uploaded images (gitignored contents) │   │   ├── activities/ │   │   └── venues/ │   │ │   ├── storage/sessions/         # PHP session files (gitignored) │   └── logs/                     # Runtime logs (gitignored) │       └── emails.log            # Email log when no driver is configured │ ├── database/ │   ├── schema.sql                # MariaDB schema — source of truth │   ├── seeds-customers.sql       # Fictional customer seed data (committed) │   └── seeds-wfcs-data.sql       # Real staff/activity/venue data (gitignored — never commit) │ ├── tests/ │   ├── bootstrap.php             # PHPUnit bootstrap (sets JWT_SECRET, APP_KEY) │   └── Unit/                     # Pure unit tests (no DB) │       ├── AuthHelperTest.php │       ├── CsvSafeTest.php │       ├── DateHelperTest.php │       ├── GiftAidHelperTest.php │       ├── HelpersTest.php │       ├── JWTTest.php │       ├── RoomHireServiceTest.php │       ├── SlugGeneratorTest.php │       └── ValidationHelperTest.php │ └── docs/ ├── dev-guide.md              # This file ├── admin-guide.md ├── api-reference.md ├── wiki/ └── plans/"
   },
   {
     "pageId": "developer-guide",
@@ -1338,7 +1455,7 @@
     "level": 3,
     "anchor": "auth-token-flow",
     "snippet": "1. Login: `AuthService::login()` verifies bcrypt, issues JWT via `JWT::encode()` 2. `setAuthCookie($token)` writes `auth_token` cookie: HttpOnly, Same",
-    "content": "1. Login: `AuthService::login()` verifies bcrypt, issues JWT via `JWT::encode()` 2. `setAuthCookie($token)` writes `auth_token` cookie: HttpOnly, SameSite=Strict, Secure on HTTPS 3. Subsequent requests: `getAuthUser()` (views) or `requireAuth()` / `requireVerifiedRole()` (API) reads cookie 4. JWT payload: `{user_id, email, role, iat, exp}` 5. Password invalidation: if `users.password_changed_at > JWT.iat`, token is rejected immediately 6. Token expiry: 24 hours (configurable in `config/app.php`) 7. Logout: `GET /logout` calls `clearAuthCookie()` then redirects to `/` ---"
+    "content": "1. Login: `AuthService::login()` verifies bcrypt, issues JWT via `JWT::encode()` 2. `setAuthCookie($token)` writes `auth_token` cookie: HttpOnly, SameSite=Strict, Secure on HTTPS 3. Subsequent requests: `getAuthUser()` (views) or `requireAuth()` / `requireVerifiedRole()` (API) reads cookie 4. JWT payload: `{user_id, email, role, iat, exp}` 5. Password invalidation: if `users.password_changed_at > JWT.iat`, token is rejected immediately 6. Token expiry: 120 minutes; rolling refresh — each page navigation resets the clock; JS idle timer logs out after 120 minutes of inactivity 7. Logout: `GET /logout` calls `clearAuthCookie()` then redirects to `/` ---"
   },
   {
     "pageId": "developer-guide",
@@ -1374,7 +1491,7 @@
     "level": 3,
     "anchor": "repositories-the-data-layer",
     "snippet": "**Rules:** - ALL SQL lives in Repositories. No SQL in Controllers or Services. - Each Repository owns one domain: `BookingRepository` handles the `boo",
-    "content": "**Rules:** - ALL SQL lives in Repositories. No SQL in Controllers or Services. - Each Repository owns one domain: `BookingRepository` handles the `bookings` table. - Use `Database::getInstance()` — never `new Database()`. - Return plain arrays. No domain objects. **What belongs in a Repository:** - SELECT queries - INSERT / UPDATE / DELETE - Filtering, pagination, JOIN queries - Never business logic — just data retrieval and mutation class BookingRepository { public function findByUser(int $userId, array $filters = []): array { $sql = 'SELECT b.*, a.title FROM bookings b JOIN activities a ON b.activity_id = a.id WHERE b.user_id = ?'; $params = [$userId]; if (!empty($filters['status'])) { $sql .= ' AND b.booking_status = ?'; $params[] = $filters['status']; } return $this->db->query($sql, $params); } } class BookingService { public function getUserBookings(int $userId): array { // NO: SQL does not belong in a service return $this->db->query('SELECT * FROM bookings WHERE user_id = ?', [$userId]); } }"
+    "content": "**Rules:** - ALL SQL lives in Repositories. No SQL in Controllers or Services. - Each Repository owns one domain: `BookingRepository` handles the `bookings` table. - Use `Database::getInstance()` — never `new Database()`. - Return plain arrays. No domain objects. **What belongs in a Repository:** - SELECT queries - INSERT / UPDATE / DELETE - Filtering, pagination, JOIN queries - Never business logic — just data retrieval and mutation class BookingRepository { public function findByUser(int $userId, array $filters = []): array { $sql = 'SELECT b.*, a.title FROM bookings b JOIN activities a ON b.activity_id = a.id WHERE b.user_id = ?'; $params = [$userId]; if (!empty($filters['status'])) { $sql .= ' AND b.booking_status = ?'; $params[] = $filters['status']; } return $this->db->query($sql, $params); } } class BookingService { public function getUserBookings(int $userId): array { // NO: SQL does not belong in a service return $this->db->query('SELECT * FROM bookings WHERE user_id = ?', [$userId]); } } **Notable repositories:** | Repository | Table(s) | Notes | |---|---|---| | `AppSettingsRepository` | `app_settings` | Key-value store for admin-configurable settings. Use `get($key)`, `set($key, $value)`, `getMultiple($keys[])`. All Stripe keys, mail driver and SMTP credentials go through this class. | | `NotificationSubscriptionRepository` | `user_notification_subscriptions` | CRUD for per-user event notification preferences. Manages activity/session-specific subscriptions for admins and instructors. | | `BookingRepository` | `bookings` | Core booking CRUD, filters, block-booking queries. | | `PaymentRepository` | `payments`, `account_credit_transactions` | Payment records and credit ledger writes. | | `SessionRepository` | `sessions` | Session generation, availability queries. | | `UserRepository` | `users`, `participants` | User and participant CRUD, role lookups. |"
   },
   {
     "pageId": "developer-guide",
@@ -1553,17 +1670,17 @@
     "title": "Key table groups",
     "level": 3,
     "anchor": "key-table-groups",
-    "snippet": "**Users and auth:** | Table | Purpose | |---|---| | `users` | User accounts. Roles: customer, instructor, admin, super_admin | | `participants` | Book",
-    "content": "**Users and auth:** | Table | Purpose | |---|---| | `users` | User accounts. Roles: customer, instructor, admin, super_admin | | `participants` | Bookable people (self + children). Linked to user | | `gdpr_consents` | UK GDPR consent records per user per consent type | | `audit_logs` | Login attempts, password resets, payment events | **Activities and sessions:** | Table | Purpose | |---|---| | `venues` | Physical locations (Bellshill, Eurocentral) | | `bookable_spaces` | Rooms/pitches within venues. `space_type` includes `room_hire` | | `activity_types` | Categories: sports, classes, outdoor, indoor, meeting_room | | `activities` | Programmes. Has `slug` (unique), `capacity`, `price_per_session`, `allow_waiting_list` | | `activity_images` | Multiple images per activity. `is_thumbnail` flag | | `sessions` | Individual dated occurrences of an activity | **Bookings and payments:** | Table | Purpose | |---|---| | `bookings` | Core booking record. `booking_type` (individual/block), `is_waiting_list`, `booking_status` | | `payments` | Stripe payment intent records | | `account_credit_transactions` | Credit ledger. `transaction_type`: topup, deduction, refund, admin_adjustment | | `attendance_logs` | Attendance records per booking per session | **Notifications:** | Table | Purpose | |---|---| | `notification_subscriptions` | Staff/admin subscriptions to event types per activity/session | | `notification_logs` | Sent notification history | **Settings:** | Table | Purpose | |---|---| | `app_settings` | Key-value store for admin-configurable settings. Stripe keys, email driver config (Resend API key, SMTP credentials), Bird credentials — sensitive values encrypted with AES-256-GCM | | `cache` | Generic key-value cache table | **Gift Aid:** | Table | Purpose | |---|---| | `gift_aid_declarations` | HMRC Gift Aid declaration per user (address required) | | `gift_aid_claims` | Per-payment Gift Aid claim tracking. `claim_status`: eligible, claimed, received |"
+    "snippet": "**Users and auth:** | Table | Purpose | |---|---| | `users` | User accounts. Roles: customer, instructor, admin, super_admin. Flags: `is_customer` (sh",
+    "content": "**Users and auth:** | Table | Purpose | |---|---| | `users` | User accounts. Roles: customer, instructor, admin, super_admin. Flags: `is_customer` (shows customer nav for staff), `is_global_instructor` (instructor shown on all activities/sessions) | | `participants` | Bookable people (self + children). Linked to user | | `gdpr_consents` | UK GDPR consent records per user per consent type | | `audit_logs` | Login attempts, password resets, payment events | **Activities and sessions:** | Table | Purpose | |---|---| | `venues` | Physical locations (Bellshill, Eurocentral) | | `bookable_spaces` | Rooms/pitches within venues. `space_type` includes `room_hire` | | `activity_types` | Categories: sports, classes, outdoor, indoor, meeting_room | | `activities` | Programmes. Has `slug` (unique), `capacity`, `price_per_session`, `allow_waiting_list`. No direct `instructor_id` — instructors managed via `activity_instructors` | | `activity_instructors` | Junction table: activity ↔ instructor. `is_primary=1` for primary instructor, `0` for co-instructors. Global instructors (flag on `users`) appear on all sessions | | `activity_images` | Multiple images per activity. `is_thumbnail` flag | | `sessions` | Individual dated occurrences of an activity. No `instructor_id` column — inherited from `activity_instructors` | **Bookings and payments:** | Table | Purpose | |---|---| | `bookings` | Core booking record. `booking_type` (individual/block), `is_waiting_list`, `booking_status` | | `payments` | Stripe payment intent records | | `account_credit_transactions` | Credit ledger. `transaction_type`: topup, deduction, refund, admin_adjustment | | `attendance_logs` | Attendance records per booking per session | | `discount_codes` | Discount codes. `type`: percentage/fixed (manual entry), third_child_free/bulk_session (auto). `min_sessions` used by bulk_session for \"every Nth free\" calculation | | `discount_code_restrictions` | Chip-based scope filters. `axis` (activity/activity_type/venue/account_type/staff_role/user/booking_type) + `value_id` / `value_text`. OR within an axis, AND across axes. No rows = unrestricted. A `user` or `staff_role` row makes the code auto-apply at checkout | | `discount_code_usages` | Per-booking usage log for discount codes | **Notifications:** | Table | Purpose | |---|---| | `notification_subscriptions` | Staff/admin subscriptions to event types per activity/session | | `notification_logs` | Sent notification history | **Settings:** | Table | Purpose | |---|---| | `app_settings` | Key-value store for admin-configurable settings. Stripe keys, email driver config (Resend API key, SMTP credentials) — sensitive values encrypted with AES-256-GCM | | `cache` | Generic key-value cache table | **Groups:** | Table | Purpose | |---|---| | `groups` | Independent participant rosters. `activity_id` is nullable (legacy). Has `min_age`/`max_age` for auto-assignment | | `activity_groups` | Many-to-many: activity ↔ group assignment (preferred over `groups.activity_id`) | | `group_participants` | Many-to-many: participant ↔ group membership | | `session_groups` | Many-to-many: session ↔ group (restricts booking to group members only) | **Gift Aid:** | Table | Purpose | |---|---| | `gift_aid_declarations` | HMRC Gift Aid declaration per user (address required) | | `gift_aid_claims` | Per-payment Gift Aid claim tracking. `claim_status`: eligible, claimed, received |"
   },
   {
     "pageId": "developer-guide",
     "pageTitle": "Developer Guide",
-    "title": "Complete wipe + reimport (preserves app_settings)",
+    "title": "Complete wipe + reimport (from git root)",
     "level": 1,
-    "anchor": "complete-wipe-reimport-preserves-app-settings",
-    "snippet": "./galvani db-init.php This drops all tables, but first saves `app_settings` (Stripe keys etc.), then drops all tables, reimports `database/schema.sql`",
-    "content": "./galvani db-init.php This drops all tables, but first saves `app_settings` (Stripe keys etc.), then drops all tables, reimports `database/schema.sql`, reimports `database/seeds.sql`, then restores the saved settings."
+    "anchor": "complete-wipe-reimport-from-git-root",
+    "snippet": "bash db-reset.sh # from the booking directory `db-reset.sh` imports `schema.sql` → `seeds-wfcs-data.sql` → `seeds-customers.sql` (or `seeds-customers-",
+    "content": "bash db-reset.sh   # from the booking directory `db-reset.sh` imports `schema.sql` → `seeds-wfcs-data.sql` → `seeds-customers.sql` (or `seeds-customers-live.sql` if present) via the mysql CLI directly, with FK checks disabled. This is the only reliable reset method — `./galvani db-init.php` does not persist data to the socket-accessible database. **Manual single-file import:**"
   },
   {
     "pageId": "developer-guide",
@@ -1577,11 +1694,29 @@
   {
     "pageId": "developer-guide",
     "pageTitle": "Developer Guide",
+    "title": "Walk-in attendees",
+    "level": 3,
+    "anchor": "walk-in-attendees",
+    "snippet": "An instructor records someone who turned up without an account or booking: `POST /instructor/sessions/{slug}/{date}/walk-in` → `WalkInService::validat",
+    "content": "An instructor records someone who turned up without an account or booking: `POST /instructor/sessions/{slug}/{date}/walk-in` → `WalkInService::validate()` → `WalkInService::add()`. - **Checks, all before any write (autocommit):** - the instructor is on the activity (`belongsToInstructor`) - not room hire, and the session isn't in the future - the group is one the instructor can see - age, using a matched participant's stored DOB if there is one (`effectiveDob`), else the typed DOB (`ActivityService::isEligibleByDob`) - an existing email must belong to a **customer** account, and the typed parent/adult first and last name must match it (`holderMatchesAccount`, case/space-insensitive) - **Account:** the email is looked up. A new email gets `createUser()` with a NULL `password_hash` (unverified), plus `createUserPreferences()` and `applyRoleChange(null, 'customer')`, which sets up the default reminder. An existing customer account is reused, and its records are never edited from instructor input. - **Participant:** matched by `matchParticipant()` (an adult's self-participant, or a child with the same name and DOB), otherwise created. - **Booking:** if the participant is already booked on the session, that booking is just marked attended. Otherwise a `createSessionBooking()` with: - `source = 'walk_in'`, `added_by_user_id` - `booking_status = 'confirmed'`, `payment_status = 'unpaid_attended'`, `amount_paid = price_per_session` Then `AttendanceService::markAttendance()` writes `attendance_logs`, which the register reads. Because the status isn't `pending`, `markAttendance()` sends no payment request of its own. Payment goes through the basket flow (`batch-pay` accepts `unpaid_attended`). - **Groups:** `GroupService::addMember(..., 'regular', false)`. There's no auto-enrolment until payment, when `enrollAfterPayment()` takes over. - **Email:** - **New account:** `NotificationService::sendWalkInWelcome()` (template `walk_in_welcome`) with `AuthService::createInviteUrl()`, a 7-day `password_reset` JWT carrying `invite: true`. A `new_user` subscriber alert is also sent. - **Existing account:** `sendPaymentRequest()`. - **Set-up page:** `/reset-password?token=…` detects invites (`AuthService::isInviteToken`) and asks for the three consents (`partials/atoms/consent-toggles.php`). `resetPassword(..., $consents)` records them. `updatePasswordHash()` already sets `email_verified = 1`, and the existing `password_changed_at > iat` check makes the link single-use. Login refuses accounts with no password. - **Instructor messages:** only `InvalidArgumentException` messages are shown. The success message is the same whether or not the account already existed. - **Admin:** `/admin/bookings?source=walk_in`, a Walk-in badge, \"Added by\" on booking detail, and `POST /admin/bookings/{id}/resend-invite` (walk-in accounts with no password only)."
+  },
+  {
+    "pageId": "developer-guide",
+    "pageTitle": "Developer Guide",
     "title": "Booking creation",
     "level": 3,
     "anchor": "booking-creation",
     "snippet": "The flow differs by booking type. All paths go through `BookingController::createBooking()` then `BookingService::createBooking()`. **Individual sessi",
-    "content": "The flow differs by booking type. All paths go through `BookingController::createBooking()` then `BookingService::createBooking()`. **Individual session booking:** { participant_id, activity_id, session_id, booking_type: \"individual\" } BookingService::createBooking() 1. Get activity — check exists, check space_type (room_hire uses separate path) 2. Get participant — verify belongs to user 3. Check parental consent if participant is a child 4. Check age eligibility (min_age / max_age on activity) 5. Verify session exists for this activity 6. Check no duplicate booking (same participant + session) 7. Check capacity: if full and allow_waiting_list=true -> put on waitlist 8. INSERT INTO bookings (booking_status='pending', is_waiting_list=0/1) 9. Return { booking_ids, total_price, is_waiting_list } BookingController (after createBooking returns): - If waitlisted -> return 201, no payment - If free (price=0) -> confirmMultipleBookings() -> sendBookingConfirmation() -> return 201 - If paid: applyCredit(userId, price, bookingId) If remaining=0 -> confirmMultipleBookings() -> sendBookingConfirmation() -> return 201 If remaining>0 -> createPaymentIntent(remaining) -> linkToBooking() -> return 201 with Stripe data **Block booking:** { participant_id, activity_id, recurrence_start: sessionId, weeks: 6 } BookingService (detected by recurrence_start + weeks): 1. sessionRepo->findConsecutiveSessions(startSessionId, 6) -> list of session IDs 2. For each session: check duplicate, check capacity 3. Skip already-booked sessions (don't fail — block may partially overlap) 4. Create parent booking (block header, no session, is_waiting_list=0) 5. Create child booking for each normal session 6. Create waitlist child bookings for full sessions 7. Price = price_per_session x count(normal sessions only) **Room hire booking:** { activity_id (room_hire type), booking_date, start_time, duration, purpose, attendees } BookingService -> createRoomHireBooking(): 1. Check room availability for date+time window (no overlap) 2. Calculate price (per_hour x duration or per_booking) 3. Create a session on-the-fly for this specific slot 4. INSERT booking linked to new session 5. INSERT space_reservation for the time slot (prevents double-booking)"
+    "content": "The flow differs by booking type. All paths go through `BookingController::createBooking()` then `BookingService::createBooking()`. **Individual session booking:** { participant_id, activity_id, session_id, booking_type: \"individual\" } BookingService::createBooking() 1. Get activity — check exists, check space_type (room_hire uses separate path) 2. Get participant — verify belongs to user 3. Check parental consent if participant is a child 4. Check age eligibility (min_age / max_age on activity) 5. Verify session exists for this activity 6. Check no duplicate booking (same participant + session) 6a. Group restriction: if session has groups, participant must be a member — OR be a first-timer (age-eligible, no group for this activity yet; group assigned post-payment) 7. Check capacity: if full and allow_waiting_list=true -> put on waitlist 8. INSERT INTO bookings (booking_status='pending', is_waiting_list=0/1) 9. Return { booking_ids, total_price, is_waiting_list } BookingController (after createBooking returns): - If waitlisted -> return 201, no payment - If free (price=0) -> confirmMultipleBookings() -> sendBookingConfirmation() -> return 201 - If paid: applyCredit(userId, price, bookingId) If remaining=0 -> confirmMultipleBookings() -> sendBookingConfirmation() -> return 201 If remaining>0 -> createPaymentIntent(remaining) -> linkToBooking() -> return 201 with Stripe data **Block booking:** { participant_id, activity_id, recurrence_start: sessionId, weeks: 6 } BookingService (detected by recurrence_start + weeks): 1. sessionRepo->findConsecutiveSessions(startSessionId, 6) -> list of session IDs 2. For each session: check duplicate, check capacity 3. Skip already-booked sessions (don't fail — block may partially overlap) 4. Create parent booking (block header, no session, is_waiting_list=0) 5. Create child booking for each normal session 6. Create waitlist child bookings for full sessions 7. Price = price_per_session x count(normal sessions only) **Room hire booking:** { activity_id (room_hire type), booking_date, start_time, duration, purpose, attendees } BookingService -> createRoomHireBooking(): 1. Check room availability for date+time window (no overlap) 2. Calculate price (per_hour x duration or per_booking) 3. Create a session on-the-fly for this specific slot 4. INSERT booking linked to new session 5. INSERT space_reservation for the time slot (prevents double-booking)"
+  },
+  {
+    "pageId": "developer-guide",
+    "pageTitle": "Developer Guide",
+    "title": "Group enrollment",
+    "level": 3,
+    "anchor": "group-enrollment",
+    "snippet": "Children are assigned to activity groups **after** their first paid session — not on registration. Adding a child to an account has no group side-effe",
+    "content": "Children are assigned to activity groups **after** their first paid session — not on registration. Adding a child to an account has no group side-effects. After booking confirmed as paid: 1. Check booking['relationship'] !== 'self' 2. GroupService::assignToActivityGroupByAge(participantId, activityId) - Fetch participant DOB from DB - Calculate age - GroupRepository::findByActivityAndAge(activityId, age) — scoped to this activity only - For each matching group: addMember() → enrollInFutureSessions() enrollInFutureSessions() creates pending bookings for ALL future group sessions Wrapped in try/catch: booking is already committed under autocommit, so a group assignment failure must not break the payment response (logged, not thrown). processBatchPayment() deduplicates by participant+activity key across the batch. **Group restriction bypass (BookingService::createBooking):** - Already has a group for this activity → DENY (wrong group) - Not age-eligible → DENY - Age-eligible + no group for this activity yet → ALLOW (first-timer bypass) Group assignment happens after payment, not at booking time."
   },
   {
     "pageId": "developer-guide",
@@ -1604,6 +1739,24 @@
   {
     "pageId": "developer-guide",
     "pageTitle": "Developer Guide",
+    "title": "Notification events",
+    "level": 3,
+    "anchor": "notification-events",
+    "snippet": "All outbound notifications flow through `NotificationService`. The table below lists every event, which channels fire, and what triggers the dispatch.",
+    "content": "All outbound notifications flow through `NotificationService`. The table below lists every event, which channels fire, and what triggers the dispatch. | Event | Channels | Trigger | |---|---|---| | Email verification | Email | Registration, or resend request | | Password reset | Email | Forgotten password request | | Email change verification | Email | Customer updates their email address | | Booking confirmation | Email | Payment confirmed (Stripe or credit) | | Booking cancellation | Email | Customer cancels a booking | | Session cancellation | Email | Admin cancels a session (fires per affected booking) | | Session reminder | Email | Cron — 24 h before session start (see Scheduled Tasks) | | Attendance confirmation request | Email | Cron — configurable hours before session (default 24 h, see Notification Templates) | | Payment request | Email | Instructor marks booking attended and payment_status is pending | | Payment reminder | Email | Post-session sweep — attended but unpaid | | Group broadcast | Email | Admin sends message to a group | | Staff subscriber alert | Email, In-app | New booking / cancellation / attendance reminder, if staff has a subscription for that activity | | Test email | Email | Admin → Settings → Notification Services | Staff subscribers receive notifications through `dispatchToSubscribers()` for `new_booking`, `cancellation`, and `attendance_reminder` events. Admins with `in_app_notifications = 1` always receive in-app alerts for those events even without a subscription."
+  },
+  {
+    "pageId": "developer-guide",
+    "pageTitle": "Developer Guide",
+    "title": "Notification channels",
+    "level": 3,
+    "anchor": "notification-channels",
+    "snippet": "Email is the only customer notification channel (SMS/WhatsApp via Bird were removed in October 2026). Staff also get in-app toasts. **The email toggle",
+    "content": "Email is the only customer notification channel (SMS/WhatsApp via Bird were removed in October 2026). Staff also get in-app toasts. **The email toggle is honoured.** `NotificationService::dispatch()` skips email when the user's `user_preferences.email_notifications = 0` (no row or NULL = on, via `UserRepository::emailPrefAllows()`). Staff subscriber emails check the same preference. Use it to silence notification emails for an account, e.g. auto-booked sessions before go-live. **Booking does not require email to be on.** A customer with email off can still book; they just aren't emailed. **Toggle switches post a hidden input that is always present** (`value=\"0\"` or `\"1\"`). Read them with `postFlag('field')` from `app/Helpers/helpers.php`, never `isset($_POST['field'])`. **App-wide kill switch:** `app_settings.notifications_disabled = '1'` stops customer emails and staff subscriber emails/in-app alerts. Admin and instructor broadcasts go through the same gate (`NotificationService::sendToUser()`) and refuse with 409 while it's on. **Staff subscription events** are listed once in `NotificationSubscriptionRepository::EVENT_LABELS` (must match the `event_type` enum; `SubscriptionEventTypesTest` enforces it). `eventTypesForRole()` drives the form and route validation. Send an event with `NotificationService::notifySubscribers($eventType, $subject, $summary, $activityId, $sessionId)`; unknown types throw. Fan-out only reaches staff (admin, super_admin, instructor). | Event | Sent from | |---|---| | `new_session_booking` / `new_room_booking` | `sendBookingConfirmation()` (room hire → `new_room_booking`) | | `cancellation` | `sendCancellationNotification()` | | `attendance_reminder` | `sendSessionReminder()` | | `payment_received` | `PaymentService` — Stripe single/batch and account credit | | `payment_failed` | `StripeWebhookService` via `POST /api/payments/stripe/webhook` (signature-verified, needs `stripe_webhook_secret`) | | `withdrawal_requested` | `BookingController::requestWithdrawal()` | | `new_user` | `AuthService::register()` | **Customer session reminders:** a customer's own reminder is sent only for activities in their \"Booking reminders\" choices (`attendance_reminder` rows; `activity_id` NULL = all). New customers get an \"All\" row (`addDefaultCustomerReminder()`); existing ones were backfilled by `2026_10_14_customer_reminder_default.sql`. Customer rows are never fanned out to other users."
+  },
+  {
+    "pageId": "developer-guide",
+    "pageTitle": "Developer Guide",
     "title": "Email notifications",
     "level": 3,
     "anchor": "email-notifications",
@@ -1613,11 +1766,20 @@
   {
     "pageId": "developer-guide",
     "pageTitle": "Developer Guide",
-    "title": "SMS and WhatsApp (Bird)",
+    "title": "Attendance confirmation flow (soft-decline)",
     "level": 3,
-    "anchor": "sms-and-whatsapp-bird",
-    "snippet": "- BIRD_MOCK env var: if true, writes to logs/bird-mock.log and returns success - bird_api_key from app_settings (encrypted) - bird_sms_originator, bir",
-    "content": "- BIRD_MOCK env var: if true, writes to logs/bird-mock.log and returns success - bird_api_key from app_settings (encrypted) - bird_sms_originator, bird_whatsapp_workspace_id, bird_whatsapp_channel_id NotificationService dispatches SMS/WhatsApp via BirdService::sendSms() / sendWhatsApp() alongside email for each notification event To go live: 1. Set credentials in Admin -> Settings -> Notification Services 2. Set BIRD_MOCK=false in booking/booking/.env 3. Restart Galvani ---"
+    "anchor": "attendance-confirmation-flow-soft-decline",
+    "snippet": "The attendance confirmation is a yes/no email sent to the account holder before the session. \"No\" is a **soft decline** — it records the response but ",
+    "content": "The attendance confirmation is a yes/no email sent to the account holder before the session. \"No\" is a **soft decline** — it records the response but does not cancel or refund. ↓ Clicks YES → POST /booking/confirm-attendance?token=…&response=yes AttendanceConfirmationService::processResponse() - booking_status → 'confirmed', attendance_response = 'yes' - No further action (payment handled separately via AttendanceService) Clicks NO → POST /booking/confirm-attendance?token=…&response=no AttendanceConfirmationService::processResponse() - attendance_response = 'no' - booking_status stays as-is (NOT cancelled, NOT refunded) - Returns: \"Got it — you have been marked as not attending.\" Downstream when instructor marks attendance (`AttendanceService::markAttendance()`): → NotificationService::sendPaymentRequest() — asks customer to pay status = 'absent' + payment_status = 'paid' + booking_status != 'pending' → BookingService::cancelBooking(..., isAdmin: true) with reason 'Absent — refund issued' (same refund as a cancellation: net of discount, capped for block sessions, to account credit) status = 'absent' + booking_status = 'pending' → BookingRepository::cancelWithReason('Absent and booking not confirmed') (nothing was paid, so no refund) The instructor session-detail view shows an **Unpaid** badge for any booking with `payment_status = 'pending'` (visible to both instructors and admins — not admin-only)."
+  },
+  {
+    "pageId": "developer-guide",
+    "pageTitle": "Developer Guide",
+    "title": "Notification templates",
+    "level": 3,
+    "anchor": "notification-templates",
+    "snippet": "Admins (super_admin only) can override the subject, body, and short summary for 7 notification types without a code deploy. The system checks for a DB",
+    "content": "Admins (super_admin only) can override the subject, body, and short summary for 7 notification types without a code deploy. The system checks for a DB override first and falls back to the hardcoded default if none exists. **DB table:** `notification_templates` | Column | Type | Notes | |---|---|---| | `notification_type` | varchar(50) UNIQUE | One of the 7 editable types | | `email_subject` | varchar(255) NULL | NULL = use hardcoded default | | `email_body` | text NULL | Plain text; newlines → `<br>` on send | | `short_message` | varchar(500) NULL | Plain-text summary for in-app notifications and staff alert emails | | `send_day_of_week` | tinyint NULL | Session reminder + attendance confirmation only; 1=Mon…7=Sun (ISO-8601), NULL=Monday | **Editable types:** `booking_confirmation`, `cancellation_notification`, `session_cancellation`, `session_reminder`, `attendance_confirmation`, `payment_request`, `payment_reminder`. **Resolution:** `NotificationService::resolveTemplate(type, ...)` queries `NotificationTemplateRepository::getByType()`. Non-null DB fields override their hardcoded counterparts; null fields fall through to the hardcoded string. **Placeholders:** `{participant_name}`, `{activity_title}`, `{date}`, `{time}`, `{amount}`, `{venue}`, `{refund_amount}`, `{first_name}`, `{booking_id}`, `{yes_url}`, `{no_url}` — availability varies by type. Required placeholders are validated client-side and server-side on save. **`send_day_of_week`:** Controls which day of the week reminders are batched and sent. Both cron scripts (`send-session-reminders.php`, `send-attendance-confirmations.php`) run daily, check if today matches the configured day (default Monday), then send reminders for all sessions from the following day through the next 7 days. Sessions already reminded (`reminder_sent_at IS NOT NULL`) are skipped automatically. **Admin UI:** `GET /admin/notification-templates/{type}` (super_admin only). Left nav lists all 7 types with a dot indicator for customised ones. Right form: placeholder toolbar, email subject input, email body textarea, short summary textarea, and day-of-week dropdown for time-based types. Inputs pre-fill with the hardcoded defaults when no DB override exists. \"Reset to default\" button clears all fields for the current type. **Key files:** `NotificationTemplateRepository.php`, `NotificationService::resolveTemplate()`, `app/Views/admin/notification-templates.php`, `app/Routes/admin.php` (~line 2881), `scripts/send-session-reminders.php`, `scripts/send-attendance-confirmations.php`. ---"
   },
   {
     "pageId": "developer-guide",
@@ -1688,8 +1850,8 @@
     "title": "JWT tokens",
     "level": 3,
     "anchor": "jwt-tokens",
-    "snippet": "- Algorithm: HS256 (HMAC-SHA256) - Secret: `JWT_SECRET` environment variable - Payload: `{ user_id, email, role, iat, exp }` - Expiry: 24 hours by def",
-    "content": "- Algorithm: HS256 (HMAC-SHA256) - Secret: `JWT_SECRET` environment variable - Payload: `{ user_id, email, role, iat, exp }` - Expiry: 24 hours by default (configurable) - Stored in `auth_token` cookie: HttpOnly, SameSite=Strict, Secure when HTTPS **Password invalidation:** if `users.password_changed_at > JWT.iat`, the token is rejected even if not expired. This immediately invalidates all existing sessions when a user changes their password."
+    "snippet": "- Algorithm: HS256 (HMAC-SHA256) - Secret: `JWT_SECRET` environment variable - Payload: `{ user_id, email, role, iat, exp }` - Expiry: 120 minutes; ro",
+    "content": "- Algorithm: HS256 (HMAC-SHA256) - Secret: `JWT_SECRET` environment variable - Payload: `{ user_id, email, role, iat, exp }` - Expiry: 120 minutes; rolling refresh on each page navigation creates a 120-minute inactivity window - Stored in `auth_token` cookie: HttpOnly, SameSite=Strict, Secure when HTTPS **Password invalidation:** if `users.password_changed_at > JWT.iat`, the token is rejected even if not expired. This immediately invalidates all existing sessions when a user changes their password."
   },
   {
     "pageId": "developer-guide",
@@ -1706,8 +1868,8 @@
     "title": "Encrypted settings",
     "level": 3,
     "anchor": "encrypted-settings",
-    "snippet": "Sensitive values in `app_settings` (Stripe keys, Resend API key, Bird credentials) are encrypted with AES-256-GCM before storage. The encryption key i",
-    "content": "Sensitive values in `app_settings` (Stripe keys, Resend API key, Bird credentials) are encrypted with AES-256-GCM before storage. The encryption key is `APP_KEY` (64-char hex, 256-bit) from `.env`. $encrypted = encryptSetting($plaintextApiKey); $db->execute( \"INSERT INTO app_settings (setting_key, setting_value) VALUES ('stripe_secret_key', ?)\", [$encrypted] ); // Decrypt when reading $plaintext = decryptSetting($row['setting_value']); Format: `enc:<base64(12-byte-IV + 16-byte-tag + ciphertext)>`. Values not prefixed with `enc:` are treated as legacy plaintext (backward compatible)."
+    "snippet": "Sensitive values in `app_settings` (Stripe keys, Resend API key, SMTP password) are encrypted with AES-256-GCM before storage. The encryption key is `",
+    "content": "Sensitive values in `app_settings` (Stripe keys, Resend API key, SMTP password) are encrypted with AES-256-GCM before storage. The encryption key is `APP_KEY` (64-char hex, 256-bit) from `.env`. $encrypted = encryptSetting($plaintextApiKey); $db->execute( \"INSERT INTO app_settings (setting_key, setting_value) VALUES ('stripe_secret_key', ?)\", [$encrypted] ); // Decrypt when reading $plaintext = decryptSetting($row['setting_value']); Format: `enc:<base64(12-byte-IV + 16-byte-tag + ciphertext)>`. Values not prefixed with `enc:` are treated as legacy plaintext (backward compatible)."
   },
   {
     "pageId": "developer-guide",
@@ -1878,7 +2040,7 @@
     "level": 4,
     "anchor": "booking-booking-env-application-variables",
     "snippet": "| Variable | Required | What it does | Example | |---|---|---|---| | `APP_ENV` | Yes | Environment name | `development` or `production` | | `APP_DEBUG",
-    "content": "| Variable | Required | What it does | Example | |---|---|---|---| | `APP_ENV` | Yes | Environment name | `development` or `production` | | `APP_DEBUG` | No | Enable verbose error output | `true` (dev) / `false` (prod) | | `APP_URL` | Yes | Base URL of the app | `http://localhost:8080/booking` | | `APP_KEY` | Yes | 64-char hex, 256-bit AES key for encrypted settings | 32 random bytes, hex-encoded | | `JWT_SECRET` | Yes | Secret for signing JWT auth tokens | long random string | | `DB_NAME` | No | Database name | `booking_app` | | `DB_USER` | No | Database username | `root` (dev) / db user (prod) | | `DB_PASS` | No | Database password | empty (dev) | | `DB_HOST` | No | MySQL host — leave blank for Galvani socket | `localhost` (LAMP) | | `DB_PORT` | No | MySQL port | `3306` | | `BIRD_MOCK` | No | If `true`, SMS/WhatsApp writes to log file | `true` (dev) / `false` (prod) | | `REALTIME_ENABLED` | No | Enable WebSocket real-time features | `true` | | `RESEND_API_KEY` | No | Fallback Resend key (DB setting takes priority) | `re_...` | | `MAIL_DRIVER` | No | Active email driver: `smtp` or `resend` | `resend` | | `SMTP_HOST` | No | SMTP server hostname | `smtp.office365.com` | | `SMTP_PORT` | No | SMTP port | `587` | | `SMTP_USERNAME` | No | SMTP username (full email address) | — | | `SMTP_PASSWORD` | No | SMTP password / app password | — | | `SMTP_ENCRYPTION` | No | `tls`, `ssl`, or `none` | `tls` | | `MAIL_FROM_ADDRESS` | No | Fallback from address (DB setting takes priority) | `noreply@wellfoundation.org.uk` | | `MAIL_FROM_NAME` | No | Fallback from name | `WFCS Booking` |"
+    "content": "| Variable | Required | What it does | Example | |---|---|---|---| | `APP_ENV` | Yes | Environment name | `development` or `production` | | `APP_DEBUG` | No | Enable verbose error output | `true` (dev) / `false` (prod) | | `APP_URL` | Yes | Base URL of the app | `http://localhost:8080/booking` | | `APP_KEY` | Yes | 64-char hex, 256-bit AES key for encrypted settings | 32 random bytes, hex-encoded | | `JWT_SECRET` | Yes | Secret for signing JWT auth tokens | long random string | | `DB_NAME` | No | Database name | `booking_app` | | `DB_USER` | No | Database username | `root` (dev) / db user (prod) | | `DB_PASS` | No | Database password | empty (dev) | | `DB_HOST` | No | MySQL host — leave blank for Galvani socket | `localhost` (LAMP) | | `DB_PORT` | No | MySQL port | `3306` | | `REALTIME_ENABLED` | No | Enable WebSocket real-time features | `true` | | `RESEND_API_KEY` | No | Fallback Resend key (DB setting takes priority) | `re_...` | | `MAIL_DRIVER` | No | Active email driver: `smtp` or `resend` | `resend` | | `SMTP_HOST` | No | SMTP server hostname | `smtp.office365.com` | | `SMTP_PORT` | No | SMTP port | `587` | | `SMTP_USERNAME` | No | SMTP username (full email address) | — | | `SMTP_PASSWORD` | No | SMTP password / app password | — | | `SMTP_ENCRYPTION` | No | `tls`, `ssl`, or `none` | `tls` | | `MAIL_FROM_ADDRESS` | No | Fallback from address (DB setting takes priority) | `noreply@wellfoundation.org.uk` | | `MAIL_FROM_NAME` | No | Fallback from name | `WFCS Booking` |"
   },
   {
     "pageId": "developer-guide",
@@ -1887,7 +2049,7 @@
     "level": 4,
     "anchor": "settings-stored-in-app-settings-table-via-admin-ui",
     "snippet": "| Key | What it does | |---|---| | `stripe_secret_key` | Stripe secret key (encrypted) | | `stripe_public_key` | Stripe publishable key (encrypted) | ",
-    "content": "| Key | What it does | |---|---| | `stripe_secret_key` | Stripe secret key (encrypted) | | `stripe_public_key` | Stripe publishable key (encrypted) | | `resend_api_key` | Resend email API key (encrypted) | | `mail_driver` | Active email driver (`resend` or `smtp`) | | `smtp_host` | SMTP server hostname | | `smtp_port` | SMTP port (default `587`) | | `smtp_username` | SMTP username | | `smtp_password` | SMTP password (encrypted) | | `smtp_encryption` | Encryption mode: `tls`, `ssl`, or `none` | | `mail_from_address` | Email from address | | `mail_from_name` | Email from display name | | `bird_api_key` | Bird SMS/WhatsApp API key (encrypted) | | `bird_sms_originator` | Bird SMS sender name/number | | `bird_whatsapp_workspace_id` | Bird WhatsApp workspace ID | | `bird_whatsapp_channel_id` | Bird WhatsApp channel ID |"
+    "content": "| Key | What it does | |---|---| | `stripe_secret_key` | Stripe secret key (encrypted) | | `stripe_public_key` | Stripe publishable key (encrypted) | | `resend_api_key` | Resend email API key (encrypted) | | `mail_driver` | Active email driver (`resend` or `smtp`) | | `smtp_host` | SMTP server hostname | | `smtp_port` | SMTP port (default `587`) | | `smtp_username` | SMTP username | | `smtp_password` | SMTP password (encrypted) | | `smtp_encryption` | Encryption mode: `tls`, `ssl`, or `none` | | `mail_from_address` | Email from address | | `mail_from_name` | Email from display name |"
   },
   {
     "pageId": "developer-guide",
@@ -1896,7 +2058,70 @@
     "level": 4,
     "anchor": "booking-env-galvani-runtime-minimal",
     "snippet": "| Variable | What it does | |---|---| | `SERVER_PORT` | Port for Galvani to listen on (default 8080) | | `GALVANI_THREADS` | Number of worker threads ",
-    "content": "| Variable | What it does | |---|---| | `SERVER_PORT` | Port for Galvani to listen on (default 8080) | | `GALVANI_THREADS` | Number of worker threads (minimum 4) | --- *Last updated: 2026-02-15. Branch: feature/4-spa-to-mvc.*"
+    "content": "| Variable | What it does | |---|---| | `SERVER_PORT` | Port for Galvani to listen on (default 8080) | | `GALVANI_THREADS` | Number of worker threads (minimum 4) | --- ---"
+  },
+  {
+    "pageId": "developer-guide",
+    "pageTitle": "Developer Guide",
+    "title": "14. Scheduled Tasks (Cron Jobs)",
+    "level": 2,
+    "anchor": "14-scheduled-tasks-cron-jobs",
+    "snippet": "Two PHP scripts in `scripts/` must be scheduled on the production server. Both follow the same pattern as the existing payment reminder script: load t",
+    "content": "Two PHP scripts in `scripts/` must be scheduled on the production server. Both follow the same pattern as the existing payment reminder script: load the framework, run the service method, mark records sent, log output."
+  },
+  {
+    "pageId": "developer-guide",
+    "pageTitle": "Developer Guide",
+    "title": "Session reminders — `scripts/send-session-reminders.php`",
+    "level": 3,
+    "anchor": "session-reminders-scripts-send-session-reminders-php",
+    "snippet": "Finds all `scheduled` sessions starting within the next 24 hours that have not yet had a reminder sent (`sessions.reminder_sent_at IS NULL`), sends em",
+    "content": "Finds all `scheduled` sessions starting within the next 24 hours that have not yet had a reminder sent (`sessions.reminder_sent_at IS NULL`), sends email to every confirmed booking on that session, then stamps `reminder_sent_at` on the session row to prevent duplicates. **Recommended schedule:** hourly, so reminders fire as close to the 24-hour mark as possible."
+  },
+  {
+    "pageId": "developer-guide",
+    "pageTitle": "Developer Guide",
+    "title": "Session reminders — run every hour",
+    "level": 1,
+    "anchor": "session-reminders-run-every-hour",
+    "snippet": "0 * * * * php /var/www/html/booking/scripts/send-session-reminders.php >> /var/log/booking-session-reminders.log 2>&1",
+    "content": "0 * * * * php /var/www/html/booking/scripts/send-session-reminders.php >> /var/log/booking-session-reminders.log 2>&1"
+  },
+  {
+    "pageId": "developer-guide",
+    "pageTitle": "Developer Guide",
+    "title": "Payment reminders — `scripts/send-payment-reminders.php`",
+    "level": 3,
+    "anchor": "payment-reminders-scripts-send-payment-reminders-php",
+    "snippet": "Finds bookings with `booking_status = unpaid_attended` where the last payment reminder was sent more than `payment_reminder_days` (per activity) ago, ",
+    "content": "Finds bookings with `booking_status = unpaid_attended` where the last payment reminder was sent more than `payment_reminder_days` (per activity) ago, sends a reminder, then stamps `payment_reminder_sent_at` on the booking. **Recommended schedule:** daily at 09:00."
+  },
+  {
+    "pageId": "developer-guide",
+    "pageTitle": "Developer Guide",
+    "title": "Payment reminders — run daily at 09:00",
+    "level": 1,
+    "anchor": "payment-reminders-run-daily-at-09-00",
+    "snippet": "0 9 * * * php /var/www/html/booking/scripts/send-payment-reminders.php >> /var/log/booking-payment-reminders.log 2>&1",
+    "content": "0 9 * * * php /var/www/html/booking/scripts/send-payment-reminders.php >> /var/log/booking-payment-reminders.log 2>&1"
+  },
+  {
+    "pageId": "developer-guide",
+    "pageTitle": "Developer Guide",
+    "title": "Adding cron jobs on IONOS (or cPanel-based LAMP host)",
+    "level": 3,
+    "anchor": "adding-cron-jobs-on-ionos-or-cpanel-based-lamp-host",
+    "snippet": "1. Log in to the IONOS control panel (or cPanel) 2. Navigate to **Hosting → Cron jobs** (cPanel) or **Scheduled Tasks** (IONOS Managed Hosting) 3. Add",
+    "content": "1. Log in to the IONOS control panel (or cPanel) 2. Navigate to **Hosting → Cron jobs** (cPanel) or **Scheduled Tasks** (IONOS Managed Hosting) 3. Add each job above — adjust the path to match the actual `public_html` document root 4. Verify by tailing the log file after the first scheduled run: ```bash tail -f /var/log/booking-session-reminders.log ```"
+  },
+  {
+    "pageId": "developer-guide",
+    "pageTitle": "Developer Guide",
+    "title": "Schema note",
+    "level": 3,
+    "anchor": "schema-note",
+    "snippet": "`sessions.reminder_sent_at` (DATETIME, nullable) was added by migration `database/migrations/2026_03_19_sessions_reminder_sent_at.sql`. Ensure this mi",
+    "content": "`sessions.reminder_sent_at` (DATETIME, nullable) was added by migration `database/migrations/2026_03_19_sessions_reminder_sent_at.sql`. Ensure this migration has been applied to the production database before enabling the cron. --- *Last updated: 2026-10-14. SMS/WhatsApp removed — email is the only customer channel.*"
   },
   {
     "pageId": "api-reference",
@@ -1959,7 +2184,7 @@
     "level": 3,
     "anchor": "post-api-auth-login",
     "snippet": "Authenticate and receive a session cookie. **Auth required:** None (public) **CSRF required:** Yes **Request body (JSON)** | Field | Type | Required |",
-    "content": "Authenticate and receive a session cookie. **Auth required:** None (public) **CSRF required:** Yes **Request body (JSON)** | Field | Type | Required | |---|---|---| | `email` | string | Yes | | `password` | string | Yes | **Success:** `200 OK` \"token\": \"<jwt>\", \"expires_in\": 86400, \"user\": { \"id\": 5, \"role\": \"customer\", \"first_name\": \"Jane\", ... } } Sets `auth_token` HTTP-only cookie. **Errors** | Status | Message | |---|---| | `400` | `Email and password are required` | | `401` | Invalid credentials (from AuthService) | ---"
+    "content": "Authenticate and receive a session cookie. **Auth required:** None (public) **CSRF required:** Yes **Request body (JSON)** | Field | Type | Required | |---|---|---| | `email` | string | Yes | | `password` | string | Yes | **Success:** `200 OK` \"token\": \"<jwt>\", \"expires_in\": 7200, \"user\": { \"id\": 5, \"role\": \"customer\", \"first_name\": \"Jane\", ... } } Sets `auth_token` HTTP-only cookie. **Errors** | Status | Message | |---|---| | `400` | `Email and password are required` | | `401` | Invalid credentials (from AuthService) | ---"
   },
   {
     "pageId": "api-reference",
@@ -2004,7 +2229,7 @@
     "level": 3,
     "anchor": "get-api-activities",
     "snippet": "List published activities with optional filters. Room-hire activities are included (filter by `space_type` client-side if needed). **Auth required:** ",
-    "content": "List published activities with optional filters. Room-hire activities are included (filter by `space_type` client-side if needed). **Auth required:** None (public endpoint, but in practice accessed by authenticated customers) **Query params** | Param | Type | Notes | |---|---|---| | `status` | string | e.g. `published`, `draft`, `all` | | `activity_type_id` | integer | Filter by type | | `venue_id` | integer | Filter by venue | | `category` | string | Free-text category | | `search` | string | Full-text search on title/description | | `min_price` | float | | | `max_price` | float | | | `min_age` | integer | | | `max_age` | integer | | | `page` | integer | Default `1` | | `per_page` | integer | Default `20` | **Success:** `200 OK` \"data\": [ { \"id\": 1, \"title\": \"Yoga\", \"slug\": \"yoga\", \"price_per_session\": 8.00, ... } ], \"total\": 42, \"page\": 1, \"per_page\": 20 } ---"
+    "content": "List published activities with optional filters. Room-hire activities are included (filter by `space_type` client-side if needed). **Auth required:** None (public endpoint, but in practice accessed by authenticated customers) **Query params** | Param | Type | Notes | |---|---|---| | `status` | string | Admins only: `published` (default), `draft`, `archived` or `all`. Ignored for everyone else, who only see published activities | | `activity_type_id` | integer | Filter by type | | `venue_id` | integer | Filter by venue | | `category` | string | Free-text category | | `search` | string | Full-text search on title/description | | `min_price` | float | | | `max_price` | float | | | `min_age` | integer | | | `max_age` | integer | | | `page` | integer | Default `1` | | `per_page` | integer | Default `20` | **Success:** `200 OK` \"data\": [ { \"id\": 1, \"title\": \"Yoga\", \"slug\": \"yoga\", \"price_per_session\": 8.00, ... } ], \"total\": 42, \"page\": 1, \"per_page\": 20 } ---"
   },
   {
     "pageId": "api-reference",
@@ -2049,7 +2274,7 @@
     "level": 3,
     "anchor": "post-api-admin-activities",
     "snippet": "Create a new activity. **Auth required:** admin / super_admin **CSRF required:** Yes **Request body (JSON)** | Field | Type | Required | Notes | |---|",
-    "content": "Create a new activity. **Auth required:** admin / super_admin **CSRF required:** Yes **Request body (JSON)** | Field | Type | Required | Notes | |---|---|---|---| | `title` | string | Yes | | | `description` | string | No | | | `activity_type_id` | integer | No | | | `bookable_space_id` | integer | Yes | | | `instructor_id` | integer | No | | | `price_per_session` | float | Yes | | | `capacity` | integer | Yes | | | `min_age` | integer | No | | | `max_age` | integer | No | | | `frequency` | string | Yes | `weekly` or `single` | | `start_date` | string | No | YYYY-MM-DD | | `end_date` | string | No | YYYY-MM-DD | | `start_time` | string | No | HH:MM | | `end_time` | string | No | HH:MM | | `allow_waiting_list` | integer | No | `0` or `1` | | `status` | string | No | `draft` or `published` | | `pricing_type` | string | No | `per_booking` or `per_hour` | **Success:** `201 Created` — created activity object ---"
+    "content": "Create a new activity. **Auth required:** admin / super_admin **CSRF required:** Yes **Request body (JSON)** | Field | Type | Required | Notes | |---|---|---|---| | `title` | string | Yes | | | `description` | string | No | | | `activity_type_id` | integer | No | | | `bookable_space_id` | integer | Yes | | | `primary_instructor_id` | integer | No | User ID of the primary instructor | | `co_instructor_ids` | integer[] | No | Array of user IDs for co-instructors | | `price_per_session` | float | Yes | | | `capacity` | integer | Yes | | | `min_age` | integer | No | | | `max_age` | integer | No | | | `frequency` | string | Yes | `weekly` or `single` | | `start_date` | string | No | YYYY-MM-DD | | `end_date` | string | No | YYYY-MM-DD | | `start_time` | string | No | HH:MM | | `end_time` | string | No | HH:MM | | `allow_waiting_list` | integer | No | `0` or `1` | | `status` | string | No | `draft` or `published` | | `pricing_type` | string | No | `per_booking` or `per_hour` | | `group_ids` | integer[] | No | Group IDs to assign to this activity via `activity_groups` junction table | **Success:** `201 Created` — created activity object ---"
   },
   {
     "pageId": "api-reference",
@@ -2252,20 +2477,11 @@
   {
     "pageId": "api-reference",
     "pageTitle": "REST API Reference",
-    "title": "`POST /api/user/account-credit/topup`",
-    "level": 3,
-    "anchor": "post-api-user-account-credit-topup",
-    "snippet": "Add credit to account after a Stripe payment has been completed on the client side. **Auth required:** customer **CSRF required:** Yes **Request body ",
-    "content": "Add credit to account after a Stripe payment has been completed on the client side. **Auth required:** customer **CSRF required:** Yes **Request body (JSON)** | Field | Type | Required | Notes | |---|---|---|---| | `amount` | float | Yes | | | `payment_intent_id` | string | Yes | | **Success:** `201 Created` ---"
-  },
-  {
-    "pageId": "api-reference",
-    "pageTitle": "REST API Reference",
     "title": "`POST /api/user/account-credit/withdraw`",
     "level": 3,
     "anchor": "post-api-user-account-credit-withdraw",
-    "snippet": "Request a withdrawal of credit back to a payment card (creates a pending withdrawal request for admin approval). **Auth required:** customer **CSRF re",
-    "content": "Request a withdrawal of credit back to a payment card (creates a pending withdrawal request for admin approval). **Auth required:** customer **CSRF required:** Yes **Request body (JSON)** | Field | Type | Required | Notes | |---|---|---|---| | `amount` | float | Yes | Must be > 0 and ≤ current balance | **Success:** `200 OK` \"message\": \"Withdrawal request submitted successfully\", \"request_id\": 7, \"amount\": 20.00 } **Errors** | Status | Message | |---|---| | `422` | `Withdrawal amount must be greater than zero` | | `422` | `Insufficient credit balance` | ---"
+    "snippet": "Request a withdrawal of credit back to a payment card (creates a pending withdrawal request for admin approval). The amount is held until the request ",
+    "content": "Request a withdrawal of credit back to a payment card (creates a pending withdrawal request for admin approval). The amount is held until the request is approved or rejected: it can't be spent or withdrawn again, and the request is refused (`422 Insufficient credit balance`) if it exceeds the balance less other pending withdrawals. **Auth required:** customer **CSRF required:** Yes **Request body (JSON)** | Field | Type | Required | Notes | |---|---|---|---| | `amount` | float | Yes | Must be > 0 and ≤ current balance | **Success:** `200 OK` \"message\": \"Withdrawal request submitted successfully\", \"request_id\": 7, \"amount\": 20.00 } **Errors** | Status | Message | |---|---| | `422` | `Withdrawal amount must be greater than zero` | | `422` | `Insufficient credit balance` | ---"
   },
   {
     "pageId": "api-reference",
@@ -2589,7 +2805,7 @@
     "level": 4,
     "anchor": "post-api-admin-users",
     "snippet": "Create a user. **Auth required:** admin **CSRF required:** Yes **Request body (JSON)** | Field | Type | Required | |---|---|---| | `email` | string | ",
-    "content": "Create a user. **Auth required:** admin **CSRF required:** Yes **Request body (JSON)** | Field | Type | Required | |---|---|---| | `email` | string | Yes | | `password` | string | Yes | | `first_name` | string | No | | `last_name` | string | No | | `phone` | string | No | | `role` | string | No — defaults to `customer`; only super_admin can set `super_admin` | **Success:** `201 Created` ---"
+    "content": "Create a user. **Auth required:** admin **CSRF required:** Yes **Request body (JSON)** | Field | Type | Required | |---|---|---| | `email` | string | Yes | | `password` | string | Yes | | `first_name` | string | No | | `last_name` | string | No | | `phone` | string | No | | `role` | string | No — defaults to `customer`; only super_admin can set `super_admin` | | `is_customer` | integer | No — `1` to show customer nav for staff accounts; also auto-creates a self-participant | | `is_global_instructor` | integer | No — `1` to display this user on all activity/session pages as a global instructor | **Success:** `201 Created` ---"
   },
   {
     "pageId": "api-reference",
@@ -2597,8 +2813,8 @@
     "title": "`PUT /api/admin/users/{id}`",
     "level": 4,
     "anchor": "put-api-admin-users-id",
-    "snippet": "Update a user. Cannot escalate to `super_admin` unless you are `super_admin`. **Auth required:** admin **CSRF required:** Yes ---",
-    "content": "Update a user. Cannot escalate to `super_admin` unless you are `super_admin`. **Auth required:** admin **CSRF required:** Yes ---"
+    "snippet": "Update a user. Cannot escalate to `super_admin` unless you are `super_admin`. **Auth required:** admin **CSRF required:** Yes **Request body (JSON)** ",
+    "content": "Update a user. Cannot escalate to `super_admin` unless you are `super_admin`. **Auth required:** admin **CSRF required:** Yes **Request body (JSON)** — all fields optional | Field | Type | Notes | |---|---|---| | `first_name` | string | | | `last_name` | string | | | `email` | string | Must be unique | | `password` | string | If provided, replaces current password | | `role` | string | Only super_admin can set `super_admin` | | `is_customer` | integer | `1` to enable customer nav; auto-creates self-participant if missing | | `is_global_instructor` | integer | `1` to show on all activity/session pages | ---"
   },
   {
     "pageId": "api-reference",
@@ -2859,7 +3075,7 @@
     "level": 3,
     "anchor": "admin-notification-subscriptions",
     "snippet": "| Method | Path | Auth | Notes | |---|---|---|---| | `POST` | `/admin/notification-subscriptions/create` | admin | Create subscription | | `POST` | `/",
-    "content": "| Method | Path | Auth | Notes | |---|---|---|---| | `POST` | `/admin/notification-subscriptions/create` | admin | Create subscription | | `POST` | `/admin/notification-subscriptions/{id}/edit` | admin | Update subscription | | `POST` | `/admin/notification-subscriptions/{id}/delete` | admin | Delete subscription | **Subscription fields** | Field | Type | Required | Values | |---|---|---|---| | `event_type` | string | Yes | `new_booking`, `cancellation`, `waitlist_join`, `payment_received`, `payment_failed`, `new_user`, `attendance_reminder` | | `activity_id` | integer | No | Scope to specific activity | | `session_id` | integer | No | Scope to specific session | | `email_enabled` | checkbox | No | `0` or `1` | | `sms_enabled` | checkbox | No | `0` or `1` | | `whatsapp_enabled` | checkbox | No | `0` or `1` | | `in_app_enabled` | integer | No | `0` or `1` (admin-only field) |"
+    "content": "| Method | Path | Auth | Notes | |---|---|---|---| | `POST` | `/admin/notification-subscriptions/create` | admin | Create subscription | | `POST` | `/admin/notification-subscriptions/{id}/edit` | admin | Update subscription | | `POST` | `/admin/notification-subscriptions/{id}/delete` | admin | Delete subscription | **Subscription fields** | Field | Type | Required | Values | |---|---|---|---| | `event_type` | string | Yes | `new_booking`, `cancellation`, `waitlist_join`, `payment_received`, `payment_failed`, `new_user`, `attendance_reminder` | | `activity_id` | integer | No | Scope to specific activity | | `session_id` | integer | No | Scope to specific session | | `email_enabled` | checkbox | No | `0` or `1` | | `in_app_enabled` | integer | No | `0` or `1` (admin-only field) |"
   },
   {
     "pageId": "api-reference",
@@ -2877,7 +3093,7 @@
     "level": 3,
     "anchor": "customer-notification-preferences",
     "snippet": "| Method | Path | Auth | Notes | |---|---|---|---| | `GET` | `/account/notifications` | customer | View preferences | | `POST` | `/account/notificatio",
-    "content": "| Method | Path | Auth | Notes | |---|---|---|---| | `GET` | `/account/notifications` | customer | View preferences | | `POST` | `/account/notifications` | customer | Save preferences | **Preference fields** | Field | Type | Notes | |---|---|---| | `email_notifications` | checkbox | | | `sms_notifications` | checkbox | | | `whatsapp_notifications` | checkbox | | | `bird_notification_phone` | string | E.164 format for SMS/WhatsApp | ---"
+    "content": "| Method | Path | Auth | Notes | |---|---|---|---| | `GET` | `/account/notifications` | customer | View preferences | | `POST` | `/account/notifications` | customer | Save preferences | **Preference fields** | Field | Type | Notes | |---|---|---| | `email_notifications` | checkbox | | ---"
   },
   {
     "pageId": "api-reference",
@@ -2945,11 +3161,65 @@
   {
     "pageId": "api-reference",
     "pageTitle": "REST API Reference",
+    "title": "`POST /api/discount-codes/validate`",
+    "level": 3,
+    "anchor": "post-api-discount-codes-validate",
+    "snippet": "Validate a discount code and get the discounted price for a booking. **Auth required:** Any authenticated user **CSRF required:** Yes **Request body (",
+    "content": "Validate a discount code and get the discounted price for a booking. **Auth required:** Any authenticated user **CSRF required:** Yes **Request body (JSON)** | Field | Type | Required | Notes | |---|---|---|---| | `code` | string | Yes | The discount code to validate | | `activity_id` | integer | Yes | Activity the code is being applied to | | `original_price` | float | Yes | Full price before discount | **Success:** `200 OK` **Error (invalid code):** `200 OK` (not 4xx — always check `valid` field) ---"
+  },
+  {
+    "pageId": "api-reference",
+    "pageTitle": "REST API Reference",
+    "title": "`GET /api/discount-codes/auto-check`",
+    "level": 3,
+    "anchor": "get-api-discount-codes-auto-check",
+    "snippet": "Auto-check if a discount code should be pre-applied (e.g. from a referral link). **Auth required:** Any authenticated user **Query params:** `code`, `",
+    "content": "Auto-check if a discount code should be pre-applied (e.g. from a referral link). **Auth required:** Any authenticated user **Query params:** `code`, `activity_id`, `original_price` **Success:** `200 OK` — same shape as validate ---"
+  },
+  {
+    "pageId": "api-reference",
+    "pageTitle": "REST API Reference",
+    "title": "`GET /api/admin/discount-codes`",
+    "level": 3,
+    "anchor": "get-api-admin-discount-codes",
+    "snippet": "List all discount codes. **Auth required:** admin / super_admin **Success:** `200 OK` — array of discount code objects ---",
+    "content": "List all discount codes. **Auth required:** admin / super_admin **Success:** `200 OK` — array of discount code objects ---"
+  },
+  {
+    "pageId": "api-reference",
+    "pageTitle": "REST API Reference",
+    "title": "`POST /api/admin/discount-codes`",
+    "level": 3,
+    "anchor": "post-api-admin-discount-codes",
+    "snippet": "Create a discount code. **Auth required:** admin / super_admin **CSRF required:** Yes **Request body (JSON)** | Field | Type | Required | Notes | |---",
+    "content": "Create a discount code. **Auth required:** admin / super_admin **CSRF required:** Yes **Request body (JSON)** | Field | Type | Required | Notes | |---|---|---|---| | `code` | string | Yes | Unique code string | | `type` | string | Yes | `percentage` or `fixed` | | `value` | float | Yes | Percentage (0–100) or fixed £ amount | | `max_uses` | integer | No | Null = unlimited | | `expires_at` | string | No | YYYY-MM-DD | | `activity_id` | integer | No | Null = applies to all activities | **Success:** `201 Created` — created code object ---"
+  },
+  {
+    "pageId": "api-reference",
+    "pageTitle": "REST API Reference",
+    "title": "`PUT /api/admin/discount-codes/{id}`",
+    "level": 3,
+    "anchor": "put-api-admin-discount-codes-id",
+    "snippet": "Update a discount code. **Auth required:** admin / super_admin **CSRF required:** Yes **Request body:** same fields as create (all optional on update)",
+    "content": "Update a discount code. **Auth required:** admin / super_admin **CSRF required:** Yes **Request body:** same fields as create (all optional on update) **Success:** `200 OK` ---"
+  },
+  {
+    "pageId": "api-reference",
+    "pageTitle": "REST API Reference",
+    "title": "`DELETE /api/admin/discount-codes/{id}`",
+    "level": 3,
+    "anchor": "delete-api-admin-discount-codes-id",
+    "snippet": "Delete a discount code. **Auth required:** admin / super_admin **CSRF required:** Yes — `_csrf_token` query param **Success:** `200 OK` ---",
+    "content": "Delete a discount code. **Auth required:** admin / super_admin **CSRF required:** Yes — `_csrf_token` query param **Success:** `200 OK` ---"
+  },
+  {
+    "pageId": "api-reference",
+    "pageTitle": "REST API Reference",
     "title": "Route Summary Table",
     "level": 2,
     "anchor": "route-summary-table",
     "snippet": "| Method | Path | Auth | Domain | |---|---|---|---| | `POST` | `/api/auth/register` | public | Auth | | `POST` | `/api/auth/login` | public | Auth | |",
-    "content": "| Method | Path | Auth | Domain | |---|---|---|---| | `POST` | `/api/auth/register` | public | Auth | | `POST` | `/api/auth/login` | public | Auth | | `POST` | `/api/auth/logout` | public | Auth | | `GET` | `/api/auth/verify-token` | public | Auth | | `GET` | `/api/user/profile` | customer | Auth | | `PUT` | `/api/user/profile` | customer | Auth | | `GET` | `/api/activities` | public | Activities | | `GET` | `/api/activities/{id}` | public | Activities | | `GET` | `/api/activities/{slug}/availability` | public | Activities | | `GET` | `/api/activities/{id}/sessions` | public | Activities | | `GET` | `/api/activities/{activityId}/sessions/{sessionId}` | public | Activities | | `POST` | `/api/admin/activities` | admin | Activities | | `PUT` | `/api/admin/activities/{id}` | admin | Activities | | `DELETE` | `/api/admin/activities/{id}` | admin | Activities | | `POST` | `/api/admin/activities/{id}/sessions` | admin | Activities | | `POST` | `/api/admin/activities/{id}/images` | admin | Activities | | `PUT` | `/api/admin/activities/{activityId}/images/{imageId}/thumbnail` | admin | Activities | | `DELETE` | `/api/admin/activities/{activityId}/images/{imageId}` | admin | Activities | | `POST` | `/api/bookings` | customer | Bookings | | `GET` | `/api/user/bookings` | customer | Bookings | | `GET` | `/api/bookings/{id}` | customer | Bookings | | `POST` | `/api/bookings/{id}/pay` | customer | Bookings | | `DELETE` | `/api/bookings/{id}` | customer | Bookings | | `GET` | `/api/user/participants` | customer | Participants | | `GET` | `/api/user/participants/{id}` | customer | Participants | | `POST` | `/api/user/participants` | customer | Participants | | `PUT` | `/api/user/participants/{id}` | customer | Participants | | `DELETE` | `/api/user/participants/{id}` | customer | Participants | | `POST` | `/api/user/participants/{id}/consent` | customer | Participants | | `GET` | `/api/payments/stripe/config` | any auth | Payments | | `POST` | `/api/payments/stripe/intent` | any auth | Payments | | `POST` | `/api/payments/stripe/confirm` | any auth | Payments | | `GET` | `/api/user/payments` | customer | Payments | | `GET` | `/api/user/account-credit` | customer | Credit | | `POST` | `/api/user/account-credit/topup` | customer | Credit | | `POST` | `/api/user/account-credit/withdraw` | customer | Credit | | `GET` | `/api/user/account-credit/transactions` | customer | Credit | | `GET` | `/api/withdrawals/{id}` | customer | Credit | | `GET` | `/api/user/gift-aid/declaration` | customer | Gift Aid | | `POST` | `/api/user/gift-aid/declaration` | customer | Gift Aid | | `PUT` | `/api/user/gift-aid/declaration/withdraw` | customer | Gift Aid | | `GET` | `/api/user/gift-aid/claims` | customer | Gift Aid | | `GET` | `/api/instructor/dashboard` | instructor | Instructor | | `GET` | `/api/instructor/profile` | instructor | Instructor | | `GET` | `/api/instructor/activities` | instructor | Instructor | | `GET` | `/api/instructor/activities/{id}/sessions` | instructor | Instructor | | `GET` | `/api/instructor/sessions/upcoming` | instructor | Instructor | | `GET` | `/api/instructor/sessions/past` | instructor | Instructor | | `GET` | `/api/instructor/sessions/{id}/bookings` | instructor | Instructor | | `GET` | `/api/instructor/sessions/{slug}/{date}/bookings` | instructor | Instructor | | `POST` | `/api/instructor/attendance/mark` | instructor | Instructor | | `PUT` | `/api/instructor/sessions/{id}/notes` | instructor | Instructor | | `GET` | `/api/instructor/stats` | instructor | Instructor | | `GET` | `/api/admin/dashboard` | admin | Admin | | `GET` | `/api/admin/reports/bookings` | admin | Admin | | `GET` | `/api/admin/reports/attendance` | admin | Admin | | `GET` | `/api/admin/reports/payments` | admin | Admin | | `GET` | `/api/admin/reports/payments/{activityId}` | admin | Admin | | `GET` | `/api/admin/reports/activities` | admin | Admin | | `GET` | `/api/admin/reports/export` | admin | Admin | | `GET` | `/api/admin/bookings/list` | admin | Admin | | `GET` | `/api/admin/bookings/{id}` | admin | Admin | | `PUT` | `/api/admin/bookings/{id}` | admin | Admin | | `POST` | `/api/admin/bookings/{id}/promote` | admin | Admin | | `POST` | `/api/admin/bookings/{id}/refund` | admin | Admin | | `DELETE` | `/api/admin/bookings/{id}` | admin | Admin | | `GET` | `/api/admin/refundable-bookings` | admin | Admin | | `GET` | `/api/admin/refunded-bookings` | admin | Admin | | `GET` | `/api/admin/users` | admin | Admin | | `POST` | `/api/admin/users` | admin | Admin | | `PUT` | `/api/admin/users/{id}` | admin | Admin | | `DELETE` | `/api/admin/users/{id}` | admin | Admin | | `POST` | `/api/admin/users/{id}/refund` | admin | Admin | | `GET` | `/api/admin/users/{id}/participants` | admin | Admin | | `POST` | `/api/admin/users/{id}/participants` | admin | Admin | | `GET` | `/api/admin/participants` | admin | Admin | | `DELETE` | `/api/admin/participants/{id}` | admin | Admin | | `GET` | `/api/admin/venues` | admin | Admin | | `GET` | `/api/admin/venues/{id}` | admin | Admin | | `POST` | `/api/admin/venues` | admin | Admin | | `PUT` | `/api/admin/venues/{id}` | admin | Admin | | `DELETE` | `/api/admin/venues/{id}` | admin | Admin | | `POST` | `/api/admin/venues/{id}/image` | admin | Admin | | `DELETE` | `/api/admin/venues/{id}/image` | admin | Admin | | `GET` | `/api/admin/spaces` | admin | Admin | | `GET` | `/api/admin/spaces/{id}` | admin | Admin | | `POST` | `/api/admin/spaces` | admin | Admin | | `PUT` | `/api/admin/spaces/{id}` | admin | Admin | | `DELETE` | `/api/admin/spaces/{id}` | admin | Admin | | `POST` | `/api/admin/spaces/{id}/image` | admin | Admin | | `DELETE` | `/api/admin/spaces/{id}/image` | admin | Admin | | `GET` | `/api/admin/activity-types` | admin | Admin | | `GET` | `/api/admin/gift-aid` | super_admin | Admin | | `GET` | `/api/admin/gift-aid/export` | super_admin | Admin | | `GET` | `/api/admin/settings/payments` | super_admin | Admin | | `POST` | `/api/admin/settings/payments` | super_admin | Admin | | `POST` | `/api/admin/withdrawals/{id}/process` | super_admin | Admin | | `POST` | `/api/admin/withdrawals/{id}/reject` | super_admin | Admin | | `POST` | `/api/admin/notifications/preview` | admin | Notifications | | `POST` | `/api/admin/notifications/send` | admin | Notifications | | `GET` | `/api/admin/notifications/history` | admin | Notifications | | `GET` | `/api/updates` | any auth | Real-time |"
+    "content": "| Method | Path | Auth | Domain | |---|---|---|---| | `POST` | `/api/auth/register` | public | Auth | | `POST` | `/api/auth/login` | public | Auth | | `POST` | `/api/auth/logout` | public | Auth | | `GET` | `/api/auth/verify-token` | public | Auth | | `GET` | `/api/user/profile` | customer | Auth | | `PUT` | `/api/user/profile` | customer | Auth | | `GET` | `/api/activities` | public | Activities | | `GET` | `/api/activities/{id}` | public | Activities | | `GET` | `/api/activities/{slug}/availability` | public | Activities | | `GET` | `/api/activities/{id}/sessions` | public | Activities | | `GET` | `/api/activities/{activityId}/sessions/{sessionId}` | public | Activities | | `POST` | `/api/admin/activities` | admin | Activities | | `PUT` | `/api/admin/activities/{id}` | admin | Activities | | `DELETE` | `/api/admin/activities/{id}` | admin | Activities | | `POST` | `/api/admin/activities/{id}/sessions` | admin | Activities | | `POST` | `/api/admin/activities/{id}/images` | admin | Activities | | `PUT` | `/api/admin/activities/{activityId}/images/{imageId}/thumbnail` | admin | Activities | | `DELETE` | `/api/admin/activities/{activityId}/images/{imageId}` | admin | Activities | | `POST` | `/api/bookings` | customer | Bookings | | `GET` | `/api/user/bookings` | customer | Bookings | | `GET` | `/api/bookings/{id}` | customer | Bookings | | `POST` | `/api/bookings/{id}/pay` | customer | Bookings | | `DELETE` | `/api/bookings/{id}` | customer | Bookings | | `GET` | `/api/user/participants` | customer | Participants | | `GET` | `/api/user/participants/{id}` | customer | Participants | | `POST` | `/api/user/participants` | customer | Participants | | `PUT` | `/api/user/participants/{id}` | customer | Participants | | `DELETE` | `/api/user/participants/{id}` | customer | Participants | | `POST` | `/api/user/participants/{id}/consent` | customer | Participants | | `GET` | `/api/payments/stripe/config` | any auth | Payments | | `POST` | `/api/payments/stripe/intent` | any auth | Payments | | `POST` | `/api/payments/stripe/confirm` | any auth | Payments | | `GET` | `/api/user/payments` | customer | Payments | | `GET` | `/api/user/account-credit` | customer | Credit | | `POST` | `/api/user/account-credit/withdraw` | customer | Credit | | `GET` | `/api/user/account-credit/transactions` | customer | Credit | | `GET` | `/api/withdrawals/{id}` | customer | Credit | | `GET` | `/api/user/gift-aid/declaration` | customer | Gift Aid | | `POST` | `/api/user/gift-aid/declaration` | customer | Gift Aid | | `PUT` | `/api/user/gift-aid/declaration/withdraw` | customer | Gift Aid | | `GET` | `/api/user/gift-aid/claims` | customer | Gift Aid | | `GET` | `/api/instructor/dashboard` | instructor | Instructor | | `GET` | `/api/instructor/profile` | instructor | Instructor | | `GET` | `/api/instructor/activities` | instructor | Instructor | | `GET` | `/api/instructor/activities/{id}/sessions` | instructor | Instructor | | `GET` | `/api/instructor/sessions/upcoming` | instructor | Instructor | | `GET` | `/api/instructor/sessions/past` | instructor | Instructor | | `GET` | `/api/instructor/sessions/{id}/bookings` | instructor | Instructor | | `GET` | `/api/instructor/sessions/{slug}/{date}/bookings` | instructor | Instructor | | `POST` | `/api/instructor/attendance/mark` | instructor | Instructor | | `PUT` | `/api/instructor/sessions/{id}/notes` | instructor | Instructor | | `GET` | `/api/instructor/stats` | instructor | Instructor | | `GET` | `/api/admin/dashboard` | admin | Admin | | `GET` | `/api/admin/reports/bookings` | admin | Admin | | `GET` | `/api/admin/reports/attendance` | admin | Admin | | `GET` | `/api/admin/reports/payments` | admin | Admin | | `GET` | `/api/admin/reports/payments/{activityId}` | admin | Admin | | `GET` | `/api/admin/reports/activities` | admin | Admin | | `GET` | `/api/admin/reports/export` | admin | Admin | | `GET` | `/api/admin/bookings/list` | admin | Admin | | `GET` | `/api/admin/bookings/{id}` | admin | Admin | | `PUT` | `/api/admin/bookings/{id}` | admin | Admin | | `POST` | `/api/admin/bookings/{id}/promote` | admin | Admin | | `POST` | `/api/admin/bookings/{id}/refund` | admin | Admin | | `DELETE` | `/api/admin/bookings/{id}` | admin | Admin | | `GET` | `/api/admin/refundable-bookings` | admin | Admin | | `GET` | `/api/admin/refunded-bookings` | admin | Admin | | `GET` | `/api/admin/users` | admin | Admin | | `POST` | `/api/admin/users` | admin | Admin | | `PUT` | `/api/admin/users/{id}` | admin | Admin | | `DELETE` | `/api/admin/users/{id}` | admin | Admin | | `POST` | `/api/admin/users/{id}/refund` | admin | Admin | | `GET` | `/api/admin/users/{id}/participants` | admin | Admin | | `POST` | `/api/admin/users/{id}/participants` | admin | Admin | | `GET` | `/api/admin/participants` | admin | Admin | | `DELETE` | `/api/admin/participants/{id}` | admin | Admin | | `GET` | `/api/admin/venues` | admin | Admin | | `GET` | `/api/admin/venues/{id}` | admin | Admin | | `POST` | `/api/admin/venues` | admin | Admin | | `PUT` | `/api/admin/venues/{id}` | admin | Admin | | `DELETE` | `/api/admin/venues/{id}` | admin | Admin | | `POST` | `/api/admin/venues/{id}/image` | admin | Admin | | `DELETE` | `/api/admin/venues/{id}/image` | admin | Admin | | `GET` | `/api/admin/spaces` | admin | Admin | | `GET` | `/api/admin/spaces/{id}` | admin | Admin | | `POST` | `/api/admin/spaces` | admin | Admin | | `PUT` | `/api/admin/spaces/{id}` | admin | Admin | | `DELETE` | `/api/admin/spaces/{id}` | admin | Admin | | `POST` | `/api/admin/spaces/{id}/image` | admin | Admin | | `DELETE` | `/api/admin/spaces/{id}/image` | admin | Admin | | `GET` | `/api/admin/activity-types` | admin | Admin | | `GET` | `/api/admin/gift-aid` | super_admin | Admin | | `GET` | `/api/admin/gift-aid/export` | super_admin | Admin | | `GET` | `/api/admin/settings/payments` | super_admin | Admin | | `POST` | `/api/admin/settings/payments` | super_admin | Admin | | `POST` | `/api/admin/withdrawals/{id}/process` | super_admin | Admin | | `POST` | `/api/admin/withdrawals/{id}/reject` | super_admin | Admin | | `POST` | `/api/admin/notifications/preview` | admin | Notifications | | `POST` | `/api/admin/notifications/send` | admin | Notifications | | `GET` | `/api/admin/notifications/history` | admin | Notifications | | `POST` | `/api/discount-codes/validate` | any auth | Discounts | | `GET` | `/api/discount-codes/auto-check` | any auth | Discounts | | `GET` | `/api/admin/discount-codes` | admin | Discounts | | `POST` | `/api/admin/discount-codes` | admin | Discounts | | `PUT` | `/api/admin/discount-codes/{id}` | admin | Discounts | | `DELETE` | `/api/admin/discount-codes/{id}` | admin | Discounts | | `GET` | `/api/updates` | any auth | Real-time |"
   },
   {
     "pageId": "mcp-server",
@@ -2976,7 +3246,7 @@
     "level": 3,
     "anchor": "customer-tools-all-roles",
     "snippet": "| Tool | What it does | |---|---| | `verify_connection` | Check API connection and show user info | | `search_activities` | Browse activities, check a",
-    "content": "| Tool | What it does | |---|---| | `verify_connection` | Check API connection and show user info | | `search_activities` | Browse activities, check availability, view sessions | | `my_bookings` | List, view, create, cancel, and pay for bookings | | `my_participants` | Manage child/dependent participants | | `my_credit` | View balance, transactions, top up, withdraw | | `my_gift_aid` | Gift Aid declarations and claims | | `my_profile` | View and update profile |"
+    "content": "| Tool | What it does | |---|---| | `verify_connection` | Check API connection and show user info | | `search_activities` | Browse activities, check availability, view sessions | | `my_bookings` | List, view, create, cancel, and pay for bookings | | `my_participants` | Manage child/dependent participants | | `my_credit` | View balance and transactions, request a withdrawal (top-ups are by card on the website) | | `my_gift_aid` | Gift Aid declarations and claims | | `my_profile` | View and update profile |"
   },
   {
     "pageId": "mcp-server",
@@ -3075,7 +3345,7 @@
     "level": 3,
     "anchor": "config-env-php",
     "snippet": "This replaces `.env` on shared hosting. It sets `$_ENV` values directly from PHP (Shared hosting does not support dotfiles in the document root). $_EN",
-    "content": "This replaces `.env` on shared hosting. It sets `$_ENV` values directly from PHP (Shared hosting does not support dotfiles in the document root). $_ENV['JWT_SECRET']             = 'your-long-random-secret'; $_ENV['APP_KEY']                = 'your-32-char-aes-key'; $_ENV['STRIPE_SECRET_KEY']      = 'sk_live_...'; $_ENV['STRIPE_PUBLISHABLE_KEY'] = 'pk_live_...'; $_ENV['STRIPE_WEBHOOK_SECRET']  = 'whsec_...'; $_ENV['BIRD_MOCK']              = 'false'; Leave email driver credentials (Resend API key or SMTP password) and Bird credentials blank if you are configuring them via the admin Settings page (recommended — avoids storing secrets in files)."
+    "content": "This replaces `.env` on shared hosting. It sets `$_ENV` values directly from PHP (Shared hosting does not support dotfiles in the document root). $_ENV['JWT_SECRET']             = 'your-long-random-secret'; $_ENV['APP_KEY']                = 'your-32-char-aes-key'; $_ENV['STRIPE_SECRET_KEY']      = 'sk_live_...'; $_ENV['STRIPE_PUBLISHABLE_KEY'] = 'pk_live_...'; $_ENV['STRIPE_WEBHOOK_SECRET']  = 'whsec_...'; Leave email driver credentials (Resend API key or SMTP password) blank if you are configuring them via the admin Settings page (recommended — avoids storing secrets in files)."
   },
   {
     "pageId": "deployment",
@@ -3138,7 +3408,7 @@
     "level": 2,
     "anchor": "step-7-re-save-stripe-keys-in-settings",
     "snippet": "After importing the database, log in as `admin@booking.local` (or your production super_admin account) and go to **Settings > Stripe**. Re-enter your ",
-    "content": "After importing the database, log in as `admin@booking.local` (or your production super_admin account) and go to **Settings > Stripe**. Re-enter your Stripe secret key, publishable key, and webhook secret, then save. **Why**: The database dump contains Stripe keys encrypted with your local `APP_KEY`. The production server has a different `APP_KEY` in `config/env.php`, so the encrypted values from the dump cannot be decrypted. Re-saving via the UI re-encrypts them with the production key. The same applies to Settings > Notification Services for email (SMTP or Resend) and Bird SMS/WhatsApp credentials. ---"
+    "content": "After importing the database, log in as `admin@booking.local` (or your production super_admin account) and go to **Settings > Stripe**. Re-enter your Stripe secret key, publishable key, and webhook secret, then save. **Why**: The database dump contains Stripe keys encrypted with your local `APP_KEY`. The production server has a different `APP_KEY` in `config/env.php`, so the encrypted values from the dump cannot be decrypted. Re-saving via the UI re-encrypts them with the production key. The same applies to Settings > Notification Services for email (SMTP or Resend) credentials. ---"
   },
   {
     "pageId": "deployment",
@@ -3156,7 +3426,7 @@
     "level": 2,
     "anchor": "updating-after-a-code-change",
     "snippet": "1. Pull the latest code locally. 2. Re-run `build.sh` (choose option 1 or 2 depending on whether you want to sync the database). 3. Upload changed fil",
-    "content": "1. Pull the latest code locally. 2. Re-run `build.sh` (choose option 1 or 2 depending on whether you want to sync the database). 3. Upload changed files from `dist/` to LAMP — you only need to upload modified files. 4. If the database schema changed, run the migration or re-import `booking-install.sql`. Config files in `dist/config/` are preserved by `build.sh` on subsequent runs (it backs them up before wiping `dist/` and restores them after). ---"
+    "content": "1. Pull the latest code locally. 2. Re-run `build.sh` (choose option 1 or 2 depending on whether you want to sync the database). 3. Upload changed files from `dist/` to LAMP — you only need to upload modified files. 4. If the database schema changed, run the migration or re-import `booking-install.sql`. The SMS/WhatsApp removal release needs `database/migrations/2026_10_14_remove_sms_whatsapp.sql`. Config files in `dist/config/` are preserved by `build.sh` on subsequent runs (it backs them up before wiping `dist/` and restores them after). ---"
   },
   {
     "pageId": "deployment",

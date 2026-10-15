@@ -36,12 +36,12 @@ You land on the admin dashboard at `/admin`.
 
 The dashboard gives you an at-a-glance view of the day's activity. At the top you will find two tabs:
 
-- **Activities** — a calendar of scheduled sessions with a toggle between Month and Day view. Each session slot shows the time, activity name, and booking count against capacity. Colour coding tells you at a glance whether a session is available (blue), full (amber), or past (grey).
+- **Activities** — a calendar of scheduled sessions with a toggle between Month, Week, and Day view. Each session slot shows the time, activity name, and booking count against capacity. Colour coding tells you at a glance whether a session is available (blue), full (amber), or past (grey).
 - **Meeting rooms** — a horizontal timeline showing which rooms are booked and at what times for the selected date.
 
 Below the calendar, stat cards summarise Total Users, Activities, Sessions, Active Bookings, and Waiting List count. Super admins also see Revenue and Awaiting Payment figures.
 
-To jump to a different month on the calendar, use the **Prev** and **Next** arrows. To move to a different day in Day view, use the date navigation arrows or select **Today**.
+To jump to a different month or week on the calendar, use the **Prev** and **Next** arrows. A **Back to today** button appears when you have navigated away from the current period. To move to a different day in Day view, use the date navigation arrows or select **Today**.
 
 Clicking any session slot on the calendar opens a quick-view panel showing the activity title, date, time, instructor, venue, and booking progress bar. Select **Manage session** from that panel to go to the full session detail page.
 
@@ -54,9 +54,9 @@ Clicking any session slot on the calendar opens a quick-view panel showing the a
 Sub-tabs appear within each section:
 
 - Bookings: Bookings, Attendance, Waitlist, Meeting rooms
-- Payments: Cancellations, Payments received, Refunds, Withdrawals, Gift Aid, Credit accounts
+- Payments: Cancellations, Payments received, Refunds, Withdrawals, Gift Aid, Credit accounts, Discount codes
 - Resources: Activities, Meeting rooms, Spaces, Venues
-- Settings: Stripe, Notification Services, Account
+- Settings: Stripe, Notification Services, Notification Templates, Account
 
 ---
 
@@ -66,9 +66,9 @@ Go to **Bookings** in the top navigation. You land on the Bookings sub-tab.
 
 ### Viewing the bookings list
 
-The bookings list shows all bookings with columns for Booking number, Participant, Activity, Session date, Amount paid, and Status.
+The bookings list shows upcoming bookings (today and future sessions) ordered by session date, most recent first. Columns show: Booking number, Participant, Activity, Session date, Amount paid, and Status. Past bookings are available in the Payments section.
 
-Stat cards at the top of the page show: Total, Confirmed, Waitlisted, Awaiting payment, Cancelled, and (for super admins) Revenue and Average value, plus overall attendance rate.
+Stat cards at the top of the page reflect the same upcoming-only view: Total, Confirmed, Awaiting payment, and (for super admins) Revenue and Average value.
 
 Status badges tell you the state of each booking:
 
@@ -85,6 +85,15 @@ Status badges tell you the state of each booking:
 
 1. Click any row in the bookings table.
 2. A detail panel opens showing: participant, date of birth, booked by (account holder), activity, session, venue, booking type (Single or Block), booking date, booking and payment status, attendance status, amount paid, payment method, paid-on date, and any cancellation information.
+
+### Walk-ins
+
+When someone turns up to a session without an account or a booking, the instructor adds them from the session register (see *Instructor features → Adding a walk-in*). Their booking appears here like any other, with a purple **Walk-in** badge.
+
+- **Find them:** use the **All sources → Walk-ins** filter on the bookings list.
+- **Payment:** a walk-in booking is left unpaid, so it shows under **Awaiting payment**. The customer pays from their account like any outstanding booking.
+- **New accounts:** someone who didn't have an account is emailed a link to set one up (valid for 7 days). On the booking's detail page you'll see who added them. While they haven't set a password yet, there's also a **Resend set-up email** button.
+- **Onboarding:** add any missing details (address, medical notes, emergency contacts) from the user's edit page as usual.
 
 ### Cancelling a booking
 
@@ -135,6 +144,8 @@ Select the **By Activity** or **By Session** buttons to switch views.
 Attendance rates are colour coded: green for 80% and above, amber for 60–79%, and red below 60%.
 
 Instructors mark attendance from their own session detail pages (see [Instructor features](#12-instructor-features)). The data feeds directly into these reports.
+
+**Note:** Marking a participant as absent cancels their booking. If the booking was paid, what they paid (less any discount) is refunded to their account credit, the same as a cancellation. If it was never confirmed (for example a group enrolment), it is simply cancelled. Marking someone as attended who hasn't paid sends them a payment request.
 
 ---
 
@@ -196,7 +207,8 @@ Activities are displayed as cards showing the image, status badge, price badge, 
 1. Select **Add activity** at the top right.
 2. A panel opens. Fill in:
    - **Title** (required)
-   - **Instructor** — select from the list of instructor-role users
+   - **Primary instructor** — the instructor responsible for the activity (selected from instructor-role users)
+   - **Co-instructors** — optional additional instructors who can also mark attendance
    - **Space** — select the venue and space where this activity takes place
    - **Price per session** (in pounds — enter 0 for free)
    - **Capacity** — maximum number of bookings per session
@@ -245,7 +257,7 @@ The most recently uploaded image becomes the featured image shown on the activit
 
 Sessions are individual occurrences of an activity. For recurring activities, sessions are generated automatically. For one-off activities, you create sessions manually.
 
-**Viewing sessions** — Go to **Resources**, then the **Sessions** sub-tab. A monthly calendar shows all sessions. Click a date to navigate to that session's detail page.
+**Viewing sessions** — Go to **Resources**, then the **Sessions** sub-tab. A calendar shows all sessions with a toggle between Month and Week view. A **Back to today** button appears when you have navigated away from the current period. Click any session slot to navigate to that session's detail page.
 
 **Adding a one-off session from the dashboard:**
 
@@ -359,17 +371,21 @@ To delete a blockout, select **Delete** in the blockout table.
 
 The Payments section is only visible to super admins. Go to **Payments** in the top navigation.
 
-The Payments section has six sub-tabs: Cancellations, Payments received, Refunds, Withdrawals, Gift Aid, and Credit accounts.
+The Payments section has seven sub-tabs: Cancellations, Payments received, Refunds, Withdrawals, Gift Aid, Credit accounts, and Discount codes.
 
 ### Cancellations
 
-This tab lists all cancelled bookings showing: Booking number, Participant, Activity, Cancellation date, Amount paid, and Amount refunded.
+This tab lists all cancelled bookings showing: Booking number, Participant, Activity, Cancellation date, Amount paid, and Amount refunded. Rows are ordered by session date, most recent first.
+
+Use the filters at the top to narrow results by venue, space, activity, group, and year (defaults to the current year). A date range picker lets you filter by exact cancellation date. Select **All years** to see the full history.
 
 Click any row to open the detail panel showing the full booking and cancellation information, including who processed the refund and when.
 
 ### Payments received
 
-This tab lists all bookings where payment has been received. It shows: Booking number, Participant, Activity, Session date, Amount paid, and Status.
+This tab lists all bookings where payment has been received. It shows: Booking number, Participant, Activity, Session date, Amount paid, and Status. Rows are ordered by session date, most recent first.
+
+Use the filters at the top to narrow results by venue, space, activity, group, and year (defaults to the current year). A date range picker lets you filter by exact payment date. Select **All years** to see the full history.
 
 Click any row to open the detail panel. From the panel you can **cancel the booking and refund the payment**:
 
@@ -380,7 +396,9 @@ Click any row to open the detail panel. From the panel you can **cancel the book
 
 ### Refunds
 
-This tab lists all bookings that have been refunded. Columns show: Booking number, Participant, Activity, Refund date, and Amount refunded.
+This tab lists all bookings that have been refunded. Columns show: Booking number, Participant, Activity, Refund date, and Amount refunded. Rows are ordered by session date, most recent first.
+
+Use the filters at the top to narrow results by venue, space, activity, group, refunder, and year (defaults to the current year). A date range picker lets you filter by exact refund date. Select **All years** to see the full history.
 
 Click any row to see the full refund detail including original payment method, paid-on date, amount refunded, and which admin processed the refund.
 
@@ -446,6 +464,68 @@ This table lists every user who holds account credit. Columns show: Name, Email,
 
 If a user has a pending withdrawal request, it appears in the Withdrawal request column. You can select **Process** or **Reject** directly from this table, following the same steps as the Withdrawals tab above.
 
+### Discount codes
+
+Go to **Payments**, then the **Discount codes** sub-tab.
+
+This page lists all discount codes as cards. Each card shows the code (or **AUTO** for codes that apply automatically), type, value, usage count, scope, and status.
+
+#### Discount types
+
+| Type | How it works |
+|---|---|
+| Percentage | Reduces the total by a percentage (e.g. 10%) |
+| Fixed amount | Reduces the total by a fixed £ amount |
+| Every Nth session free | For block bookings: one session is free for every N sessions booked in a single transaction (e.g. every 3rd session free) |
+| Third child free | Applied automatically when a family books a third or later child into the same session |
+
+#### Scopes — who the code applies to
+
+| Scope | Behaviour |
+|---|---|
+| Global | Applies to all activities; customers enter the code at checkout |
+| Activity | Applies to a single activity; customers enter the code at checkout |
+| Activity type | Applies to all activities of a given type; customers enter the code at checkout |
+| Venue | Applies to all activities at a specific venue; customers enter the code at checkout |
+| Account type | Applies based on the customer's account type; customers enter the code at checkout |
+| Room hire | Applies to meeting room bookings only; customers enter the code at checkout |
+| Staff | Applied automatically by role — no code needed; the customer never types anything |
+| Per user | Applied automatically to one or more specific users — no code needed |
+
+Codes with **Staff** or **Per user** scope show **AUTO** instead of a code string. When a customer eligible for an auto-applied discount opens the booking popover, the discount is detected and applied immediately. If the discount covers the full session cost, the Stripe payment form is hidden and the button reads **Confirm Booking** instead of **Pay £X**.
+
+#### Adding a discount code
+
+1. Select **Add discount code**.
+2. A panel opens. Choose the **Scope** first — this controls which other fields appear.
+3. For most scopes, enter a **Code** string (e.g. `SUMMER10`). For Staff and Per user scopes the code field is hidden (auto-applied codes have no code).
+4. Fill in:
+   - **Name** — a plain-English label shown to customers when the discount is applied
+   - **Type** — Percentage, Fixed amount, Every Nth session free, or Third child free
+   - **Value** — the percentage or fixed amount (not shown for session-free types)
+   - **Min sessions** — for "Every Nth session free": the N (e.g. 3 means every 3rd session is free)
+   - **Max uses** — leave blank for unlimited uses
+   - **Expires at** — optional expiry date; leave blank for no expiry
+   - **Activity** — for Activity scope, select the specific activity
+   - **Users** — for Per user scope, search and select one or more users
+5. Select **Save**.
+
+#### Editing a discount code
+
+1. Click the **Edit** button on any card.
+2. Update the fields and select **Update**.
+
+#### Deleting a discount code
+
+1. Click the **Delete** button on any card and confirm.
+
+If a code has been used at least once, deleting it deactivates it rather than removing it — the usage history is preserved. Codes with zero uses are deleted immediately.
+
+#### How customers see discounts
+
+- **Manual codes** — a "Have a discount code?" link appears on the booking popover. The customer enters the code and the discounted price updates immediately.
+- **Auto-applied discounts** — the discount appears automatically when the popover opens. A notice explains the saving (e.g. "You're booking 3 sessions — 1 session is free!" for a bulk discount, or "Staff discount applied automatically." for a staff discount). The "Amount to Pay" label changes to "Your Price". If the total drops to £0, it shows **FREE** and the payment form is hidden.
+
 ---
 
 ## 10. Settings (super admin)
@@ -465,6 +545,14 @@ This is where you configure the Stripe API keys used for payment processing.
 The current key values are masked for security — only the last four characters are shown. Leave a field blank to keep the existing value.
 
 **Switching between test and live mode:** Replace both keys with the corresponding test or live pair. Test keys (prefixed `pk_test_` / `sk_test_`) allow you to process payments using Stripe's test card numbers without real charges.
+
+**Payment failure alerts (webhook):** Card payments are confirmed in the customer's browser, so the booking system only hears about a *failed* payment through a Stripe webhook. To turn on "Payment failed" alerts:
+
+1. In the Stripe dashboard, go to **Developers → Webhooks → Add endpoint**.
+2. Set the endpoint URL to `https://<your booking site>/api/payments/stripe/webhook` and select the event **payment_intent.payment_failed**.
+3. Copy the endpoint's **Signing secret** (starts with `whsec_`) into the **Webhook Secret** field here and select **Save Settings**.
+
+Do this once for test mode and once for live mode; each has its own signing secret. Until a secret is saved, the endpoint refuses every request.
 
 ### Notification Services
 
@@ -503,6 +591,26 @@ Use this for cloud hosting where SMTP is blocked or unavailable.
 **No email driver configured yet?** The system handles this gracefully — if neither SMTP nor Resend has been set up, email notifications are silently skipped rather than showing errors to customers. Everything else (bookings, payments, waitlist) continues to work normally. You can configure email at any time and notifications will start sending immediately.
 
 All API keys are encrypted at rest using AES-256-GCM. Database settings take priority over environment variables, so updates made here take effect immediately without server file access.
+
+### Notification Templates
+
+Go to **Settings**, then the **Notification Templates** sub-tab (super admin only).
+
+This page lists all automated notification events — booking confirmations, payment requests, cancellations, attendance reminders, and others. For each event you can see the trigger condition described in plain English, and customise the email subject line and body, plus the short summary used for in-app notifications and staff alert emails.
+
+**Customising a template:**
+
+1. Find the notification event you want to edit.
+2. Select **Edit**.
+3. Update the **Subject** (email only) and **Body** fields.
+4. Templates support placeholder tokens — these are replaced with real values when the notification is sent. The available tokens are shown beneath each field (e.g. `{{participant_name}}`, `{{session_date}}`, `{{activity_title}}`).
+5. Select **Save**.
+
+**Restoring the default:**
+
+If you want to revert a template to the built-in default text, select **Reset to default** and confirm.
+
+Custom templates are stored in the database and override the built-in defaults. This means notification copy can be updated without any code changes or server access.
 
 ---
 
@@ -553,7 +661,20 @@ Instructors have their own section of the system accessible at `/instructor`. Th
 
 The instructor dashboard shows stat cards for: Total Sessions, Activities, Participants, and Attendance Rate.
 
-Below the stats is a monthly calendar showing all sessions assigned to the instructor. Each slot shows the activity name, time, and booking count against capacity. Full sessions are shown in red.
+Below the stats is a calendar showing all sessions assigned to the instructor, with a toggle between Month and Week view. Each slot shows the activity name, time, and booking count against capacity. Full sessions are shown in red. A **Back to today** button appears when navigated away from the current period.
+
+### Adding a walk-in
+
+If someone turns up who isn't booked, or doesn't have an account yet, open the session's register and select **Add walk-in**. The button only appears on the day of the session or afterwards.
+
+1. Choose **A child** or **An adult, for themselves**.
+2. Enter the parent's or guardian's details (or the adult's own): first name, last name, email and mobile.
+3. For a child, enter the child's first and last name.
+4. Enter the date of birth (the child's, or the adult's). Walk-ins must be within the activity's age range.
+5. If the session has groups, choose the group.
+6. Select **Add walk-in**.
+
+If the email already belongs to an account, the parent's (or adult's) name must match that account; otherwise you'll be asked to check the details or get an admin to help. They're marked as attended straight away and the booking is left unpaid. The account holder is emailed about payment. If they didn't have an account, the email includes a link to set one up. If anything is wrong, the form stays open with your details kept so you can fix it.
 
 ### Viewing activities
 
@@ -649,4 +770,4 @@ You say yes, and only then does Claude proceed.
 
 ---
 
-*This guide covers the WFCS booking system as of February 2026. The Well Foundation (SC040105) — info@wellfoundation.org.uk.*
+*This guide covers the WFCS booking system as of March 2026. The Well Foundation (SC040105) — info@wellfoundation.org.uk.*

@@ -43,6 +43,29 @@ All database queries must go through Repository classes in `app/Repositories/`. 
 
 ---
 
+## Schema drift — keeping schema.sql and the live DB in sync
+
+`build.sh` uses `schema.sql` for table structure and `mysqldump --complete-insert` for data. Because `--complete-insert` lists every column explicitly, **any column that exists in the live DB but not in schema.sql will break the install SQL**.
+
+**Rule:** whenever you change `schema.sql` (add/remove/rename a column), you must also run the equivalent `ALTER TABLE` against the local Galvani DB immediately. Do not rely on `db-init.php` to fix it — that wipes all data.
+
+```sql
+-- Example: removing a column
+ALTER TABLE participants DROP COLUMN emergency_contact_name, DROP COLUMN emergency_contact_phone;
+
+-- Example: adding a column
+ALTER TABLE participants ADD COLUMN new_field varchar(100) DEFAULT NULL AFTER medical_notes;
+```
+
+If you ever hit a `#1054 - Unknown column` error when importing the dist SQL, it means the live DB has drifted from `schema.sql`. To fix:
+1. Identify the orphaned columns in the live DB (`SHOW COLUMNS FROM table_name`)
+2. Check whether any rows have data in those columns before dropping
+3. If data exists, migrate it to its new home first
+4. Drop the orphaned columns with `ALTER TABLE`
+5. Re-run `build.sh` option 4
+
+---
+
 ## Reset the database
 
 ```bash
@@ -84,7 +107,7 @@ A participant is the person who actually attends an activity — either the user
 | `relationship` | `self`, `child`, `dependent` |
 | `parental_consent` | tinyint(1) required for minors |
 | `medical_notes` | free text |
-| `emergency_contact_name/phone` | |
+| `profile_image` | path in `uploads/users/` |
 
 #### `gdpr_consents`
 Records each consent given at registration (or later). One row per consent type per user.
