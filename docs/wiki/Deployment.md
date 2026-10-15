@@ -125,7 +125,7 @@ The export leaves out anything encrypted with your local `APP_KEY`. Re-enter the
 Then register the Stripe webhook in the Stripe dashboard:
 
 - Endpoint URL: `https://booking.wellfoundation.org.uk/api/payments/stripe/webhook`
-- Events: `payment_intent.succeeded`, `payment_intent.payment_failed`
+- Event: `payment_intent.payment_failed` (the only one the app acts on: successful payments are confirmed in the customer's browser)
 
 Make a test booking with a Stripe test card (`4242 4242 4242 4242`).
 
