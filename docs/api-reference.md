@@ -1256,13 +1256,17 @@ Overall dashboard summary stats.
 
 #### `GET /api/admin/reports/payments/{activityId}`
 
-Payment detail for a single activity.
+Every payment for one activity, newest first, with the booker, participant and session.
 
-**Auth required:** admin
+**Auth required:** super_admin
+
+**Success:** `200 OK` — `{ "activity_id": 21, "payments": [ { "id": …, "amount": "13.00", "payment_status": "completed", "email": "…", "participant_first": "…", "session_date": "2026-03-05", … } ] }`
 
 ---
 
 #### `GET /api/admin/reports/activities`
+
+Per-activity performance: sessions, bookings and revenue for every activity.
 
 **Auth required:** admin
 
@@ -1270,7 +1274,7 @@ Payment detail for a single activity.
 
 #### `GET /api/admin/reports/export`
 
-Export report as CSV download.
+Export a report as CSV text, wrapped in JSON (the MCP clients parse every response as JSON).
 
 **Auth required:** admin
 
@@ -1278,9 +1282,11 @@ Export report as CSV download.
 
 | Param | Type | Notes |
 |---|---|---|
-| `type` | string | `bookings`, `attendance`, `payments`, etc. Default: `bookings` |
+| `type` | string | `bookings` (the only type so far). Default: `bookings` |
 
-**Success:** `200 OK` with `Content-Type: text/csv` and `Content-Disposition: attachment`
+**Success:** `200 OK` — `{ "type": "bookings", "filename": "bookings_report.csv", "csv": "Booking ID,Date,Email,…\n…" }`
+
+**Errors:** `400` for any other `type`
 
 ---
 
@@ -1626,7 +1632,7 @@ Overview of all Gift Aid declarations and claims.
 
 #### `GET /api/admin/gift-aid/export`
 
-Export Gift Aid schedule as an `.ods` HMRC submission file.
+A tax year's eligible (not yet submitted) claims and its totals, as JSON. The HMRC schedule spreadsheet (`.ods`) is downloaded from **Payments → Gift Aid** in the admin.
 
 **Auth required:** super_admin
 
@@ -1634,9 +1640,11 @@ Export Gift Aid schedule as an `.ods` HMRC submission file.
 
 | Param | Type | Notes |
 |---|---|---|
-| `tax_year` | string | e.g. `2025-2026`; defaults to current UK tax year |
+| `tax_year` | string | e.g. `2025-2026`; defaults to the current UK tax year |
 
-**Success:** `200 OK` with `Content-Type: application/vnd.oasis.opendocument.spreadsheet`
+**Success:** `200 OK` — `{ "tax_year": "2026-2027", "summary": { "total_claims": 0, "eligible_claims": 0, "total_donations": 0, "total_gift_aid": 0, … }, "claims": [ … ] }`
+
+**Errors:** `400` if `tax_year` isn't in the form `2025-2026`
 
 ---
 
@@ -2050,7 +2058,7 @@ Delete a discount code.
 | `GET` | `/api/admin/reports/bookings` | admin | Admin |
 | `GET` | `/api/admin/reports/attendance` | admin | Admin |
 | `GET` | `/api/admin/reports/payments` | admin | Admin |
-| `GET` | `/api/admin/reports/payments/{activityId}` | admin | Admin |
+| `GET` | `/api/admin/reports/payments/{activityId}` | super_admin | Admin |
 | `GET` | `/api/admin/reports/activities` | admin | Admin |
 | `GET` | `/api/admin/reports/export` | admin | Admin |
 | `GET` | `/api/admin/bookings/list` | admin | Admin |
