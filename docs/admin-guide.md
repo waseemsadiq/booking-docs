@@ -558,7 +558,17 @@ Do this once for test mode and once for live mode; each has its own signing secr
 
 Go to **Settings**, then the **Notification Services** sub-tab.
 
-This page configures two services:
+**Delivery**
+
+The card at the top decides who receives email:
+
+- **Live** — email goes to the real recipients. Use this once the site has launched.
+- **Test** — only the **Allowlist** gets email: addresses, or `@domain` for everyone at a domain (e.g. `@wellfoundation.org.uk`). Everyone else's email goes to the **Test inbox** instead, with `[TEST → their address]` at the start of the subject, so you can see every email the system would send without any customer receiving it. At most 25 are redirected per batch (one broadcast or one reminder run); the rest are not sent. Leave the test inbox empty to send them nothing.
+- **Off** — nothing is sent at all, not even password resets.
+
+Select **Save delivery**. While email isn't Live, every admin page shows a banner saying where email is going.
+
+A server that isn't the live site (its `APP_ENV` isn't `production`) treats Live as Test, so a copy of the real data can never email customers.
 
 **Email Driver**
 

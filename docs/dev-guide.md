@@ -1178,7 +1178,7 @@ Email is the only customer notification channel (SMS/WhatsApp via Bird were remo
 
 **Toggle switches post a hidden input that is always present** (`value="0"` or `"1"`). Read them with `postFlag('field')` from `app/Helpers/helpers.php`, never `isset($_POST['field'])`.
 
-**App-wide kill switch:** `app_settings.notifications_disabled = '1'` stops customer emails and staff subscriber emails/in-app alerts. Admin and instructor broadcasts go through the same gate (`NotificationService::sendToUser()`) and refuse with 409 while it's on.
+**Delivery mode (`GuardedMailer` + `MailGuard`):** every email leaves through `GuardedMailer`, which `NotificationService` builds with `GuardedMailer::fromSettings()`; nothing else may create an `SmtpService` or `ResendService` (`MailChokePointTest`). `app_settings.mail_mode` is `live`, `test` (only `mail_allowlist` receives email; everyone else's goes to `mail_redirect_to` with `[TEST → address]` in the subject, at most `MailGuard::MAX_REDIRECTS` per mailer, i.e. per batch) or `off` (nothing, and staff in-app alerts are skipped too; broadcasts refuse with 409). A missing mode is `test`, and outside `APP_ENV=production` `live` is treated as `test`. Locally, `MAIL_CATCHER=127.0.0.1:1025` in `.env` sends every email unchanged to Mailpit (http://localhost:8025) instead; it's ignored in production. Admins see `GuardedMailer::banner()` on every page while email isn't live.
 
 **Staff subscription events** are listed once in `NotificationSubscriptionRepository::EVENT_LABELS` (must match the `event_type` enum; `SubscriptionEventTypesTest` enforces it). `eventTypesForRole()` drives the form and route validation. Send an event with `NotificationService::notifySubscribers($eventType, $subject, $summary, $activityId, $sessionId)`; unknown types throw. Fan-out only reaches staff (admin, super_admin, instructor).
 
@@ -1645,7 +1645,7 @@ Run from the booking folder: `bash build.sh`, then choose 1 (app files), 2 (data
 **Database export (`db-export/`)**
 
 1. Copies `booking_app` into a temporary database: structure via `mysqldump --no-data`, data server-side with `INSERT … SELECT`
-2. Cleans the copy: deletes `@test.local` accounts (their rows cascade), empties `audit_logs` and `cache`, deletes `enc:` settings (encrypted with the local `APP_KEY`), sets `notifications_disabled = 1`
+2. Cleans the copy: deletes `@test.local` accounts (their rows cascade), empties `audit_logs` and `cache`, deletes `enc:` settings (encrypted with the local `APP_KEY`), sets `mail_mode = 'test'`
 3. Converts the copy's text columns to binary and dumps the data with `--hex-blob --replace`. The Galvani MySQL gives the `mysql`/`mysqldump` clients a latin1 session whatever they ask for, so text must never pass through them as text; `--replace` lets the real `notification_templates` rows overwrite the defaults `schema.sql` seeds
 4. Writes `DROP TABLE IF EXISTS` for every table + `schema.sql` + the data, gzipped, to `db-export/booking-mirror-<date>.sql.gz`, and drops the temporary database
 

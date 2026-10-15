@@ -41,7 +41,7 @@ What the build does:
 4. For the database export, makes a temporary copy of the local database and cleans it:
    - removes the test accounts (`@test.local`), the audit log and the cache
    - removes the Stripe, JustGiving and SMTP credentials (they're encrypted with your local `APP_KEY`, so they couldn't be read on the server anyway)
-   - leaves email switched off (`notifications_disabled = 1`), so testing on the new server can't email customers
+   - leaves email in **Test** mode, so testing on the new server can't email customers: only the allowlist (e.g. `@wellfoundation.org.uk`) receives email, and everyone else's goes to the test inbox
 
    The installer takes its table structure from `database/schema.sql` and the data from that cleaned copy. Your local database isn't changed.
 
@@ -133,7 +133,9 @@ Make a test booking with a Stripe test card (`4242 4242 4242 4242`).
 
 ## Step 8 — Launch day
 
-Emails are off. When you're ready, turn them on in **Settings → Email**.
+Email is in Test mode. When you're ready, choose **Live** under **Settings → Email → Delivery** and select **Save delivery**. The server must have `APP_ENV` set to `production` in `config/env.php` (the template does), or Live behaves as Test.
+
+If the database was installed before this release, run `database/migrations/2026_10_15_mail_test_mode.sql` first: it replaces the old on/off switch with the delivery modes.
 
 ---
 
